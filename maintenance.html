@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Update Diperlukan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif;background:#050304;color:#f5f5f5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;user-select:none}
+input,button,textarea{font-family:inherit;outline:none;border:none}
+button{cursor:pointer}
+
+:root{
+  --accent:#c41e28;
+  --accent-hover:#e02630;
+  --accent-soft:rgba(196,30,40,0.12);
+  --accent-glow:rgba(196,30,40,0.5);
+  --bg:#050304;
+  --bg-card:#0d0709;
+  --bg-elev:#160d10;
+  --border:rgba(255,255,255,0.06);
+  --text:#f5f5f5;
+  --text-dim:#a39599;
+  --text-mute:#5a4548;
+  --success:#2ed573;
+  --warning:#ffa502;
+  --info:#70a1ff;
+}
+
+body{
+  background:
+    radial-gradient(circle at 20% 10%, rgba(196,30,40,0.15) 0%, transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(124,58,237,0.08) 0%, transparent 45%),
+    #050304;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Animated background */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(196,30,40,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,30,40,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:gridMove 20s linear infinite;
+  pointer-events:none;
+}
+@keyframes gridMove{
+  from{background-position:0 0}
+  to{background-position:40px 40px}
+}
+
+.bg-glow{
+  position:fixed;width:600px;height:600px;border-radius:50%;
+  filter:blur(120px);opacity:.35;z-index:0;pointer-events:none;
+}
+.bg-glow-1{top:-200px;left:-200px;background:var(--accent);animation:float1 15s ease-in-out infinite}
+.bg-glow-2{bottom:-200px;right:-200px;background:#7c3aed;animation:float2 18s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,60px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-60px)}}
+
+.bg-particles{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:var(--accent);opacity:.4;
+  animation:particleFloat 12s linear infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:.6}
+  90%{opacity:.6}
+  100%{transform:translateY(-100px) scale(1);opacity:0}
+}
+
+/* Container */
+.container{
+  position:relative;z-index:2;
+  width:100%;max-width:520px;
+  display:flex;flex-direction:column;gap:20px;
+  animation:fadeInUp .6s ease;
+}
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Icon */
+.icon-wrap{
+  display:flex;justify-content:center;margin-bottom:8px;
+  position:relative;
+}
+.icon-main{
+  width:120px;height:120px;border-radius:32px;
+  background:linear-gradient(135deg, rgba(196,30,40,0.25), rgba(196,30,40,0.05));
+  border:1px solid rgba(196,30,40,0.3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:
+    0 20px 60px rgba(196,30,40,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  animation:iconPulse 2.5s ease-in-out infinite;
+}
+@keyframes iconPulse{
+  0%,100%{transform:scale(1);box-shadow:0 20px 60px rgba(196,30,40,0.4), inset 0 1px 0 rgba(255,255,255,0.1)}
+  50%{transform:scale(1.05);box-shadow:0 25px 80px rgba(196,30,40,0.6), inset 0 1px 0 rgba(255,255,255,0.15)}
+}
+.icon-main i{
+  font-size:56px;color:var(--accent-hover);
+}
+.icon-main.update i{animation:rotateSpin 3s linear infinite}
+@keyframes rotateSpin{to{transform:rotate(360deg)}}
+.icon-main.offline i{animation:pulseFade 2s ease-in-out infinite}
+@keyframes pulseFade{0%,100%{opacity:1}50%{opacity:.4}}
+
+.icon-main::before{
+  content:'';position:absolute;inset:-10px;
+  border-radius:38px;
+  border:2px dashed rgba(196,30,40,0.3);
+  animation:spin 25s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Badge */
+.status-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:20px;
+  background:rgba(196,30,40,0.12);
+  border:1px solid rgba(196,30,40,0.3);
+  color:var(--accent-hover);
+  font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;
+  margin:0 auto;
+  position:relative;
+}
+.status-badge .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent-hover);
+  box-shadow:0 0 10px var(--accent-glow);
+  animation:dotBlink 1.5s ease-in-out infinite;
+}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.status-badge.warning{
+  background:rgba(255,165,2,0.12);
+  border-color:rgba(255,165,2,0.3);
+  color:var(--warning);
+}
+.status-badge.warning .dot{
+  background:var(--warning);
+  box-shadow:0 0 10px var(--warning);
+}
+
+/* Card */
+.card{
+  background:rgba(13,7,9,0.85);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:36px 28px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  animation:topBorder 3s ease-in-out infinite;
+}
+@keyframes topBorder{
+  0%,100%{opacity:.3}
+  50%{opacity:1}
+}
+
+.title{
+  font-family:'Poppins',sans-serif;
+  font-size:30px;font-weight:800;
+  letter-spacing:-1.5px;
+  background:linear-gradient(135deg,#fff 40%, var(--accent));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+  line-height:1.15;
+}
+.subtitle{
+  font-family:'Poppins',sans-serif;
+  font-size:12px;font-weight:600;
+  color:var(--text-dim);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+
+.message{
+  font-size:14px;
+  color:var(--text);
+  line-height:1.8;
+  margin-bottom:28px;
+  padding:18px;
+  background:rgba(196,30,40,0.06);
+  border:1px solid rgba(196,30,40,0.15);
+  border-radius:16px;
+  position:relative;
+  text-align:left;
+}
+.message i{
+  color:var(--accent-hover);
+  margin-right:6px;
+}
+
+/* Info list */
+.info-list{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:24px;
+}
+.info-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-align:left;
+}
+.info-item .ico{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--accent-soft);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.info-item .ico i{font-size:14px;color:var(--accent-hover)}
+.info-item .txt{flex:1;min-width:0}
+.info-item .txt .l{
+  font-size:10px;color:var(--text-mute);
+  text-transform:uppercase;letter-spacing:1.2px;
+  font-weight:700;margin-bottom:3px;
+}
+.info-item .txt .v{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:600;
+  color:var(--text);
+  word-break:break-all;
+}
+.info-item .txt .v.ok{color:var(--success)}
+.info-item .txt .v.warn{color:var(--warning)}
+
+/* Progress */
+.progress{
+  width:100%;height:5px;
+  background:rgba(255,255,255,0.05);
+  border-radius:3px;overflow:hidden;
+  margin-bottom:24px;
+  position:relative;
+}
+.progress .fill{
+  height:100%;width:30%;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  border-radius:3px;
+  animation:progressMove 2s ease-in-out infinite;
+  box-shadow:0 0 12px var(--accent-glow);
+}
+@keyframes progressMove{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(400%)}
+}
+
+/* Contact */
+.contact-row{
+  display:flex;gap:10px;margin-bottom:20px;
+}
+.contact-btn{
+  flex:1;padding:14px 10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+  color:var(--text);
+  font-size:10px;font-weight:600;
+  text-decoration:none;
+  transition:all .2s;
+}
+.contact-btn:active{transform:scale(.96);background:rgba(255,255,255,0.06)}
+.contact-btn i{font-size:18px}
+.contact-btn.wa i{color:#25D366}
+.contact-btn.ch i{color:var(--accent-hover)}
+.contact-btn.gr i{color:var(--info)}
+
+/* Footer */
+.footer{
+  text-align:center;
+  font-size:11px;
+  color:var(--text-mute);
+  line-height:1.7;
+  padding:0 20px;
+}
+.footer .brand{
+  font-family:'Poppins',sans-serif;
+  font-weight:800;
+  background:linear-gradient(135deg,#fff 40%, var(--accent));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-size:13px;
+  letter-spacing:-.5px;
+}
+
+/* Dots animation */
+.dots{
+  display:inline-flex;gap:4px;
+  vertical-align:middle;
+  margin-left:2px;
+}
+.dots span{
+  width:4px;height:4px;border-radius:50%;
+  background:currentColor;
+  animation:dotBounce 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotBounce{
+  0%,80%,100%{transform:scale(0.6);opacity:.4}
+  40%{transform:scale(1);opacity:1}
+}
+
+/* Responsive */
+@media (max-width:420px){
+  .title{font-size:24px}
+  .card{padding:28px 20px}
+  .icon-main{width:100px;height:100px}
+  .icon-main i{font-size:46px}
+  .contact-row{flex-wrap:wrap}
+  .contact-btn{min-width:calc(50% - 5px)}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-particles" id="particles"></div>
+
+<div class="container">
+
+  <!-- ICON -->
+  <div class="icon-wrap">
+    <div class="icon-main" id="icon-main">
+      <i class="fa-solid fa-rotate" id="icon-el"></i>
+    </div>
+  </div>
+
+  <!-- BADGE -->
+  <div class="status-badge" id="status-badge">
+    <span class="dot"></span>
+    <span id="status-text">Memeriksa Update</span>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="title" id="card-title">BluxusRat</div>
+    <div class="subtitle" id="card-subtitle">V1 [NewEra]</div>
+
+    <div class="message" id="card-message">
+      <i class="fa-solid fa-circle-info"></i>
+      Aplikasi ini memerlukan update untuk melanjutkan. Proses update sedang berlangsung. Jangan tutup aplikasi.
+    </div>
+
+    <!-- INFO LIST -->
+    <div class="info-list" id="info-list">
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-signal"></i></div>
+        <div class="txt">
+          <div class="l">Status</div>
+          <div class="v warn" id="info-status">Memeriksa update</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-globe"></i></div>
+        <div class="txt">
+          <div class="l">Jaringan</div>
+          <div class="v ok" id="info-network">Terhubung</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-code-branch"></i></div>
+        <div class="txt">
+          <div class="l">Versi</div>
+          <div class="v" id="info-version">v1.0.0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress">
+      <div class="fill"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-row">
+      <a class="contact-btn wa" href="https://wa.me/6283137236898" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>WhatsApp</span>
+      </a>
+      <a class="contact-btn ch" href="https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w" target="_blank">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Channel</span>
+      </a>
+      <a class="contact-btn gr" href="https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU" target="_blank">
+        <i class="fa-solid fa-comments"></i>
+        <span>Grup</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="brand">BluxusRat</div>
+    <div>© 2026 BluxusRat — All Rights Reserved</div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// PARTICLE GENERATOR
+// ============================================================
+(function generateParticles() {
+  const container = document.getElementById("particles");
+  if (!container) return;
+  const count = 20;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.animationDelay = (Math.random() * 12) + "s";
+    p.style.animationDuration = (8 + Math.random() * 8) + "s";
+    const size = 2 + Math.random() * 3;
+    p.style.width = size + "px";
+    p.style.height = size + "px";
+    container.appendChild(p);
+  }
+})();
+
+// ============================================================
+// MODE SELECTOR — update / offline
+// ============================================================
+(function detectMode() {
+  const params = new URLSearchParams(window.location.search);
+  let mode = params.get("mode") || "update";
+
+  // Auto-detect mode berdasarkan koneksi
+  if (!navigator.onLine) {
+    mode = "offline";
+  }
+
+  applyMode(mode);
+})();
+
+function applyMode(mode) {
+  const iconEl = document.getElementById("icon-el");
+  const iconWrap = document.getElementById("icon-main");
+  const badge = document.getElementById("status-badge");
+  const statusText = document.getElementById("status-text");
+  const cardTitle = document.getElementById("card-title");
+  const cardSubtitle = document.getElementById("card-subtitle");
+  const cardMessage = document.getElementById("card-message");
+  const infoStatus = document.getElementById("info-status");
+
+  if (mode === "offline") {
+    iconWrap.className = "icon-main offline";
+    iconEl.className = "fa-solid fa-wifi";
+    badge.className = "status-badge warning";
+    statusText.textContent = "Tidak Ada Jaringan";
+    cardTitle.textContent = "BluxusRat";
+    cardSubtitle.textContent = "V1 [NewEra]";
+    cardMessage.innerHTML =
+      '<i class="fa-solid fa-triangle-exclamation"></i> Aplikasi ini membutuhkan jaringan internet untuk terus update. Sambungkan kembali perangkat kamu ke internet agar aplikasi dapat berjalan normal.';
+    infoStatus.textContent = "Menunggu jaringan";
+    infoStatus.className = "v warn";
+    document.getElementById("info-network").textContent = "Terputus";
+    document.getElementById("info-network").className = "v warn";
+    document.title = "Tidak Ada Jaringan — BluxusRat";
+  } else {
+    iconWrap.className = "icon-main update";
+    iconEl.className = "fa-solid fa-rotate";
+    badge.className = "status-badge";
+    statusText.textContent = "Update Diperlukan";
+    cardTitle.textContent = "Update Diperlukan";
+    cardSubtitle.textContent = "BluxusRat V1 [NewEra]";
+    cardMessage.innerHTML =
+      '<i class="fa-solid fa-circle-info"></i> Aplikasi ini memerlukan update untuk melanjutkan. Proses update sedang berlangsung. Jangan tutup aplikasi.';
+    infoStatus.textContent = "Memeriksa update";
+    infoStatus.className = "v warn";
+    infoStatus.textContent = "Memeriksa update";
+    document.title = "Update Diperlukan — BluxusRat";
+  }
+}
+
+// ============================================================
+// AUTO-DETECT CONNECTION CHANGE
+// ============================================================
+window.addEventListener("online", () => {
+  const badge = document.getElementById("status-badge");
+  if (badge && badge.classList.contains("warning")) {
+    // Kalau offline berubah jadi online, balik ke mode update
+    applyMode("update");
+  }
+});
+
+window.addEventListener("offline", () => {
+  applyMode("offline");
+});
+
+// ============================================================
+// URL PARAM CUSTOMIZATION (Universal)
+// ============================================================
+(function applyParams() {
+  const params = new URLSearchParams(window.location.search);
+
+  const title = params.get("title");
+  if (title) document.getElementById("card-title").textContent = decodeURIComponent(title);
+
+  const subtitle = params.get("subtitle");
+  if (subtitle) document.getElementById("card-subtitle").textContent = decodeURIComponent(subtitle);
+
+  const message = params.get("message") || params.get("msg");
+  if (message) {
+    document.getElementById("card-message").innerHTML =
+      '<i class="fa-solid fa-circle-info"></i> ' + decodeURIComponent(message);
+  }
+
+  const status = params.get("status");
+  if (status) document.getElementById("status-text").textContent = decodeURIComponent(status);
+
+  const version = params.get("version") || params.get("v");
+  if (version) document.getElementById("info-version").textContent = decodeURIComponent(version);
+
+  const color = params.get("color");
+  if (color) {
+    const hex = color.startsWith("#") ? color : "#" + color;
+    document.documentElement.style.setProperty("--accent", hex);
+    document.documentElement.style.setProperty("--accent-hover", hex);
+    document.documentElement.style.setProperty("--accent-glow", hexToRgba(hex, 0.5));
+    document.documentElement.style.setProperty("--accent-soft", hexToRgba(hex, 0.12));
+  }
+
+  const icon = params.get("icon");
+  if (icon) {
+    const iconEl = document.getElementById("icon-el");
+    if (iconEl) iconEl.className = "fa-solid " + decodeURIComponent(icon);
+  }
+
+  const docTitle = params.get("doctitle");
+  if (docTitle) document.title = decodeURIComponent(docTitle);
+})();
+
+// ============================================================
+// HEX TO RGBA HELPER
+// ============================================================
+function hexToRgba(hex, alpha) {
+  hex = hex.replace("#", "");
+  if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ============================================================
+// ANIMATED DOTS — untuk status text
+// ============================================================
+(function animateStatusDots() {
+  const statusEl = document.getElementById("info-status");
+  if (!statusEl) return;
+  let count = 0;
+  setInterval(() => {
+    count = (count + 1) % 4;
+    const dots = ".".repeat(count);
+    const base = statusEl.textContent.replace(/\.+$/, "");
+    statusEl.textContent = base + dots;
+  }, 500);
+})();
+</script>
+
+</body>
+</html>
