@@ -3,641 +3,594 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BluxusRat V1 [NewEra]</title>
-<link rel="icon" href="assets/icon-app.png">
+<title>Update Diperlukan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif;background:#050304;color:#f5f5f5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;user-select:none}
+input,button,textarea{font-family:inherit;outline:none;border:none}
+button{cursor:pointer}
+
+:root{
+  --accent:#c41e28;
+  --accent-hover:#e02630;
+  --accent-soft:rgba(196,30,40,0.12);
+  --accent-glow:rgba(196,30,40,0.5);
+  --bg:#050304;
+  --bg-card:#0d0709;
+  --bg-elev:#160d10;
+  --border:rgba(255,255,255,0.06);
+  --text:#f5f5f5;
+  --text-dim:#a39599;
+  --text-mute:#5a4548;
+  --success:#2ed573;
+  --warning:#ffa502;
+  --info:#70a1ff;
+}
+
+body{
+  background:
+    radial-gradient(circle at 20% 10%, rgba(196,30,40,0.15) 0%, transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(124,58,237,0.08) 0%, transparent 45%),
+    #050304;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Animated background */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(196,30,40,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,30,40,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:gridMove 20s linear infinite;
+  pointer-events:none;
+}
+@keyframes gridMove{
+  from{background-position:0 0}
+  to{background-position:40px 40px}
+}
+
+.bg-glow{
+  position:fixed;width:600px;height:600px;border-radius:50%;
+  filter:blur(120px);opacity:.35;z-index:0;pointer-events:none;
+}
+.bg-glow-1{top:-200px;left:-200px;background:var(--accent);animation:float1 15s ease-in-out infinite}
+.bg-glow-2{bottom:-200px;right:-200px;background:#7c3aed;animation:float2 18s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,60px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-60px)}}
+
+.bg-particles{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:var(--accent);opacity:.4;
+  animation:particleFloat 12s linear infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:.6}
+  90%{opacity:.6}
+  100%{transform:translateY(-100px) scale(1);opacity:0}
+}
+
+/* Container */
+.container{
+  position:relative;z-index:2;
+  width:100%;max-width:520px;
+  display:flex;flex-direction:column;gap:20px;
+  animation:fadeInUp .6s ease;
+}
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Icon */
+.icon-wrap{
+  display:flex;justify-content:center;margin-bottom:8px;
+  position:relative;
+}
+.icon-main{
+  width:120px;height:120px;border-radius:32px;
+  background:linear-gradient(135deg, rgba(196,30,40,0.25), rgba(196,30,40,0.05));
+  border:1px solid rgba(196,30,40,0.3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:
+    0 20px 60px rgba(196,30,40,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  animation:iconPulse 2.5s ease-in-out infinite;
+}
+@keyframes iconPulse{
+  0%,100%{transform:scale(1);box-shadow:0 20px 60px rgba(196,30,40,0.4), inset 0 1px 0 rgba(255,255,255,0.1)}
+  50%{transform:scale(1.05);box-shadow:0 25px 80px rgba(196,30,40,0.6), inset 0 1px 0 rgba(255,255,255,0.15)}
+}
+.icon-main i{
+  font-size:56px;color:var(--accent-hover);
+}
+.icon-main.update i{animation:rotateSpin 3s linear infinite}
+@keyframes rotateSpin{to{transform:rotate(360deg)}}
+.icon-main.offline i{animation:pulseFade 2s ease-in-out infinite}
+@keyframes pulseFade{0%,100%{opacity:1}50%{opacity:.4}}
+
+.icon-main::before{
+  content:'';position:absolute;inset:-10px;
+  border-radius:38px;
+  border:2px dashed rgba(196,30,40,0.3);
+  animation:spin 25s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Badge */
+.status-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:20px;
+  background:rgba(196,30,40,0.12);
+  border:1px solid rgba(196,30,40,0.3);
+  color:var(--accent-hover);
+  font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;
+  margin:0 auto;
+  position:relative;
+}
+.status-badge .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent-hover);
+  box-shadow:0 0 10px var(--accent-glow);
+  animation:dotBlink 1.5s ease-in-out infinite;
+}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.status-badge.warning{
+  background:rgba(255,165,2,0.12);
+  border-color:rgba(255,165,2,0.3);
+  color:var(--warning);
+}
+.status-badge.warning .dot{
+  background:var(--warning);
+  box-shadow:0 0 10px var(--warning);
+}
+
+/* Card */
+.card{
+  background:rgba(13,7,9,0.85);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:36px 28px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  animation:topBorder 3s ease-in-out infinite;
+}
+@keyframes topBorder{
+  0%,100%{opacity:.3}
+  50%{opacity:1}
+}
+
+.title{
+  font-family:'Poppins',sans-serif;
+  font-size:30px;font-weight:800;
+  letter-spacing:-1.5px;
+  background:linear-gradient(135deg,#fff 40%, var(--accent));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+  line-height:1.15;
+}
+.subtitle{
+  font-family:'Poppins',sans-serif;
+  font-size:12px;font-weight:600;
+  color:var(--text-dim);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+
+.message{
+  font-size:14px;
+  color:var(--text);
+  line-height:1.8;
+  margin-bottom:28px;
+  padding:18px;
+  background:rgba(196,30,40,0.06);
+  border:1px solid rgba(196,30,40,0.15);
+  border-radius:16px;
+  position:relative;
+  text-align:left;
+}
+.message i{
+  color:var(--accent-hover);
+  margin-right:6px;
+}
+
+/* Info list */
+.info-list{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:24px;
+}
+.info-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  text-align:left;
+}
+.info-item .ico{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--accent-soft);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.info-item .ico i{font-size:14px;color:var(--accent-hover)}
+.info-item .txt{flex:1;min-width:0}
+.info-item .txt .l{
+  font-size:10px;color:var(--text-mute);
+  text-transform:uppercase;letter-spacing:1.2px;
+  font-weight:700;margin-bottom:3px;
+}
+.info-item .txt .v{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:600;
+  color:var(--text);
+  word-break:break-all;
+}
+.info-item .txt .v.ok{color:var(--success)}
+.info-item .txt .v.warn{color:var(--warning)}
+
+/* Progress */
+.progress{
+  width:100%;height:5px;
+  background:rgba(255,255,255,0.05);
+  border-radius:3px;overflow:hidden;
+  margin-bottom:24px;
+  position:relative;
+}
+.progress .fill{
+  height:100%;width:30%;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  border-radius:3px;
+  animation:progressMove 2s ease-in-out infinite;
+  box-shadow:0 0 12px var(--accent-glow);
+}
+@keyframes progressMove{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(400%)}
+}
+
+/* Contact */
+.contact-row{
+  display:flex;gap:10px;margin-bottom:20px;
+}
+.contact-btn{
+  flex:1;padding:14px 10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+  color:var(--text);
+  font-size:10px;font-weight:600;
+  text-decoration:none;
+  transition:all .2s;
+}
+.contact-btn:active{transform:scale(.96);background:rgba(255,255,255,0.06)}
+.contact-btn i{font-size:18px}
+.contact-btn.wa i{color:#25D366}
+.contact-btn.ch i{color:var(--accent-hover)}
+.contact-btn.gr i{color:var(--info)}
+
+/* Footer */
+.footer{
+  text-align:center;
+  font-size:11px;
+  color:var(--text-mute);
+  line-height:1.7;
+  padding:0 20px;
+}
+.footer .brand{
+  font-family:'Poppins',sans-serif;
+  font-weight:800;
+  background:linear-gradient(135deg,#fff 40%, var(--accent));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-size:13px;
+  letter-spacing:-.5px;
+}
+
+/* Dots animation */
+.dots{
+  display:inline-flex;gap:4px;
+  vertical-align:middle;
+  margin-left:2px;
+}
+.dots span{
+  width:4px;height:4px;border-radius:50%;
+  background:currentColor;
+  animation:dotBounce 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotBounce{
+  0%,80%,100%{transform:scale(0.6);opacity:.4}
+  40%{transform:scale(1);opacity:1}
+}
+
+/* Responsive */
+@media (max-width:420px){
+  .title{font-size:24px}
+  .card{padding:28px 20px}
+  .icon-main{width:100px;height:100px}
+  .icon-main i{font-size:46px}
+  .contact-row{flex-wrap:wrap}
+  .contact-btn{min-width:calc(50% - 5px)}
+}
+</style>
 </head>
 <body>
 
-<div id="conn-dot"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-particles" id="particles"></div>
 
-<div id="app">
-  <div class="app-shell">
+<div class="container">
 
-    <!-- LOADING -->
-    <div class="screen active" id="screen-loading">
-      <div class="brand-logo">BluxusRat</div>
-      <div class="brand-sub">V1 [NewEra]</div>
-      <div class="brand-ver">Control Panel</div>
-      <div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
-      <div id="loading-text">Connecting to Firebase...</div>
+  <!-- ICON -->
+  <div class="icon-wrap">
+    <div class="icon-main" id="icon-main">
+      <i class="fa-solid fa-rotate" id="icon-el"></i>
     </div>
-
-    <!-- LOGIN -->
-    <div class="screen" id="screen-login">
-      <div class="banner-wrap">
-        <img src="assets/banner-login.png" onerror="this.style.display='none'">
-        <div class="banner-title">BluxusRat</div>
-        <div class="banner-sub">V1 [NewEra]</div>
-      </div>
-      <div class="form-zone">
-        <div class="card">
-          <div class="card-title">Sign In</div>
-          <div class="field">
-            <label>Username</label>
-            <div class="input-wrap">
-              <div class="ico-badge"><i class="fa-solid fa-user"></i></div>
-              <input type="text" id="login-usn" placeholder="username">
-            </div>
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <div class="input-wrap">
-              <div class="ico-badge"><i class="fa-solid fa-lock"></i></div>
-              <input type="password" id="login-pw" placeholder="••••••••">
-            </div>
-          </div>
-          <button class="btn btn-primary ripple" id="btn-login">
-            <i class="fa-solid fa-right-to-bracket"></i> Login
-          </button>
-          <button class="btn btn-ghost ripple" id="btn-buy-access" style="margin-top:10px">
-            <i class="fa-solid fa-cart-shopping"></i> Beli Akses
-          </button>
-          <div class="login-redirect" id="login-redirect">
-            <div class="spin"></div><span>Mengalihkan...</span>
-          </div>
-          <div class="login-meta">BluxusRat V1 — NewEra</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BELI AKSES -->
-    <div class="screen" id="screen-buy">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-back-buy"><i class="fa-solid fa-arrow-left"></i></div>
-        <span class="page-title">Beli Akses</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="stepper" id="buy-stepper">
-          <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Role</div></div>
-          <div class="step-line"></div>
-          <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Durasi</div></div>
-          <div class="step-line"></div>
-          <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Data</div></div>
-          <div class="step-line"></div>
-          <div class="step" data-step="4"><div class="step-num">4</div><div class="step-label">Bayar</div></div>
-        </div>
-        <div class="buy-step active" id="buy-step-1">
-          <div class="section">
-            <h3><div class="ico-badge"><i class="fa-solid fa-user-tag"></i></div> Pilih Role</h3>
-            <div class="role-grid" id="buy-role-grid"></div>
-          </div>
-          <button class="btn btn-primary" id="btn-buy-next-1" disabled>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
-        </div>
-        <div class="buy-step" id="buy-step-2">
-          <div class="section">
-            <h3><div class="ico-badge"><i class="fa-solid fa-clock"></i></div> Pilih Durasi</h3>
-            <div id="buy-role-selected" style="font-size:12px;color:var(--text-dim);margin-bottom:14px"></div>
-            <div class="duration-grid" id="buy-duration-grid"></div>
-          </div>
-          <div class="flex-gap">
-            <button class="btn btn-ghost" id="btn-buy-back-2"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <button class="btn btn-primary" id="btn-buy-next-2" disabled>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-        <div class="buy-step" id="buy-step-3">
-          <div class="section">
-            <h3><div class="ico-badge"><i class="fa-solid fa-pen"></i></div> Data Akun</h3>
-            <div class="field">
-              <label>Username yang mau dibeli/dibuat</label>
-              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-user"></i></div><input type="text" id="buy-username" placeholder="username"></div>
-            </div>
-            <div class="field">
-              <label>Email Anda</label>
-              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-envelope"></i></div><input type="email" id="buy-email" placeholder="email@example.com"></div>
-            </div>
-            <div class="buy-note">
-              <i class="fa-solid fa-circle-info"></i>
-              <span>Data akun akan dikirim ke email Anda setelah pembayaran diverifikasi. Pastikan email aktif & benar.</span>
-            </div>
-          </div>
-          <div class="flex-gap">
-            <button class="btn btn-ghost" id="btn-buy-back-3"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <button class="btn btn-primary" id="btn-buy-next-3" disabled>Ya, Kirim <i class="fa-solid fa-paper-plane"></i></button>
-          </div>
-        </div>
-        <div class="buy-step" id="buy-step-4">
-          <div class="section">
-            <h3><div class="ico-badge"><i class="fa-solid fa-circle-check"></i></div> Pesanan Terkirim</h3>
-            <div class="success-animation">
-              <div class="success-circle"><i class="fa-solid fa-check"></i></div>
-              <div class="success-text">Pesanan Anda Telah Dikirim</div>
-            </div>
-            <div class="order-detail" id="order-detail"></div>
-            <div class="buy-note" style="margin-top:14px">
-              <i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>
-              <span>Kirim struk belanja ke WhatsApp admin untuk verifikasi pesanan.</span>
-            </div>
-          </div>
-          <button class="btn btn-primary" id="btn-buy-pay"><i class="fa-brands fa-whatsapp"></i> Bayar & Kirim Struk</button>
-          <button class="btn btn-ghost" id="btn-buy-done" style="margin-top:10px">Selesai</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div class="screen" id="screen-dash">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger"><i class="fa-solid fa-bars"></i></div>
-        <span class="logo-text">BluxusRat</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="welcome-banner fade-in">
-          <img src="assets/banner-welcome.png" onerror="this.style.display='none'">
-          <div class="wb-badge" id="dash-badge">MEMBER</div>
-          <div class="wb-text">
-            <div class="w">Welcome back, <span id="dash-welcome-name">User</span></div>
-            <div class="s">Control panel siap</div>
-          </div>
-        </div>
-        <div class="user-card fade-in-1">
-          <div class="content">
-            <div class="left">
-              <div class="label">Username</div>
-              <div class="usn" id="dash-usn">—</div>
-              <div class="role" id="dash-role"><i class="fa-solid fa-user"></i> member</div>
-            </div>
-            <div class="right">
-              <div class="label">User Code</div>
-              <div class="val mono" id="dash-usercode">—</div>
-            </div>
-          </div>
-        </div>
-        <div class="mini-grid fade-in-2">
-          <div class="mini-card">
-            <div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div>
-            <div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div>
-          </div>
-          <div class="mini-card">
-            <div class="ico-badge"><i class="fa-solid fa-wifi"></i></div>
-            <div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div>
-          </div>
-        </div>
-        <div id="announce-wrap" class="fade-in-3"></div>
-      </div>
-    </div>
-
-    <!-- RAT -->
-    <div class="screen" id="screen-rat">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Rat</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="usercode-card fade-in">
-          <div class="uc-head">
-            <div class="ico-badge"><i class="fa-solid fa-key"></i></div>
-            <div><div class="t">User Code Kamu</div><div class="d">Taruh di config.json APK</div></div>
-          </div>
-          <div class="uc-row">
-            <div class="uc-code" id="rat-usercode">—</div>
-            <button class="uc-copy ripple" id="btn-copy-usercode"><i class="fa-solid fa-copy"></i></button>
-          </div>
-          <div class="uc-info"><i class="fa-solid fa-circle-info"></i><span>Code ini buat identifikasi target yang install APK kamu.</span></div>
-        </div>
-        <div class="section fade-in-1">
-          <h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
-          <div class="target-list" id="target-list"><div class="skeleton"></div><div class="skeleton"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TARGET DETAIL -->
-    <div class="screen" id="screen-target">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-target-back"><i class="fa-solid fa-arrow-left"></i></div>
-        <span class="page-title" id="target-title">Target</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="feature-grid" id="feature-grid"></div>
-
-        <!-- INFO -->
-        <div class="feature-page" id="fp-info">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Info Device</div></div>
-          <div class="fp-desc">Detail lengkap device target. Semua data terupdate otomatis saat target online.</div>
-          <div class="section" id="info-content"></div>
-        </div>
-
-        <!-- LIVE CAM -->
-        <div class="feature-page" id="fp-live">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Live Cam</div></div>
-          <div class="fp-desc">Stream layar target secara real-time. Cuma work di Android 11+ (SDK 30+).</div>
-          <div class="toggle-row" id="live-toggle-row">
-            <div class="tr-left">
-              <div class="ico-badge"><i class="fa-solid fa-video"></i></div>
-              <div class="tr-info"><div class="n">Aktifkan Live Cam</div><div class="d">Stream layar target</div></div>
-            </div>
-            <label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
-          </div>
-          <div class="live-warning hidden" id="live-warning">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Target pake Android <span id="live-android-ver">?</span>. Live Cam cuma support Android 11+.</span>
-          </div>
-          <div class="live-view" id="live-view" style="margin-top:14px">
-            <div class="empty"><i class="fa-solid fa-image"></i><div>Live cam nonaktif</div></div>
-          </div>
-        </div>
-
-        <!-- LOCATE -->
-        <div class="feature-page" id="fp-locate">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Locate</div></div>
-          <div class="fp-desc">Ambil lokasi target secara real-time.</div>
-          <div class="toggle-row">
-            <div class="tr-left">
-              <div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div>
-              <div class="tr-info"><div class="n">Aktifkan Locate</div><div class="d">Lokasi target</div></div>
-            </div>
-            <label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
-          </div>
-          <div class="loc-map" id="loc-map" style="margin-top:14px">
-            <div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div>
-          </div>
-          <div class="loc-coords" id="loc-coords">—</div>
-        </div>
-
-        <!-- SENTER & STROBO -->
-        <div class="feature-page" id="fp-flash">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Senter & Strobo</div></div>
-          <div class="fp-desc">Kontrol senter (flashlight) target. Strobo bakal bikin senter kedip tiap 1 detik.</div>
-          <div class="toggle-row">
-            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-lightbulb"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
-            <label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
-          </div>
-          <div class="toggle-row">
-            <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip tiap 1 detik</div></div></div>
-            <label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
-          </div>
-        </div>
-
-        <!-- KUNCI HP -->
-        <div class="feature-page" id="fp-lock">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kunci HP</div></div>
-          <div class="fp-desc">Kunci HP target pake overlay. Target harus masukin PIN 4-digit yang lo set. Kalo salah, HP tetep ke-lock.</div>
-          <div class="section">
-            <div class="field">
-              <label>PIN 4 Digit</label>
-              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="tel" id="lock-pin" maxlength="4" placeholder="0000"></div>
-            </div>
-            <div class="toggle-row">
-              <div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-mobile-screen-button"></i></div><div class="tr-info"><div class="n">Status Lock</div><div class="d">Aktifin buat kunci HP target</div></div></div>
-              <label class="switch"><input type="checkbox" id="sw-lock"><span class="slider"></span></label>
-            </div>
-          </div>
-        </div>
-
-        <!-- VOLUME -->
-        <div class="feature-page" id="fp-volume">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Volume</div></div>
-          <div class="fp-desc">Atur volume HP target. Geser slider buat naikin/turunin volume.</div>
-          <div class="section">
-            <div class="slider-row">
-              <div class="slider-icon"><i class="fa-solid fa-volume-low"></i></div>
-              <input type="range" id="volume-slider" min="0" max="100" value="50" class="range-input">
-              <div class="slider-icon"><i class="fa-solid fa-volume-high"></i></div>
-            </div>
-            <div class="slider-value" id="volume-value">50%</div>
-            <button class="btn btn-primary" id="btn-set-volume" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Volume</button>
-          </div>
-        </div>
-
-        <!-- KECERAHAN -->
-        <div class="feature-page" id="fp-brightness">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Kecerahan</div></div>
-          <div class="fp-desc">Atur tingkat kecerahan layar HP target. Slider kiri = redup, kanan = terang.</div>
-          <div class="section">
-            <div class="slider-row">
-              <div class="slider-icon"><i class="fa-solid fa-sun"></i></div>
-              <input type="range" id="brightness-slider" min="0" max="100" value="50" class="range-input">
-              <div class="slider-icon"><i class="fa-solid fa-sun" style="font-size:20px"></i></div>
-            </div>
-            <div class="slider-value" id="brightness-value">50%</div>
-            <button class="btn btn-primary" id="btn-set-brightness" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Kecerahan</button>
-          </div>
-        </div>
-
-        <!-- URL DIRECT -->
-        <div class="feature-page" id="fp-url">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">URL Direct</div></div>
-          <div class="fp-desc">Buka URL di browser HP target secara otomatis.</div>
-          <div class="section">
-            <div class="field">
-              <label>URL Target</label>
-              <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="url-direct" placeholder="https://example.com"></div>
-            </div>
-            <button class="btn btn-primary" id="btn-open-url" style="margin-top:8px"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka URL di Target</button>
-          </div>
-        </div>
-
-        <!-- GALLERY -->
-        <div class="feature-page" id="fp-gallery">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Get Gallery</div></div>
-          <div class="fp-desc">Ambil semua foto dari galeri HP target. Foto bakal di-load ke sini. Butuh izin storage di HP target.</div>
-          <div class="section">
-            <button class="btn btn-primary" id="btn-get-gallery"><i class="fa-solid fa-images"></i> Ambil Galeri</button>
-            <div class="gallery-grid" id="gallery-grid" style="margin-top:14px">
-              <div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-image"></i><div>Klik tombol buat ambil galeri target</div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TOAST -->
-        <div class="feature-page" id="fp-toast">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kirim Toast</div></div>
-          <div class="fp-desc">Tampilkan pesan toast di HP target. Pesan bakal muncul sebentar di layar target.</div>
-          <div class="section">
-            <div class="field">
-              <label>Pesan Toast</label>
-              <div class="input-wrap">
-                <div class="ico-badge"><i class="fa-solid fa-comment-dots"></i></div>
-                <input type="text" id="toast-message" placeholder="Contoh: Halo dari admin">
-              </div>
-            </div>
-            <button class="btn btn-primary" id="btn-send-toast"><i class="fa-solid fa-paper-plane"></i> Kirim Toast ke Target</button>
-          </div>
-        </div>
-
-        <!-- HIDE APP -->
-        <div class="feature-page" id="fp-hideapp">
-          <div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Hide App</div></div>
-          <div class="fp-desc">Sembunyikan icon APK di HP target. App tetap jalan di background, tapi icon hilang dari launcher.</div>
-          <div class="section">
-            <button class="btn btn-primary" id="btn-hide-app" style="margin-bottom:10px"><i class="fa-solid fa-eye-slash"></i> Sembunyikan Icon</button>
-            <button class="btn btn-ghost" id="btn-show-app"><i class="fa-solid fa-eye"></i> Tampilkan Icon</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- BLUXANIME -->
-    <div class="screen" id="screen-anime">
-      <div class="anime-header">
-        <div class="anime-header-top">
-          <div class="anime-header-left">
-            <div class="hamburger" id="btn-hamburger-anime"><i class="fa-solid fa-bars"></i></div>
-            <div class="anime-logo">BluxAnime</div>
-          </div>
-          <div class="anime-search-btn" id="btn-anime-search"><i class="fa-solid fa-magnifying-glass"></i></div>
-        </div>
-        <div class="anime-search-inline" id="anime-search-inline">
-          <input type="text" id="anime-search-input" placeholder="Cari anime...">
-          <div class="anime-search-close" id="btn-anime-search-close"><i class="fa-solid fa-xmark"></i></div>
-        </div>
-      </div>
-      <div class="anime-body" id="anime-body">
-        <div class="anime-banner"><img id="anime-banner-img" src="" onerror="this.style.opacity='0'"></div>
-        <div class="anime-title-block">
-          <div class="t">BLUXANIME</div>
-          <div class="s">Nonton anime subtitle Indonesia gratis</div>
-        </div>
-        <div class="anime-rows" id="anime-rows"><div class="anime-loading"><div class="sp"></div><span>Loading...</span></div></div>
-      </div>
-    </div>
-
-    <!-- TOOLS -->
-    <div class="screen" id="screen-tools">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Tools</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="section fade-in">
-          <h3><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Regular Tools</h3>
-          <div class="tools-grid" id="tools-grid"></div>
-        </div>
-        <div class="vip-section fade-in-1">
-          <div class="vip-header">
-            <div class="vh-icon"><i class="fa-solid fa-crown"></i></div>
-            <div class="vh-text"><div class="n">VIP Tools</div><div class="d">Khusus VIP, Reseller & Owner</div></div>
-          </div>
-          <div class="tools-grid" id="vip-tools-grid"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BENEFIT ROLE -->
-    <div class="screen" id="screen-benefit">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-benefit"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Benefit Role</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="benefit-hero fade-in">
-          <div class="bh-icon"><i class="fa-solid fa-medal"></i></div>
-          <div class="bh-title">Benefit Role</div>
-          <div class="bh-desc">Kenali role di BluxusRat & benefitnya. Pilih role yang sesuai kebutuhanmu.</div>
-        </div>
-        <div id="role-cards" class="fade-in-1"></div>
-        <div class="section fade-in-2">
-          <h3><div class="ico-badge"><i class="fa-solid fa-question"></i></div> FAQ</h3>
-          <div id="faq-list"></div>
-        </div>
-        <button class="btn btn-primary fade-in-3" id="btn-upgrade-role"><i class="fa-solid fa-arrow-up"></i> Upgrade Role</button>
-      </div>
-    </div>
-
-    <!-- ACCOUNT -->
-    <div class="screen" id="screen-account">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">Account</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="profile-head fade-in">
-          <div class="avatar-wrap">
-            <img class="avatar" id="acc-avatar" src="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235a4548%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M4 22a8 8 0 0 1 16 0%22/></svg>'">
-            <div class="edit" id="btn-change-photo"><i class="fa-solid fa-camera"></i></div>
-          </div>
-          <div class="uname" id="acc-usn">—</div>
-          <div class="urole" id="acc-role">member</div>
-        </div>
-        <div class="section fade-in-1">
-          <div class="info-row"><span class="lbl"><i class="fa-solid fa-key"></i> User Code</span><span class="val mono" id="acc-usercode">—</span></div>
-          <div class="info-sep"></div>
-          <div class="info-row"><span class="lbl"><i class="fa-solid fa-calendar"></i> Created</span><span class="val" id="acc-created">—</span></div>
-        </div>
-        <div class="list-item fade-in-2" id="btn-settings">
-          <div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
-          <div class="txt"><div class="n">Settings</div><div class="d">Ganti password & foto</div></div>
-          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-        </div>
-        <div class="list-item danger fade-in-3" id="btn-logout">
-          <div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div>
-          <div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div>
-          <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <div class="screen" id="screen-about">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title">About</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="about-hero fade-in">
-          <div class="ab-logo">BluxusRat</div>
-          <div class="ab-ver">V1 [NewEra]</div>
-          <div class="ab-desc">Control panel untuk monitoring & control device.</div>
-        </div>
-        <div class="section fade-in-1">
-          <h3><div class="ico-badge"><i class="fa-solid fa-code"></i></div> Developer</h3>
-          <div class="list-item" onclick="window.open('https://wa.me/6283137236898','_blank')">
-            <div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div>
-            <div class="txt"><div class="n">Abyy</div><div class="d">Developer</div></div>
-            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-          </div>
-        </div>
-        <div class="section fade-in-2">
-          <h3><div class="ico-badge"><i class="fa-solid fa-users"></i></div> Community</h3>
-          <div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')">
-            <div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div>
-            <div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div>
-            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-          </div>
-          <div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU','_blank')">
-            <div class="ico-badge"><i class="fa-solid fa-comments"></i></div>
-            <div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div>
-            <div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-          </div>
-        </div>
-        <div class="section fade-in-3">
-          <h3><div class="ico-badge"><i class="fa-solid fa-heart"></i></div> Credits</h3>
-          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-fire"></i></div><div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div></div>
-          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="txt"><div class="n">FazzCode</div><div class="d">API Provider</div></div></div>
-          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-cloud"></i></div><div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div></div>
-          <div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div><div class="txt"><div class="n">NexaDev</div><div class="d">Anime API</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PANEL -->
-    <div class="screen" id="screen-panel">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
-        <span class="page-title" id="panel-title">Panel</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="section fade-in">
-          <h3><div class="ico-badge"><i class="fa-solid fa-shield-halved"></i></div> <span id="panel-role-text">PANEL</span></h3>
-          <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Kelola user & sistem dari sini.</div>
-        </div>
-        <div class="panel-grid" id="panel-grid"></div>
-      </div>
-    </div>
-
-    <!-- EKONOMI -->
-    <div class="screen" id="screen-ekonomi">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-ekonomi-back"><i class="fa-solid fa-arrow-left"></i></div>
-        <span class="page-title">Ekonomi</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="section fade-in">
-          <h3><div class="ico-badge"><i class="fa-solid fa-coins"></i></div> Ekonomi</h3>
-          <div style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">Kelola pesanan dari user & verifikasi pembayaran.</div>
-          <div class="list-item" id="btn-manage-order">
-            <div class="ico-badge"><i class="fa-solid fa-receipt"></i></div>
-            <div class="txt"><div class="n">Manage Order</div><div class="d">Verifikasi pembelian akses</div></div>
-            <div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MANAGE ORDER -->
-    <div class="screen" id="screen-order">
-      <div class="dash-header">
-        <div class="hamburger" id="btn-order-back"><i class="fa-solid fa-arrow-left"></i></div>
-        <span class="page-title">Manage Order</span>
-        <div style="width:40px"></div>
-      </div>
-      <div class="dash-body">
-        <div class="seg" id="order-seg">
-          <button data-tab="pending" class="active"><i class="fa-solid fa-hourglass-half"></i> Pending</button>
-          <button data-tab="verified"><i class="fa-solid fa-circle-check"></i> Verified</button>
-          <button data-tab="rejected"><i class="fa-solid fa-circle-xmark"></i> Rejected</button>
-        </div>
-        <div class="section">
-          <div class="field">
-            <div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-search"></i></div><input type="text" id="order-search" placeholder="Cari Order ID..."></div>
-          </div>
-        </div>
-        <div class="order-list" id="order-list"><div class="skeleton"></div><div class="skeleton"></div></div>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<!-- AUDIO PLAYER -->
-<div class="player-bar" id="player-bar">
-  <img class="pb-cover" id="pb-cover" src="" onerror="this.style.display='none'">
-  <div class="pb-info">
-    <div class="t" id="pb-title">—</div>
-    <div class="a" id="pb-artist">—</div>
-    <div class="progress-mini"><div class="fill" id="pb-progress"></div></div>
+  <!-- BADGE -->
+  <div class="status-badge" id="status-badge">
+    <span class="dot"></span>
+    <span id="status-text">Memeriksa Update</span>
   </div>
-  <div class="pb-controls">
-    <button class="pb-btn play" id="pb-toggle"><i class="fa-solid fa-play" id="pb-toggle-icon"></i></button>
-    <button class="pb-close" id="pb-close"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-</div>
 
-<!-- SIDEBAR -->
-<div id="sidebar-backdrop"></div>
-<aside id="sidebar">
-  <div class="sb-head">
+  <!-- CARD -->
+  <div class="card">
+    <div class="title" id="card-title">BluxusRat</div>
+    <div class="subtitle" id="card-subtitle">V1 [NewEra]</div>
+
+    <div class="message" id="card-message">
+      <i class="fa-solid fa-circle-info"></i>
+      Aplikasi ini memerlukan update untuk melanjutkan. Proses update sedang berlangsung. Jangan tutup aplikasi.
+    </div>
+
+    <!-- INFO LIST -->
+    <div class="info-list" id="info-list">
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-signal"></i></div>
+        <div class="txt">
+          <div class="l">Status</div>
+          <div class="v warn" id="info-status">Memeriksa update</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-globe"></i></div>
+        <div class="txt">
+          <div class="l">Jaringan</div>
+          <div class="v ok" id="info-network">Terhubung</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico"><i class="fa-solid fa-code-branch"></i></div>
+        <div class="txt">
+          <div class="l">Versi</div>
+          <div class="v" id="info-version">v1.0.0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress">
+      <div class="fill"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-row">
+      <a class="contact-btn wa" href="https://wa.me/6283137236898" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>WhatsApp</span>
+      </a>
+      <a class="contact-btn ch" href="https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w" target="_blank">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Channel</span>
+      </a>
+      <a class="contact-btn gr" href="https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU" target="_blank">
+        <i class="fa-solid fa-comments"></i>
+        <span>Grup</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
     <div class="brand">BluxusRat</div>
-    <div class="sub" id="sb-sub">—</div>
+    <div>© 2026 BluxusRat — All Rights Reserved</div>
   </div>
-  <nav class="sb-nav">
-    <div class="sb-item active" data-page="dash"><div class="ico-badge"><i class="fa-solid fa-house"></i></div> Dashboard</div>
-    <div class="sb-item" data-page="rat"><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Rat</div>
-    <div class="sb-item anime" data-page="anime"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div> BluxAnime</div>
-    <div class="sb-item" data-page="tools"><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Tools</div>
-    <div class="sb-item" data-page="benefit"><div class="ico-badge"><i class="fa-solid fa-medal"></i></div> Benefit Role</div>
-    <div class="sb-item" data-page="account"><div class="ico-badge"><i class="fa-solid fa-user"></i></div> Account</div>
-    <div class="sb-item" data-page="about"><div class="ico-badge"><i class="fa-solid fa-circle-info"></i></div> About</div>
-    <div id="sb-role-sep" class="hidden"><div class="sb-sep"></div><div class="sb-label">Management</div></div>
-    <div class="sb-item hidden" id="sb-panel" data-page="panel"><div class="ico-badge"><i class="fa-solid fa-crown"></i></div> Panel</div>
-    <div class="sb-item hidden" id="sb-ekonomi" data-page="ekonomi"><div class="ico-badge"><i class="fa-solid fa-coins"></i></div> Ekonomi</div>
-  </nav>
-</aside>
 
-<!-- OFFLINE POPUP -->
-<div id="offline-popup">
-  <div class="offline-box">
-    <div class="offline-icon-wrap"><i class="fa-solid fa-plug-circle-xmark offline-icon"></i></div>
-    <h3>Tidak Ada Koneksi</h3>
-    <p>Cek koneksi internet kamu<br>lalu coba lagi.</p>
-    <button class="btn btn-primary" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> Coba Lagi</button>
-  </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal"><div class="modal-box" id="modal-box"></div></div>
+<script>
+// ============================================================
+// PARTICLE GENERATOR
+// ============================================================
+(function generateParticles() {
+  const container = document.getElementById("particles");
+  if (!container) return;
+  const count = 20;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.animationDelay = (Math.random() * 12) + "s";
+    p.style.animationDuration = (8 + Math.random() * 8) + "s";
+    const size = 2 + Math.random() * 3;
+    p.style.width = size + "px";
+    p.style.height = size + "px";
+    container.appendChild(p);
+  }
+})();
 
-<!-- TOAST -->
-<div id="toast-wrap"></div>
+// ============================================================
+// MODE SELECTOR — update / offline
+// ============================================================
+(function detectMode() {
+  const params = new URLSearchParams(window.location.search);
+  let mode = params.get("mode") || "update";
 
-<!-- SCRIPT -->
-<script src="https://smtpjs.com/v3/smtp.js" onerror="console.error('SMTPJS gagal load')"></script>
-<script type="module" src="script.js"></script>
+  // Auto-detect mode berdasarkan koneksi
+  if (!navigator.onLine) {
+    mode = "offline";
+  }
+
+  applyMode(mode);
+})();
+
+function applyMode(mode) {
+  const iconEl = document.getElementById("icon-el");
+  const iconWrap = document.getElementById("icon-main");
+  const badge = document.getElementById("status-badge");
+  const statusText = document.getElementById("status-text");
+  const cardTitle = document.getElementById("card-title");
+  const cardSubtitle = document.getElementById("card-subtitle");
+  const cardMessage = document.getElementById("card-message");
+  const infoStatus = document.getElementById("info-status");
+
+  if (mode === "offline") {
+    iconWrap.className = "icon-main offline";
+    iconEl.className = "fa-solid fa-wifi";
+    badge.className = "status-badge warning";
+    statusText.textContent = "Tidak Ada Jaringan";
+    cardTitle.textContent = "BluxusRat";
+    cardSubtitle.textContent = "V1 [NewEra]";
+    cardMessage.innerHTML =
+      '<i class="fa-solid fa-triangle-exclamation"></i> Aplikasi ini membutuhkan jaringan internet untuk terus update. Sambungkan kembali perangkat kamu ke internet agar aplikasi dapat berjalan normal.';
+    infoStatus.textContent = "Menunggu jaringan";
+    infoStatus.className = "v warn";
+    document.getElementById("info-network").textContent = "Terputus";
+    document.getElementById("info-network").className = "v warn";
+    document.title = "Tidak Ada Jaringan — BluxusRat";
+  } else {
+    iconWrap.className = "icon-main update";
+    iconEl.className = "fa-solid fa-rotate";
+    badge.className = "status-badge";
+    statusText.textContent = "Update Diperlukan";
+    cardTitle.textContent = "Update Diperlukan";
+    cardSubtitle.textContent = "BluxusRat V1 [NewEra]";
+    cardMessage.innerHTML =
+      '<i class="fa-solid fa-circle-info"></i> Aplikasi ini memerlukan update untuk melanjutkan. Proses update sedang berlangsung. Jangan tutup aplikasi.';
+    infoStatus.textContent = "Memeriksa update";
+    infoStatus.className = "v warn";
+    infoStatus.textContent = "Memeriksa update";
+    document.title = "Update Diperlukan — BluxusRat";
+  }
+}
+
+// ============================================================
+// AUTO-DETECT CONNECTION CHANGE
+// ============================================================
+window.addEventListener("online", () => {
+  const badge = document.getElementById("status-badge");
+  if (badge && badge.classList.contains("warning")) {
+    // Kalau offline berubah jadi online, balik ke mode update
+    applyMode("update");
+  }
+});
+
+window.addEventListener("offline", () => {
+  applyMode("offline");
+});
+
+// ============================================================
+// URL PARAM CUSTOMIZATION (Universal)
+// ============================================================
+(function applyParams() {
+  const params = new URLSearchParams(window.location.search);
+
+  const title = params.get("title");
+  if (title) document.getElementById("card-title").textContent = decodeURIComponent(title);
+
+  const subtitle = params.get("subtitle");
+  if (subtitle) document.getElementById("card-subtitle").textContent = decodeURIComponent(subtitle);
+
+  const message = params.get("message") || params.get("msg");
+  if (message) {
+    document.getElementById("card-message").innerHTML =
+      '<i class="fa-solid fa-circle-info"></i> ' + decodeURIComponent(message);
+  }
+
+  const status = params.get("status");
+  if (status) document.getElementById("status-text").textContent = decodeURIComponent(status);
+
+  const version = params.get("version") || params.get("v");
+  if (version) document.getElementById("info-version").textContent = decodeURIComponent(version);
+
+  const color = params.get("color");
+  if (color) {
+    const hex = color.startsWith("#") ? color : "#" + color;
+    document.documentElement.style.setProperty("--accent", hex);
+    document.documentElement.style.setProperty("--accent-hover", hex);
+    document.documentElement.style.setProperty("--accent-glow", hexToRgba(hex, 0.5));
+    document.documentElement.style.setProperty("--accent-soft", hexToRgba(hex, 0.12));
+  }
+
+  const icon = params.get("icon");
+  if (icon) {
+    const iconEl = document.getElementById("icon-el");
+    if (iconEl) iconEl.className = "fa-solid " + decodeURIComponent(icon);
+  }
+
+  const docTitle = params.get("doctitle");
+  if (docTitle) document.title = decodeURIComponent(docTitle);
+})();
+
+// ============================================================
+// HEX TO RGBA HELPER
+// ============================================================
+function hexToRgba(hex, alpha) {
+  hex = hex.replace("#", "");
+  if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ============================================================
+// ANIMATED DOTS — untuk status text
+// ============================================================
+(function animateStatusDots() {
+  const statusEl = document.getElementById("info-status");
+  if (!statusEl) return;
+  let count = 0;
+  setInterval(() => {
+    count = (count + 1) % 4;
+    const dots = ".".repeat(count);
+    const base = statusEl.textContent.replace(/\.+$/, "");
+    statusEl.textContent = base + dots;
+  }, 500);
+})();
+</script>
 
 </body>
 </html>
