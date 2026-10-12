@@ -1,6 +1,6 @@
 /* ============================================================
- * BluxusRat V1 [NewEra] — Script
- * Version 3.0 — Email via SMTPJS
+ * BluxusRat V1 [NewEra] — Script (FIXED)
+ * OTP Gmail + Verifikasi Order berfungsi
  * ============================================================ */
 
 // ============================================================
@@ -34,33 +34,43 @@ const CONFIG = {
 };
 
 // ============================================================
-// GMAIL SMTP (SMTPJS)
+// GMAIL SMTP — FIXED (App Password 16 karakter)
 // ============================================================
 const GMAIL = {
   user: "bluxus.order@gmail.com",
-  pass_encoded: "eHhibXNocWJnenp5a3B1eg==",
+  appPassword: "xxbmshqbgzzykpuz",
   fromName: "BluxusRat"
 };
-
-function getGmailPass() {
-  try { return atob(GMAIL.pass_encoded); }
-  catch (e) { return ""; }
-}
 
 async function sendEmail({ to, subject, htmlBody }) {
   return new Promise((resolve, reject) => {
     if (typeof Email === "undefined") {
-      return reject(new Error("SMTPJS belum ke-load"));
+      return reject(new Error("SMTPJS belum ke-load. Cek koneksi ke smtpjs.com"));
+    }
+    const pass = (GMAIL.appPassword || "").replace(/\s/g, "");
+    if (!pass || pass.length !== 16) {
+      return reject(new Error("App Password Gmail belum di-set (harus 16 karakter)"));
     }
     Email.send({
       Host: "smtp.gmail.com",
+      Port: 587,
       Username: GMAIL.user,
-      Password: getGmailPass(),
+      Password: pass,
       To: to,
       From: GMAIL.user,
       Subject: subject,
       Body: htmlBody
-    }).then(msg => resolve(msg)).catch(err => reject(err));
+    }).then(msg => {
+      console.log("[SMTP RESPONSE]", msg);
+      if (msg && (String(msg).toLowerCase().includes("ok") || String(msg).toLowerCase().includes("success"))) {
+        resolve(msg);
+      } else {
+        reject(new Error(msg || "Gagal kirim email"));
+      }
+    }).catch(err => {
+      console.error("[SMTP ERROR]", err);
+      reject(err);
+    });
   });
 }
 
@@ -100,10 +110,7 @@ function buildEmailHTML({ username, password, role, duration, orderId }) {
 // ============================================================
 const PRICE_DATA = {
   member: {
-    label: "Member",
-    icon: "fa-user",
-    color: "member",
-    tagline: "Role dasar",
+    label: "Member", icon: "fa-user", color: "member", tagline: "Role dasar",
     desc: "Role paling dasar di BluxusRat. Cocok buat yang baru mulai. Bisa akses semua fitur Tools reguler & BluxAnime, plus kontrol device target.",
     benefits: ["Akses semua Tools reguler", "Akses BluxAnime", "Kontrol device target", "Bisa beli tambah sender", "Support komunitas"],
     options: [
@@ -114,10 +121,7 @@ const PRICE_DATA = {
     ]
   },
   vip: {
-    label: "VIP",
-    icon: "fa-crown",
-    color: "vip",
-    tagline: "Tools tambahan",
+    label: "VIP", icon: "fa-crown", color: "vip", tagline: "Tools tambahan",
     desc: "Role VIP punya akses ke semua fitur Member + VIP Tools (Spam OTP). Cocok buat yang butuh fitur lebih.",
     benefits: ["Semua benefit Member", "Akses VIP Tools (Spam OTP)", "Priority support", "Badge VIP di profil"],
     options: [
@@ -128,10 +132,7 @@ const PRICE_DATA = {
     ]
   },
   reseller: {
-    label: "Reseller",
-    icon: "fa-briefcase",
-    color: "reseller",
-    tagline: "Bisa bikin akun",
+    label: "Reseller", icon: "fa-briefcase", color: "reseller", tagline: "Bisa bikin akun",
     desc: "Reseller bisa bikin akun Member & VIP untuk dijual ke orang lain. Limit 5 akun/hari.",
     benefits: ["Semua benefit VIP", "Bisa bikin akun Member & VIP", "Limit 5 akun/hari", "Statistics bawahan sendiri", "Bisa perpanjang expired bawahan"],
     options: [
@@ -141,10 +142,7 @@ const PRICE_DATA = {
     ]
   },
   owner: {
-    label: "Owner",
-    icon: "fa-shield-halved",
-    color: "owner",
-    tagline: "Kelola sistem",
+    label: "Owner", icon: "fa-shield-halved", color: "owner", tagline: "Kelola sistem",
     desc: "Owner punya akses lebih luas dari Reseller. Bisa broadcast, liat server log, dan add user tanpa limit.",
     benefits: ["Semua benefit Reseller", "Unlimited bikin akun", "Broadcast pengumuman", "Server logs", "Akses lebih luas"],
     options: [
@@ -211,11 +209,7 @@ const CREATE_PERMS = {
 };
 
 const DAILY_LIMIT = {
-  dev: null,
-  owner: null,
-  reseller: 5,
-  vip: 0,
-  member: 0
+  dev: null, owner: null, reseller: 5, vip: 0, member: 0
 };
 
 // ============================================================
@@ -695,7 +689,7 @@ function goRat() {
 }
 
 // ============================================================
-// TARGET DETAIL (Feature Grid)
+// TARGET DETAIL
 // ============================================================
 const FEATURES = [
   { id: "info", icon: "fa-mobile-screen-button", name: "Info Device", desc: "Detail device target", page: "fp-info" },
@@ -2465,7 +2459,7 @@ async function loadLogs() {
 }
 
 // ============================================================
-// EKONOMI + MANAGE ORDER
+// EKONOMI + MANAGE ORDER (FIXED — Kirim Email Berfungsi)
 // ============================================================
 function goEkonomi() {
   showScreen("ekonomi");
@@ -2564,32 +2558,43 @@ function openOrderDetail(oid) {
   }
 }
 
+// ====== FUNGSI VERIFY ORDER — SUDAH DIPERBAIKI (KIRIM EMAIL) ======
 async function verifyOrder(o) {
   haptic(20);
   if (!confirm(`Verifikasi order ${o.orderId}?\n\nAkun "${o.username}" akan dibuat dengan password random & dikirim ke ${o.email}`)) return;
   const note = $("#order-note")?.value.trim() || "";
+
+  const btnVerify = $("#btn-verify-order");
+  if (btnVerify) {
+    btnVerify.disabled = true;
+    btnVerify.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+  }
+
   try {
+    // 1. Cek username sudah dipakai atau belum
     const usersSnap = await fbGet(fbRef(State.db, "users"));
     const users = usersSnap.exists() ? usersSnap.val() : {};
     for (const uid in users) {
       if (users[uid].username === o.username) {
-        return toast("Username udah dipake, hubungi user", "err");
+        return toast("Username sudah dipakai, hubungi user", "err");
       }
     }
 
+    // 2. Generate password & user code
     const pw = genPassword(8);
     const salt = genSalt();
     const hash = await sha256(pw + salt);
     const userCode = genUserCode();
     const exp = o.duration === -1 ? null : Date.now() + o.duration * 86400000;
 
+    // 3. Buat user baru
     const newRef = fbPush(fbRef(State.db, "users"));
     await fbSet(newRef, {
       username: o.username,
       passwordHash: hash,
       passwordSalt: salt,
       role: o.role,
-      userCode,
+      userCode: userCode,
       createdBy: State.uid,
       createdAt: Date.now(),
       expiresAt: exp,
@@ -2597,15 +2602,20 @@ async function verifyOrder(o) {
       avatar: ""
     });
 
+    // 4. Update status order
     await fbUpdate(fbRef(State.db, "orders/" + o.orderId), {
       status: "verified",
       verifiedAt: Date.now(),
       verifiedBy: State.uid,
-      note: note || "Akun dibuat & email terkirim"
+      note: note || "Akun dibuat & email terkirim",
+      generatedPassword: pw,
+      generatedUserCode: userCode
     });
 
+    // 5. Kirim email — TUNGGU SAMPAI SELESAI
     toast("Mengirim email ke " + o.email + "...", "info");
     let emailOk = false;
+    let emailErr = "";
     try {
       const htmlBody = buildEmailHTML({
         username: o.username,
@@ -2622,10 +2632,12 @@ async function verifyOrder(o) {
       emailOk = true;
       toast("Email terkirim ✓", "ok");
     } catch (e) {
-      console.warn("Email gagal:", e);
-      toast("Email gagal kirim, kirim manual: " + pw, "warn", 8000);
+      emailErr = e.message || String(e);
+      console.error("[VERIFY EMAIL ERROR]", e);
+      toast("Email gagal: " + emailErr, "warn", 8000);
     }
 
+    // 6. Tampilkan hasil
     const box = $("#modal-box");
     box.innerHTML = `
       <h3 style="color:var(--success)">Order Diverifikasi ✓</h3>
@@ -2633,11 +2645,18 @@ async function verifyOrder(o) {
       <div class="order-detail">
         <div class="od-row highlight"><span class="l">Username</span><span class="v">${o.username}</span></div>
         <div class="od-row highlight"><span class="l">Password</span><span class="v" style="color:var(--accent-hover)">${pw}</span></div>
+        <div class="od-row"><span class="l">User Code</span><span class="v">${userCode}</span></div>
         <div class="od-row"><span class="l">Role</span><span class="v">${o.roleLabel}</span></div>
         <div class="od-row"><span class="l">Durasi</span><span class="v">${o.durationLabel}</span></div>
         <div class="od-row"><span class="l">Email</span><span class="v">${o.email}</span></div>
-        <div class="od-row"><span class="l">Status Email</span><span class="v" style="color:var(--${emailOk ? "success" : "error"})">${emailOk ? "Terkirim" : "Gagal"}</span></div>
+        <div class="od-row"><span class="l">Status Email</span><span class="v" style="color:var(--${emailOk ? "success" : "error"})">${emailOk ? "Terkirim ✓" : "Gagal ✗"}</span></div>
+        ${!emailOk ? `<div class="od-row"><span class="l">Error</span><span class="v" style="color:var(--error);font-size:10px">${emailErr}</span></div>` : ""}
       </div>
+      ${!emailOk ? `
+      <div class="buy-note" style="margin-top:14px">
+        <i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>
+        <span>Email gagal terkirim. Copy detail akun di bawah & kirim manual ke user via WhatsApp.</span>
+      </div>` : ""}
       <div class="modal-actions">
         <button class="btn btn-ghost" id="btn-copy-detail"><i class="fa-solid fa-copy"></i> Copy Detail</button>
         <button class="btn btn-primary" onclick="closeModal();loadOrders()">OK</button>
@@ -2645,12 +2664,17 @@ async function verifyOrder(o) {
     `;
     $("#btn-copy-detail").onclick = async () => {
       haptic(10);
-      const text = `Username: ${o.username}\nPassword: ${pw}\nRole: ${o.roleLabel}\nDurasi: ${o.durationLabel}`;
+      const text = `BluxusRat Account\n\nUsername: ${o.username}\nPassword: ${pw}\nUser Code: ${userCode}\nRole: ${o.roleLabel}\nDurasi: ${o.durationLabel}\n\nLogin sekarang & ganti password.`;
       const ok = await copyToClipboard(text);
       toast(ok ? "Detail di-copy" : "Gagal copy", ok ? "ok" : "err");
     };
   } catch (e) {
+    console.error("[VERIFY ORDER ERROR]", e);
     toast("Gagal verifikasi: " + e.message, "err");
+    if (btnVerify) {
+      btnVerify.disabled = false;
+      btnVerify.innerHTML = '<i class="fa-solid fa-check"></i> Verifikasi';
+    }
   }
 }
 
